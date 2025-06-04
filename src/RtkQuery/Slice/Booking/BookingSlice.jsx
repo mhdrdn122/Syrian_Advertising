@@ -1,0 +1,78 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {prepareHeaders} from "../Global"
+import { BASE_URL } from "../../../Api/baseUrl";
+
+
+const baseQuery = fetchBaseQuery({
+    baseUrl: BASE_URL,
+    prepareHeaders,
+  });
+  export const BookingSlice = createApi({
+    reducerPath: "booking",
+    baseQuery,
+    tagTypes: ["bookings"],
+    endpoints: (builder) => ({
+        getBooking: builder.query({
+            query: () => "/bookings",
+            providesTags: ["bookings"],
+    }),
+    addNewBooking: builder.mutation({
+        query: (data) => {
+          return {
+            url: "bookings",
+            method: "POST",
+            body: data,
+          };
+        },
+        invalidatesTags: ["bookings"],
+      }),
+      calculateReservation: builder.mutation({
+        query: (data) => {
+          console.log(data)
+          return {
+            url: "get-calculate-Amount",
+            method: "POST",
+            body: data,
+          };
+        },
+        invalidatesTags: ["reservations"],
+      }),
+      deleteBooking: builder.mutation({
+        query: (id) => {
+          return {
+            url: `bookings/${id}`,
+            method: "DELETE",
+            body: {},
+          };
+        },
+        invalidatesTags: ["bookings"],
+      }),
+       // new new 
+       getOneBookings: builder.query({
+        query: (id) =>  `bookings/${id}`,
+  
+      }),
+      
+      
+      updateReservation: builder.mutation({
+        query: (data) => {
+          return {
+            url: `reservation/${data.id}`,
+            method: "PUT",
+            body: data,
+          };
+        },
+        invalidatesTags: ["reservations"],
+      }),
+
+    })
+})
+
+export const {
+useGetBookingQuery,
+useAddNewBookingMutation,
+useCalculateReservationMutation,
+useUpdateReservationMutation,
+useGetOneBookingsQuery,
+useDeleteBookingMutation,
+} = BookingSlice;

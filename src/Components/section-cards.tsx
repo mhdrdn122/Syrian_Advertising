@@ -1,0 +1,33 @@
+import { useGetSummariesQuery } from "../RtkQuery/Slice/Summaries/SummariesSlice";
+import LoadingGet from "../utils/Loading/LoadingGet/LoadingGet";
+import SummariesCard from "./Summaries/SummariesCard";
+
+export function SectionCards() {
+  const { data: summaries, isFetching: fetchingTemplates } =
+    useGetSummariesQuery();
+
+  if (fetchingTemplates) {
+    return (
+      <div className="w-full h-full flex-col flex justify-center items-center">
+        <LoadingGet />
+        <p>Loading ... </p>
+      </div>
+    );
+  }
+  console.log(summaries)
+  return (
+    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+
+      {summaries?.map((item, ind) => {
+        return (
+          <SummariesCard
+            key={ind}
+            title={item.name}
+            count={item.count || 0}
+            endPoint={item.endpoint}
+          />
+        );
+      })}
+    </div>
+  );
+}
