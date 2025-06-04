@@ -54,15 +54,15 @@ const baseQuery = fetchBaseQuery({
       }),
       
       
-      updateReservation: builder.mutation({
+      updateBookings: builder.mutation({
         query: (data) => {
           return {
-            url: `reservation/${data.id}`,
+            url: `bookings/${data.id}`,
             method: "PUT",
             body: data,
           };
         },
-        invalidatesTags: ["reservations"],
+        invalidatesTags: ["bookings"],
       }),
 
     })
@@ -72,7 +72,7 @@ export const {
 useGetBookingQuery,
 useAddNewBookingMutation,
 useCalculateReservationMutation,
-useUpdateReservationMutation,
+useUpdateBookingsMutation,
 useGetOneBookingsQuery,
 useDeleteBookingMutation,
 } = BookingSlice;

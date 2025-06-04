@@ -22,7 +22,6 @@ const productTypeMap = {
 
 const BookingContainer = () => {
   const [openDelete, setOpenDelete] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
@@ -58,6 +57,11 @@ const BookingContainer = () => {
     navigate(`/dashboard/booking/${row.id}`)
     setSelectedBooking(row);
     // setOpen(true);
+  };
+
+  const onEdit = (row) => {
+    navigate(`/dashboard/booking/edit/${row.id}`)
+
   };
 
   const handleDelete = (booking) => {
@@ -98,6 +102,7 @@ const BookingContainer = () => {
         isLoading={isLoading}
         onShow={onShow}
         onDelete={handleDelete}
+        onEdit={onEdit}
       />
       <DeleteDialog
         open={openDelete}

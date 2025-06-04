@@ -21,6 +21,7 @@ import AdministrationPageLayout from "./Layout/AdministrationPageLayout/Administ
 import AddBooking from "./Components/Booking/AddBooking";
 import ContractPage from "./Components/Booking/ContractPage";
 import ReportsPage from "./Pages/Reports/ReportsPage";
+import BookingForm from "./Components/Booking/BookingForm";
 
 function App() {
   return (
@@ -49,7 +50,11 @@ function App() {
               <Route path="road_signs" element={<RoadSignsPage />} />
               <Route path="payments" element={<PaymentsPages />} />
               <Route path="bookings" element={<BookingPage />} />
-              <Route path="booking/add" element={<AddBooking />} />
+              {/* <Route path="booking/add" element={<AddBooking />} /> */}
+              <Route path="booking/add" element={<BookingForm  />} />
+              <Route path="booking/edit/:id" element={<BookingForm bookingId={1}  />} />
+
+
               <Route path="booking/:id" element={<ContractPage />} />
 
             

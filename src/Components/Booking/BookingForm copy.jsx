@@ -5,6 +5,8 @@ import { useGetCustomersQuery } from "../../RtkQuery/Slice/Customers/CustomersSl
 import {
   useAddNewBookingMutation,
   useCalculateReservationMutation,
+  useUpdateBookingsMutation,
+  useGetOneBookingsQuery,
 } from "../../RtkQuery/Slice/Booking/BookingSlice";
 import { useGetRoadSignsQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsSlice";
 import { Button } from "@/components/ui/button";
@@ -31,15 +33,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// import { Textarea } from "@/components/ui/textarea"; // أزل هذا الاستيراد إذا لم تعد تستخدمه في أي مكان آخر
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import { showToast } from "../../utils/Notifictions/showToast";
-
-// استيراد ReactQuill والأنماط الخاصة به
 import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css"; // استيراد أنماط الثيم "snow"
+import "react-quill-new/dist/quill.snow.css";
+import { useParams } from "react-router";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -50,7 +50,8 @@ const validationSchema = Yup.object({
   product_type: Yup.string().required("حقل نوع المنتج مطلوب"),
 });
 
-const AddBooking = () => {
+const BookingForm = ({ bookingId }) => {
+  const isEditMode = !!bookingId;
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedSigns, setSelectedSigns] = useState([]);
   const [addedSignIds, setAddedSignIds] = useState(new Set());
@@ -59,15 +60,20 @@ const AddBooking = () => {
   const [discountType, setDiscountType] = useState("1");
   const [discountValue, setDiscountValue] = useState("");
   const [contractDialog, setContractDialog] = useState(false);
-  const [notes, setNotes] = useState(""); // هذا سيحتوي الآن على HTML من محرر النصوص
+  const [notes, setNotes] = useState("");
   const [queryParams, setQueryParams] = useState({ start_date: "2025-06-30" });
-  const { data: customers, isLoading: isLoadingCustomers } =
-    useGetCustomersQuery();
-  const { data: roadSigns, isLoading: isLoadingRoadSigns } =
-    useGetRoadSignsQuery(queryParams);
+  const {id} = useParams();
+
+  const { data: customers, isLoading: isLoadingCustomers } = useGetCustomersQuery();
+  const { data: roadSigns, isLoading: isLoadingRoadSigns } = useGetRoadSignsQuery(queryParams);
+  const { data: bookingData, isLoading: isLoadingBooking } = useGetOneBookingsQuery(id, {
+    skip: !isEditMode,
+  });
   const [addNewBooking] = useAddNewBookingMutation();
+  const [updateBookings] = useUpdateBookingsMutation();
   const [calculateReservation] = useCalculateReservationMutation();
 
+  console.log(bookingData)
   const typeOptions = [
     { value: 1, label: "دائم" },
     { value: 2, label: "مؤقت" },
@@ -90,7 +96,7 @@ const AddBooking = () => {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const bookingData = {
+        const bookingPayload = {
           customer_id: parseInt(values.customer_id),
           type: parseInt(values.type),
           start_date: values.start_date,
@@ -100,14 +106,20 @@ const AddBooking = () => {
             booking_faces,
           })),
           product_type: parseInt(values.product_type),
-          notes, // الملاحظات التي سيتم إرسالها (يمكن أن تكون HTML)
+          notes,
           discount_type: discountValue ? parseInt(discountType) : undefined,
           value: discountValue ? parseInt(discountValue) : undefined,
         };
-        console.log(bookingData);
 
-        await addNewBooking(bookingData).unwrap();
-        showToast("success", "تم إضافة الحجز بنجاح");
+        if (isEditMode) {
+          bookingPayload.id = id;
+          await updateBookings(bookingPayload).unwrap();
+          showToast("success", "تم تعديل الحجز بنجاح");
+        } else {
+          await addNewBooking(bookingPayload).unwrap();
+          showToast("success", "تم إضافة الحجز بنجاح");
+        }
+
         resetForm();
         setSelectedSigns([]);
         setAddedSignIds(new Set());
@@ -119,10 +131,40 @@ const AddBooking = () => {
         setOpenDialog(false);
         setContractDialog(false);
       } catch (error) {
-        showToast("error", "فشل في إضافة الحجز");
+        showToast("error", isEditMode ? "فشل في تعديل الحجز" : "فشل في إضافة الحجز");
       }
     },
   });
+
+  // Populate form with booking data in edit mode
+  useEffect(() => {
+    if (isEditMode && bookingData && !isLoadingBooking) {
+      formik.setValues({
+        customer_id: bookingData.customer_id.toString(),
+        type: bookingData.type.toString(),
+        start_date: bookingData.start_date.split("T")[0],
+        end_date: bookingData.end_date.split("T")[0],
+        product_type: bookingData.product_type.toString(),
+      });
+      setNotes(bookingData.notes || "");
+      setDiscountType(bookingData.discount_type?.toString() || "1");
+      setDiscountValue(bookingData.value?.toString() || "");
+      setShowDiscount(!!bookingData.value);
+      setSelectedSigns(
+        bookingData.roadsigns.map((sign) => ({
+          road_sign_id: sign.id,
+          booking_faces: sign.pivot.booking_faces,
+          max_faces: sign.faces_number,
+        }))
+      );
+      setAddedSignIds(new Set(bookingData.roadsigns.map((sign) => sign.id)));
+      setCalculationResult({
+        total_price: bookingData.total_price,
+        total_advertising_space: bookingData.total_advertising_space,
+        total_printing_space: bookingData.total_printing_space,
+      });
+    }
+  }, [bookingData, isEditMode, isLoadingBooking]);
 
   // Update query params when start_date or end_date changes
   useEffect(() => {
@@ -145,9 +187,7 @@ const AddBooking = () => {
       );
       if (unavailableSigns.length > 0) {
         setSelectedSigns(
-          selectedSigns.filter((sign) =>
-            availableSignIds.has(sign.road_sign_id)
-          )
+          selectedSigns.filter((sign) => availableSignIds.has(sign.road_sign_id))
         );
         setAddedSignIds(
           new Set([...addedSignIds].filter((id) => availableSignIds.has(id)))
@@ -237,14 +277,11 @@ const AddBooking = () => {
   };
 
   const calculateDiscountedPrice = () => {
-    if (!calculationResult || !discountValue)
-      return calculationResult?.total_price;
+    if (!calculationResult || !discountValue) return calculationResult?.total_price;
     if (discountType === "1") {
       return calculationResult.total_price - parseFloat(discountValue);
     } else {
-      return (
-        calculationResult.total_price * (1 - parseFloat(discountValue) / 100)
-      );
+      return calculationResult.total_price * (1 - parseFloat(discountValue) / 100);
     }
   };
 
@@ -255,7 +292,7 @@ const AddBooking = () => {
     >
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
-          إضافة حجز جديد
+          {isEditMode ? "تعديل الحجز" : "إضافة حجز جديد"}
         </h1>
         <Button
           type="button"
@@ -271,233 +308,208 @@ const AddBooking = () => {
         </Button>
       </div>
 
-      <form
-        onSubmit={formik.handleSubmit}
-        className="space-y-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              الزبون
-            </label>
-            <Select
-              onValueChange={(value) =>
-                formik.setFieldValue("customer_id", value)
-              }
-              value={formik.values.customer_id}
-              onBlur={() => formik.setFieldTouched("customer_id", true)}
-            >
-              <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
-                <SelectValue placeholder="اختر الزبون" />
-              </SelectTrigger>
-              <SelectContent>
-                {isLoadingCustomers ? (
-                  <SelectItem value="loading">جاري التحميل...</SelectItem>
-                ) : (
-                  customers?.map((customer) => (
-                    <SelectItem
-                      key={customer.id}
-                      value={customer.id.toString()}
-                    >
-                      {customer.full_name} - {customer.company_name}
+      {isEditMode && isLoadingBooking ? (
+        <div className="text-center py-4">جاري التحميل...</div>
+      ) : (
+        <form
+          onSubmit={formik.handleSubmit}
+          className="space-y-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                الزبون
+              </label>
+              <Select
+                onValueChange={(value) => formik.setFieldValue("customer_id", value)}
+                value={formik.values.customer_id}
+                onBlur={() => formik.setFieldTouched("customer_id", true)}
+              >
+                <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
+                  <SelectValue placeholder="اختر الزبون" />
+                </SelectTrigger>
+                <SelectContent>
+                  {isLoadingCustomers ? (
+                    <SelectItem value="loading">جاري التحميل...</SelectItem>
+                  ) : (
+                    customers?.map((customer) => (
+                      <SelectItem key={customer.id} value={customer.id.toString()}>
+                        {customer.full_name} - {customer.company_name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              {formik.touched.customer_id && formik.errors.customer_id && (
+                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.customer_id}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                نوع الحجز
+              </label>
+              <Select
+                onValueChange={(value) => formik.setFieldValue("type", value)}
+                value={formik.values.type}
+                onBlur={() => formik.setFieldTouched("type", true)}
+              >
+                <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
+                  <SelectValue placeholder="اختر نوع الحجز" />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value.toString()}>
+                      {option.label}
                     </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
-            {formik.touched.customer_id && formik.errors.customer_id && (
-              <p className="text-sm text-red-500 mt-1 text-right">
-                {formik.errors.customer_id}
-              </p>
-            )}
+                  ))}
+                </SelectContent>
+              </Select>
+              {formik.touched.type && formik.errors.type && (
+                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.type}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                تاريخ البداية
+              </label>
+              <Input
+                type="date"
+                {...formik.getFieldProps("start_date")}
+                className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
+              />
+              {formik.touched.start_date && formik.errors.start_date && (
+                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.start_date}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                تاريخ النهاية
+              </label>
+              <Input
+                type="date"
+                {...formik.getFieldProps("end_date")}
+                className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
+              />
+              {formik.touched.end_date && formik.errors.end_date && (
+                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.end_date}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                نوع المنتج
+              </label>
+              <Select
+                onValueChange={(value) => formik.setFieldValue("product_type", value)}
+                value={formik.values.product_type}
+                onBlur={() => formik.setFieldTouched("product_type", true)}
+              >
+                <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
+                  <SelectValue placeholder="اختر نوع المنتج" />
+                </SelectTrigger>
+                <SelectContent>
+                  {productTypeOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value.toString()}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {formik.touched.product_type && formik.errors.product_type && (
+                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.product_type}</p>
+              )}
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              نوع الحجز
-            </label>
-            <Select
-              onValueChange={(value) => formik.setFieldValue("type", value)}
-              value={formik.values.type}
-              onBlur={() => formik.setFieldTouched("type", true)}
-            >
-              <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
-                <SelectValue placeholder="اختر نوع الحجز" />
-              </SelectTrigger>
-              <SelectContent>
-                {typeOptions.map((option) => (
-                  <SelectItem
-                    key={option.value}
-                    value={option.value.toString()}
-                  >
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {formik.touched.type && formik.errors.type && (
-              <p className="text-sm text-red-500 mt-1 text-right">
-                {formik.errors.type}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              تاريخ البداية
-            </label>
-            <Input
-              type="date"
-              {...formik.getFieldProps("start_date")}
-              className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
-            />
-            {formik.touched.start_date && formik.errors.start_date && (
-              <p className="text-sm text-red-500 mt-1 text-right">
-                {formik.errors.start_date}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              تاريخ النهاية
-            </label>
-            <Input
-              type="date"
-              {...formik.getFieldProps("end_date")}
-              className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
-            />
-            {formik.touched.end_date && formik.errors.end_date && (
-              <p className="text-sm text-red-500 mt-1 text-right">
-                {formik.errors.end_date}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              نوع المنتج
-            </label>
-            <Select
-              onValueChange={(value) =>
-                formik.setFieldValue("product_type", value)
-              }
-              value={formik.values.product_type}
-              onBlur={() => formik.setFieldTouched("product_type", true)}
-            >
-              <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
-                <SelectValue placeholder="اختر نوع المنتج" />
-              </SelectTrigger>
-              <SelectContent>
-                {productTypeOptions.map((option) => (
-                  <SelectItem
-                    key={option.value}
-                    value={option.value.toString()}
-                  >
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {formik.touched.product_type && formik.errors.product_type && (
-              <p className="text-sm text-red-500 mt-1 text-right">
-                {formik.errors.product_type}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
-            اللوحات الطرقية
-          </h2>
-          <div className="rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gray-100 dark:bg-gray-800">
-                  <TableHead className="text-right">نموذج</TableHead>
-                  <TableHead className="text-right">عدد الأوجه</TableHead>
-                  <TableHead className="text-right">
-                    عدد الأوجه المحجوزة
-                  </TableHead>
-                  <TableHead className="text-right">عدد الأمتار</TableHead>
-                  <TableHead className="text-right">القياس</TableHead>
-                  <TableHead className="text-right">المنطقة</TableHead>
-                  <TableHead className="text-right">مكان التموضع</TableHead>
-                  <TableHead className="text-right">الاتجاه</TableHead>
-                  <TableHead className="text-right">الحالة</TableHead>
-                  <TableHead className="text-right">إجراء</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoadingRoadSigns ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-4">
-                      جاري التحميل...
-                    </TableCell>
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
+              اللوحات الطرقية
+            </h2>
+            <div className="rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-100 dark:bg-gray-800">
+                    <TableHead className="text-right">نموذج</TableHead>
+                    <TableHead className="text-right">عدد الأوجه</TableHead>
+                    <TableHead className="text-right">عدد الأوجه المحجوزة</TableHead>
+                    <TableHead className="text-right">عدد الأمتار</TableHead>
+                    <TableHead className="text-right">القياس</TableHead>
+                    <TableHead className="text-right">المنطقة</TableHead>
+                    <TableHead className="text-right">مكان التموضع</TableHead>
+                    <TableHead className="text-right">الاتجاه</TableHead>
+                    <TableHead className="text-right">الحالة</TableHead>
+                    <TableHead className="text-right">إجراء</TableHead>
                   </TableRow>
-                ) : roadSigns?.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-4">
-                      لا توجد لوحات متوفرة لهذه الفترة
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  roadSigns?.map((sign) => (
-                    <TableRow
-                      key={sign.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
-                    >
-                      <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
-                        {sign.template.model}
-                      </TableCell>
-                      <TableCell>{sign.faces_number}</TableCell>
-                      <TableCell>{sign.total_faces_on_date}</TableCell>
-                      <TableCell>{sign.advertising_meters}</TableCell>
-                      <TableCell>{sign.template.size}</TableCell>
-                      <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
-                        {sign.region.name}
-                      </TableCell>
-                      <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
-                        {sign.place}
-                      </TableCell>
-                      <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
-                        {sign.directions}
-                      </TableCell>
-                      <TableCell>
-                        {sign.faces_number - sign.total_faces_on_date === 0
-                          ? "لا يوجد أي أوجه متاحة"
-                          : `${
-                              sign.faces_number - sign.total_faces_on_date
-                            } وجه متاح`}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => addToCart(sign)}
-                          disabled={
-                            sign.faces_number - sign.total_faces_on_date === 0
-                          }
-                          className={`flex items-center gap-2 ${
-                            addedSignIds.has(sign.id)
-                              ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300"
-                              : "bg-white dark:bg-gray-700"
-                          }`}
-                        >
-                          <ShoppingCart className="h-4 w-4" />
-                          <span>إضافة</span>
-                        </Button>
+                </TableHeader>
+                <TableBody>
+                  {isLoadingRoadSigns ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center py-4">
+                        جاري التحميل...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : roadSigns?.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center py-4">
+                        لا توجد لوحات متوفرة لهذه الفترة
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    roadSigns?.map((sign) => (
+                      <TableRow
+                        key={sign.id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                      >
+                        <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
+                          {sign.template.model}
+                        </TableCell>
+                        <TableCell>{sign.faces_number}</TableCell>
+                        <TableCell>{sign.total_faces_on_date}</TableCell>
+                        <TableCell>{sign.advertising_meters}</TableCell>
+                        <TableCell>{sign.template.size}</TableCell>
+                        <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
+                          {sign.region.name}
+                        </TableCell>
+                        <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
+                          {sign.place}
+                        </TableCell>
+                        <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
+                          {sign.directions}
+                        </TableCell>
+                        <TableCell>
+                          {sign.faces_number - sign.total_faces_on_date === 0
+                            ? "لا يوجد أي أوجه متاحة"
+                            : `${sign.faces_number - sign.total_faces_on_date} وجه متاح`}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => addToCart(sign)}
+                            disabled={sign.faces_number - sign.total_faces_on_date === 0}
+                            className={`flex items-center gap-2 ${
+                              addedSignIds.has(sign.id)
+                                ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300"
+                                : "bg-white dark:bg-gray-700"
+                            }`}
+                          >
+                            <ShoppingCart className="h-4 w-4" />
+                            <span>إضافة</span>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent
@@ -516,9 +528,8 @@ const AddBooking = () => {
                   الزبون:
                 </span>
                 <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium truncate">
-                  {customers?.find(
-                    (c) => c.id === parseInt(formik.values.customer_id)
-                  )?.full_name || "غير محدد"}
+                  {customers?.find((c) => c.id === parseInt(formik.values.customer_id))?.full_name ||
+                    "غير محدد"}
                 </span>
               </div>
               <div className="flex flex-col">
@@ -526,9 +537,8 @@ const AddBooking = () => {
                   نوع الحجز:
                 </span>
                 <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-                  {typeOptions.find(
-                    (t) => t.value === parseInt(formik.values.type)
-                  )?.label || "غير محدد"}
+                  {typeOptions.find((t) => t.value === parseInt(formik.values.type))?.label ||
+                    "غير محدد"}
                 </span>
               </div>
               <div className="flex flex-col">
@@ -552,14 +562,13 @@ const AddBooking = () => {
                   نوع المنتج:
                 </span>
                 <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-                  {productTypeOptions.find(
-                    (p) => p.value === parseInt(formik.values.product_type)
-                  )?.label || "غير محدد"}
+                  {productTypeOptions.find((p) => p.value === parseInt(formik.values.product_type))
+                    ?.label || "غير محدد"}
                 </span>
               </div>
             </div>
 
-            {calculationResult && (
+            {calculationResult  &&  (
               <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 text-right">
                   نتائج الحساب
@@ -656,20 +665,14 @@ const AddBooking = () => {
                   <TableRow className="bg-gray-100 dark:bg-gray-800">
                     <TableHead className="text-right w-auto">المنطقة</TableHead>
                     <TableHead className="text-right w-auto">المكان</TableHead>
-                    <TableHead className="text-right w-20">
-                      عدد الأوجه
-                    </TableHead>
-                    <TableHead className="text-right w-32">
-                      أمتار الطباعة
-                    </TableHead>
+                    <TableHead className="text-right w-20">عدد الأوجه</TableHead>
+                    <TableHead className="text-right w-32">أمتار الطباعة</TableHead>
                     <TableHead className="text-right w-16">إجراء</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {selectedSigns.map((sign) => {
-                    const roadSign = roadSigns?.find(
-                      (rs) => rs.id === sign.road_sign_id
-                    );
+                    const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
                     return (
                       <TableRow
                         key={sign.road_sign_id}
@@ -685,22 +688,13 @@ const AddBooking = () => {
                           <Input
                             type="number"
                             min="1"
-                            max={
-                              roadSign
-                                ? roadSign.faces_number -
-                                  roadSign.total_faces_on_date
-                                : 1
-                            } // استخدم roadSign للوصول إلى faces_number و total_faces_on_date
+                            max={roadSign ? roadSign.faces_number - roadSign.total_faces_on_date : 1}
                             value={sign.booking_faces}
-                            onChange={(e) =>
-                              updateSignFaces(sign.road_sign_id, e.target.value)
-                            }
+                            onChange={(e) => updateSignFaces(sign.road_sign_id, e.target.value)}
                             className="w-16 text-right"
                           />
                         </TableCell>
-                        <TableCell>
-                          {roadSign?.printing_meters || "غير متوفر"}
-                        </TableCell>
+                        <TableCell>{roadSign?.printing_meters || "غير متوفر"}</TableCell>
                         <TableCell>
                           <Button
                             type="button"
@@ -733,9 +727,7 @@ const AddBooking = () => {
                 onClick={() => setContractDialog(true)}
                 className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg"
               >
-                {parseInt(formik.values.type) === 1
-                  ? "تصدير عقد دائم"
-                  : "تصدير عقد مؤقت"}
+                {parseInt(formik.values.type) === 1 ? "تصدير عقد دائم" : "تصدير عقد مؤقت"}
               </Button>
             )}
             <Button
@@ -743,7 +735,7 @@ const AddBooking = () => {
               onClick={formik.submitForm}
               className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
             >
-              تثبيت الحجز
+              {isEditMode ? "تعديل الحجز" : "تثبيت الحجز"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -753,9 +745,7 @@ const AddBooking = () => {
         <DialogContent dir="rtl" className="w-full max-w-[90vw] max-w-md p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-right">
-              {parseInt(formik.values.type) === 1
-                ? "تصدير عقد دائم"
-                : "تصدير عقد مؤقت"}
+              {parseInt(formik.values.type) === 1 ? "تصدير عقد دائم" : "تصدير عقد مؤقت"}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
@@ -793,4 +783,4 @@ const AddBooking = () => {
   );
 };
 
-export default AddBooking;
+export default BookingForm;
