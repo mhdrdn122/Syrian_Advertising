@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "jsx": "react-jsx" // هذا مهم لمشاريع React التي تستخدم JSX
+  },
+  "include": ["src/**/*"] // تأكد من تضمين جميع ملفاتك المصدرية
+}
