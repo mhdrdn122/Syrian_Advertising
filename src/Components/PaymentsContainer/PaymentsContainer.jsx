@@ -1,10 +1,10 @@
 import { useState } from "react";
-import {  useGetPaymentsQuery } from "../../RtkQuery/Slice/Payments/PaymentsSlice";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import HeaderPage from "../../utils/HeaderPage";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { PaymentsColumns } from "../../utils/Tables/ColumnsTable/PaymentsColumns";
 import { DialogAddPayments } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddPayments";
+import { useGetPaymentsQuery } from "../../RtkQuery/Slice/Payments/PaymentsSlice";
 
 const PaymentsContainer = () => {
   const [openDelete, setOpenDelete] = useState(false);

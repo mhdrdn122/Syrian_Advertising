@@ -248,6 +248,7 @@ const BookingForm = ({ bookingId }) => {
           booking_faces,
         })),
       };
+      console.log(payload)
       const response = await calculateReservation(payload).unwrap();
       setCalculationResult(response);
       showToast(
@@ -284,6 +285,8 @@ const BookingForm = ({ bookingId }) => {
       return calculationResult.total_price * (1 - parseFloat(discountValue) / 100);
     }
   };
+
+  console.log(formik.values.type)
 
   return (
     <div
