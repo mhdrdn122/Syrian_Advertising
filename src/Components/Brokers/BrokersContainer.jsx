@@ -4,7 +4,7 @@ import {
 } from "../../RtkQuery/Slice/Brokers/BrokersSlice";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
-import HeaderPage from "../../utils/HeaderPage";
+import HeaderComponent from "../../utils/HeaderComponent";
 import { useState } from "react";
 import { DialogAddBroker } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddBroker";
 import { DialogEditBroker } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditBroker";
@@ -56,7 +56,7 @@ const BrokersContainer = () => {
 
   return (
     <div className="p-4 sm:p-6 max-w-full mx-auto space-y-6">
-      <HeaderPage title={"الوسطاء"} titleBtn={"إضافة وسيط"} setShow={setOpen} />
+      <HeaderComponent title={"الوسطاء"} titleBtn={"إضافة وسيط"} setShow={setOpen} />
       <DynamicTable
         data={brokers || []}
         columns={BrokersColumns}

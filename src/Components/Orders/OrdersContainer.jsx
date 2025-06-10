@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
   useConfirmOneOrderMutation,
   useGetOrdersQuery,
-} from "../../RtkQuery/Slice/orders/ordersApi";
+} from "../../RtkQuery/Slice/Orders/OrdersSlice";
 import {
   useGetCitiesQuery,
   useGetActiveRegionsByCityMutation,

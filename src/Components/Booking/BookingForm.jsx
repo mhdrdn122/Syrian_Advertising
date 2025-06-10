@@ -39,7 +39,7 @@ import { ShoppingCart, Trash2 } from "lucide-react";
 import { showToast } from "../../utils/Notifictions/showToast";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -62,18 +62,23 @@ const BookingForm = ({ bookingId }) => {
   const [contractDialog, setContractDialog] = useState(false);
   const [notes, setNotes] = useState("");
   const [queryParams, setQueryParams] = useState({ start_date: "2025-06-30" });
-  const {id} = useParams();
+  const { id } = useParams();
 
-  const { data: customers, isLoading: isLoadingCustomers } = useGetCustomersQuery();
-  const { data: roadSigns, isLoading: isLoadingRoadSigns } = useGetRoadSignsQuery(queryParams);
-  const { data: bookingData, isLoading: isLoadingBooking } = useGetOneBookingsQuery(id, {
-    skip: !isEditMode,
-  });
+  const { data: customers, isLoading: isLoadingCustomers } =
+    useGetCustomersQuery();
+  const { data: roadSigns, isLoading: isLoadingRoadSigns } =
+    useGetRoadSignsQuery(queryParams);
+  const { data: bookingData, isLoading: isLoadingBooking } =
+    useGetOneBookingsQuery(id, {
+      skip: !isEditMode,
+    });
   const [addNewBooking] = useAddNewBookingMutation();
   const [updateBookings] = useUpdateBookingsMutation();
   const [calculateReservation] = useCalculateReservationMutation();
 
-  console.log(bookingData)
+  const navigate = useNavigate();
+  console.log(bookingData);
+
   const typeOptions = [
     { value: 1, label: "دائم" },
     { value: 2, label: "مؤقت" },
@@ -130,8 +135,12 @@ const BookingForm = ({ bookingId }) => {
         setNotes("");
         setOpenDialog(false);
         setContractDialog(false);
+        navigate("/dashboard/bookings");
       } catch (error) {
-        showToast("error", isEditMode ? "فشل في تعديل الحجز" : "فشل في إضافة الحجز");
+        showToast(
+          "error",
+          isEditMode ? "فشل في تعديل الحجز" : "فشل في إضافة الحجز"
+        );
       }
     },
   });
@@ -165,6 +174,7 @@ const BookingForm = ({ bookingId }) => {
       });
     }
   }, [bookingData, isEditMode, isLoadingBooking]);
+  console.log(bookingData?.customer_id)
 
   // Update query params when start_date or end_date changes
   useEffect(() => {
@@ -187,7 +197,9 @@ const BookingForm = ({ bookingId }) => {
       );
       if (unavailableSigns.length > 0) {
         setSelectedSigns(
-          selectedSigns.filter((sign) => availableSignIds.has(sign.road_sign_id))
+          selectedSigns.filter((sign) =>
+            availableSignIds.has(sign.road_sign_id)
+          )
         );
         setAddedSignIds(
           new Set([...addedSignIds].filter((id) => availableSignIds.has(id)))
@@ -248,7 +260,7 @@ const BookingForm = ({ bookingId }) => {
           booking_faces,
         })),
       };
-      console.log(payload)
+      console.log(payload);
       const response = await calculateReservation(payload).unwrap();
       setCalculationResult(response);
       showToast(
@@ -278,15 +290,18 @@ const BookingForm = ({ bookingId }) => {
   };
 
   const calculateDiscountedPrice = () => {
-    if (!calculationResult || !discountValue) return calculationResult?.total_price;
+    if (!calculationResult || !discountValue)
+      return calculationResult?.total_price;
     if (discountType === "1") {
       return calculationResult.total_price - parseFloat(discountValue);
     } else {
-      return calculationResult.total_price * (1 - parseFloat(discountValue) / 100);
+      return (
+        calculationResult.total_price * (1 - parseFloat(discountValue) / 100)
+      );
     }
   };
 
-  console.log(formik.values.type)
+  console.log(formik.values.type);
 
   return (
     <div
@@ -324,8 +339,10 @@ const BookingForm = ({ bookingId }) => {
                 الزبون
               </label>
               <Select
-                onValueChange={(value) => formik.setFieldValue("customer_id", value)}
-                value={formik.values.customer_id}
+                onValueChange={(value) =>
+                  formik.setFieldValue("customer_id", value)
+                }
+                value={bookingData?.customer_id.toString()}
                 onBlur={() => formik.setFieldTouched("customer_id", true)}
               >
                 <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
@@ -336,7 +353,10 @@ const BookingForm = ({ bookingId }) => {
                     <SelectItem value="loading">جاري التحميل...</SelectItem>
                   ) : (
                     customers?.map((customer) => (
-                      <SelectItem key={customer.id} value={customer.id.toString()}>
+                      <SelectItem
+                        key={customer.id}
+                        value={customer.id.toString()}
+                      >
                         {customer.full_name} - {customer.company_name}
                       </SelectItem>
                     ))
@@ -344,7 +364,9 @@ const BookingForm = ({ bookingId }) => {
                 </SelectContent>
               </Select>
               {formik.touched.customer_id && formik.errors.customer_id && (
-                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.customer_id}</p>
+                <p className="text-sm text-red-500 mt-1 text-right">
+                  {formik.errors.customer_id}
+                </p>
               )}
             </div>
 
@@ -354,7 +376,7 @@ const BookingForm = ({ bookingId }) => {
               </label>
               <Select
                 onValueChange={(value) => formik.setFieldValue("type", value)}
-                value={formik.values.type}
+                value={bookingData?.type.toString()}
                 onBlur={() => formik.setFieldTouched("type", true)}
               >
                 <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
@@ -362,14 +384,19 @@ const BookingForm = ({ bookingId }) => {
                 </SelectTrigger>
                 <SelectContent>
                   {typeOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value.toString()}>
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
                       {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               {formik.touched.type && formik.errors.type && (
-                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.type}</p>
+                <p className="text-sm text-red-500 mt-1 text-right">
+                  {formik.errors.type}
+                </p>
               )}
             </div>
 
@@ -383,7 +410,9 @@ const BookingForm = ({ bookingId }) => {
                 className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
               />
               {formik.touched.start_date && formik.errors.start_date && (
-                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.start_date}</p>
+                <p className="text-sm text-red-500 mt-1 text-right">
+                  {formik.errors.start_date}
+                </p>
               )}
             </div>
 
@@ -397,7 +426,9 @@ const BookingForm = ({ bookingId }) => {
                 className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
               />
               {formik.touched.end_date && formik.errors.end_date && (
-                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.end_date}</p>
+                <p className="text-sm text-red-500 mt-1 text-right">
+                  {formik.errors.end_date}
+                </p>
               )}
             </div>
 
@@ -406,8 +437,10 @@ const BookingForm = ({ bookingId }) => {
                 نوع المنتج
               </label>
               <Select
-                onValueChange={(value) => formik.setFieldValue("product_type", value)}
-                value={formik.values.product_type}
+                onValueChange={(value) =>
+                  formik.setFieldValue("product_type", value)
+                }
+                value={bookingData?.product_type.toString()}
                 onBlur={() => formik.setFieldTouched("product_type", true)}
               >
                 <SelectTrigger className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right">
@@ -415,14 +448,20 @@ const BookingForm = ({ bookingId }) => {
                 </SelectTrigger>
                 <SelectContent>
                   {productTypeOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value.toString()}>
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
+                      
                       {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               {formik.touched.product_type && formik.errors.product_type && (
-                <p className="text-sm text-red-500 mt-1 text-right">{formik.errors.product_type}</p>
+                <p className="text-sm text-red-500 mt-1 text-right">
+                  {formik.errors.product_type}
+                </p>
               )}
             </div>
           </div>
@@ -437,7 +476,9 @@ const BookingForm = ({ bookingId }) => {
                   <TableRow className="bg-gray-100 dark:bg-gray-800">
                     <TableHead className="text-right">نموذج</TableHead>
                     <TableHead className="text-right">عدد الأوجه</TableHead>
-                    <TableHead className="text-right">عدد الأوجه المحجوزة</TableHead>
+                    <TableHead className="text-right">
+                      عدد الأوجه المحجوزة
+                    </TableHead>
                     <TableHead className="text-right">عدد الأمتار</TableHead>
                     <TableHead className="text-right">القياس</TableHead>
                     <TableHead className="text-right">المنطقة</TableHead>
@@ -485,7 +526,9 @@ const BookingForm = ({ bookingId }) => {
                         <TableCell>
                           {sign.faces_number - sign.total_faces_on_date === 0
                             ? "لا يوجد أي أوجه متاحة"
-                            : `${sign.faces_number - sign.total_faces_on_date} وجه متاح`}
+                            : `${
+                                sign.faces_number - sign.total_faces_on_date
+                              } وجه متاح`}
                         </TableCell>
                         <TableCell>
                           <Button
@@ -493,7 +536,9 @@ const BookingForm = ({ bookingId }) => {
                             variant="outline"
                             size="sm"
                             onClick={() => addToCart(sign)}
-                            disabled={sign.faces_number - sign.total_faces_on_date === 0}
+                            disabled={
+                              sign.faces_number - sign.total_faces_on_date === 0
+                            }
                             className={`flex items-center gap-2 ${
                               addedSignIds.has(sign.id)
                                 ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300"
@@ -531,8 +576,9 @@ const BookingForm = ({ bookingId }) => {
                   الزبون:
                 </span>
                 <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium truncate">
-                  {customers?.find((c) => c.id === parseInt(formik.values.customer_id))?.full_name ||
-                    "غير محدد"}
+                  {customers?.find(
+                    (c) => c.id === parseInt(formik.values.customer_id)
+                  )?.full_name || "غير محدد"}
                 </span>
               </div>
               <div className="flex flex-col">
@@ -540,8 +586,9 @@ const BookingForm = ({ bookingId }) => {
                   نوع الحجز:
                 </span>
                 <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-                  {typeOptions.find((t) => t.value === parseInt(formik.values.type))?.label ||
-                    "غير محدد"}
+                  {typeOptions.find(
+                    (t) => t.value === parseInt(formik.values.type)
+                  )?.label || "غير محدد"}
                 </span>
               </div>
               <div className="flex flex-col">
@@ -565,13 +612,14 @@ const BookingForm = ({ bookingId }) => {
                   نوع المنتج:
                 </span>
                 <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-                  {productTypeOptions.find((p) => p.value === parseInt(formik.values.product_type))
-                    ?.label || "غير محدد"}
+                  {productTypeOptions.find(
+                    (p) => p.value === parseInt(formik.values.product_type)
+                  )?.label || "غير محدد"}
                 </span>
               </div>
             </div>
 
-            {calculationResult  &&  (
+            {calculationResult && (
               <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 text-right">
                   نتائج الحساب
@@ -668,14 +716,20 @@ const BookingForm = ({ bookingId }) => {
                   <TableRow className="bg-gray-100 dark:bg-gray-800">
                     <TableHead className="text-right w-auto">المنطقة</TableHead>
                     <TableHead className="text-right w-auto">المكان</TableHead>
-                    <TableHead className="text-right w-20">عدد الأوجه</TableHead>
-                    <TableHead className="text-right w-32">أمتار الطباعة</TableHead>
+                    <TableHead className="text-right w-20">
+                      عدد الأوجه
+                    </TableHead>
+                    <TableHead className="text-right w-32">
+                      أمتار الطباعة
+                    </TableHead>
                     <TableHead className="text-right w-16">إجراء</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {selectedSigns.map((sign) => {
-                    const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
+                    const roadSign = roadSigns?.find(
+                      (rs) => rs.id === sign.road_sign_id
+                    );
                     return (
                       <TableRow
                         key={sign.road_sign_id}
@@ -691,13 +745,22 @@ const BookingForm = ({ bookingId }) => {
                           <Input
                             type="number"
                             min="1"
-                            max={roadSign ? roadSign.faces_number - roadSign.total_faces_on_date : 1}
+                            max={
+                              roadSign
+                                ? roadSign.faces_number -
+                                  roadSign.total_faces_on_date
+                                : 1
+                            }
                             value={sign.booking_faces}
-                            onChange={(e) => updateSignFaces(sign.road_sign_id, e.target.value)}
+                            onChange={(e) =>
+                              updateSignFaces(sign.road_sign_id, e.target.value)
+                            }
                             className="w-16 text-right"
                           />
                         </TableCell>
-                        <TableCell>{roadSign?.printing_meters || "غير متوفر"}</TableCell>
+                        <TableCell>
+                          {roadSign?.printing_meters || "غير متوفر"}
+                        </TableCell>
                         <TableCell>
                           <Button
                             type="button"
@@ -730,7 +793,9 @@ const BookingForm = ({ bookingId }) => {
                 onClick={() => setContractDialog(true)}
                 className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg"
               >
-                {parseInt(formik.values.type) === 1 ? "تصدير عقد دائم" : "تصدير عقد مؤقت"}
+                {parseInt(formik.values.type) === 1
+                  ? "تصدير عقد دائم"
+                  : "تصدير عقد مؤقت"}
               </Button>
             )}
             <Button
@@ -748,7 +813,9 @@ const BookingForm = ({ bookingId }) => {
         <DialogContent dir="rtl" className="w-full max-w-[90vw] max-w-md p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-right">
-              {parseInt(formik.values.type) === 1 ? "تصدير عقد دائم" : "تصدير عقد مؤقت"}
+              {parseInt(formik.values.type) === 1
+                ? "تصدير عقد دائم"
+                : "تصدير عقد مؤقت"}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">

@@ -53,11 +53,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: IconCalendarEvent,
       },
       {
-        title: "العقود",
-        url: "/dashboard/contracts",
-        icon: IconChartBar,
-      },
-      {
         title: "الدفعات",
         url: "/dashboard/payments",
         icon: IconCash,

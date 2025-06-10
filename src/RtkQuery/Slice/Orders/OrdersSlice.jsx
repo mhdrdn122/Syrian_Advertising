@@ -15,6 +15,7 @@ export const OrdersSlice = createApi({
       getOrders: builder.query({
         query: (params) => {
           const queryParams = new URLSearchParams();
+          console.log(queryParams)
           if (params?.type) {
             params.type.forEach((type, index) => {
               queryParams.append(`type[${index}]`, type);

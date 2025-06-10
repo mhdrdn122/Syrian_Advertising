@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import UsersContainer from '../../Components/Users/UsersContainer';
-import HeaderPage from '../../utils/HeaderPage';
+import HeaderComponent from '../../utils/HeaderComponent';
 import { DialogAddUser } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddUser';
 import { useGetUsersQuery } from '../../RtkQuery/Slice/Users/UsersSlice';
 import useSearch from '../../hooks/useSearch';
@@ -16,7 +16,7 @@ const UsersPage = () => {
 
   return (
     <div>
-      <HeaderPage title={'الموظفين'} titleBtn={'إضافة موظف'} setShow={setOpen} />
+      <HeaderComponent title={'الموظفين'} titleBtn={'إضافة موظف'} setShow={setOpen} />
       <div className="p-4" dir="rtl">
         <input
           type="text"

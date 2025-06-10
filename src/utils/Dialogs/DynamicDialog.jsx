@@ -15,6 +15,9 @@ import Select from "react-select";
 import { showToast } from "../Notifictions/showToast";
 import { Loader2 } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import { Textarea } from "@/Components/ui/textarea";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css"; 
 
 const DynamicDialog = ({
   show,
@@ -31,7 +34,9 @@ const DynamicDialog = ({
   const hasNotifiedRef = useRef(false);
   const [mutate, { isLoading, isSuccess, isError, error }] = mutationHook();
 
+
   const renderField = (field, formik) => {
+
     switch (field.type) {
       case "select":
         const options = field.options || (selectData[field.dataKey]?.data || []);
@@ -50,10 +55,10 @@ const DynamicDialog = ({
               onChange={(selectedOption) => formik.setFieldValue(field.name, selectedOption ? selectedOption.value : "")}
               onBlur={() => formik.setFieldTouched(field.name, true)}
               placeholder={`اختر ${field.label}`}
-              isSearchable={true} // تفعيل البحث
-              autoFocus={true} // التركيز التلقائي على حقل البحث عند فتح القائمة
+              isSearchable={true}
+              autoFocus={true}
               noOptionsMessage={() => "لا توجد خيارات مطابقة"}
-              menuPlacement="auto" // ضبط موضع القائمة تلقائيًا
+              menuPlacement="auto"
               styles={{
                 control: (base) => ({
                   ...base,
@@ -69,28 +74,28 @@ const DynamicDialog = ({
                 input: (base) => ({
                   ...base,
                   direction: "rtl",
-                  padding: "8px", // جعل حقل البحث أكثر وضوحًا
+                  padding: "8px",
                 }),
                 menu: (base) => ({
                   ...base,
                   direction: "rtl",
-                  zIndex: 9999, // التأكد من ظهور القائمة فوق العناصر الأخرى
+                  zIndex: 9999,
                 }),
                 option: (base, { isFocused, isSelected }) => ({
                   ...base,
                   direction: "rtl",
                   textAlign: "right",
                   backgroundColor: isSelected
-                    ? "#2563eb" // لون الخيار المحدد
+                    ? "#2563eb"
                     : isFocused
-                    ? "primary" // لون الخيار عند التمرير
+                    ? "primary"
                     : "white",
                   color: isSelected ? "white" : "black",
                   cursor: "pointer",
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: "#9ca3af", // لون النص الافتراضي
+                  color: "#9ca3af",
                 }),
               }}
             />
@@ -147,6 +152,43 @@ const DynamicDialog = ({
             )}
           </div>
         );
+      case "textarea":
+        return (
+          <div key={field.name} className="space-y-2">
+            <Label htmlFor={field.name}>{field.label}</Label>
+            <Textarea
+              id={field.name}
+              name={field.name}
+              value={formik.values[field.name] || ""}
+              onChange={formik.handleChange}
+              onBlur={ formik.handleBlur}
+              dir={field.dir || "rtl"}
+              placeholder={field.placeholder || `أدخل ${field.label}`}
+              className={formik.touched[field.name] && formik.errors[field.name] ? "border-destructive" : ""}
+            />
+            {formik.touched[field.name] && formik.errors[field.name] && (
+              <p className="text-sm text-destructive">{formik.errors[field.name]}</p>
+            )}
+          </div>
+        );
+      case "reactquill":
+        return (
+          <div key={field.name} className="space-y-2">
+            <Label htmlFor={field.name}>{field.label}</Label>
+            <ReactQuill
+              id={field.name}
+              value={formik.values[field.name] || ""}
+              onChange={(value) => formik.setFieldValue(field.name, value)}
+              onBlur={() => formik.setFieldTouched(field.name, true)}
+              dir={field.dir || "rtl"}
+              placeholder={field.placeholder || `أدخل ${field.label}`}
+              className={formik.touched[field.name] && formik.errors[field.name] ? "border-destructive" : ""}
+            />
+            {formik.touched[field.name] && formik.errors[field.name] && (
+              <p className="text-sm text-destructive">{formik.errors[field.name]}</p>
+            )}
+          </div>
+        );
       default:
         return (
           <div key={field.name} className="space-y-2">
@@ -191,7 +233,6 @@ const DynamicDialog = ({
             } catch (err) {
               console.error("Mutation error:", err);
               showToast("error" , `  لقد حدث خطأ غير متوقع ${err.data.message}`)
-
             }
             handleClose();
           }}
@@ -203,7 +244,7 @@ const DynamicDialog = ({
               </div>
               <DialogFooter className="mt-6">
                 <Button
-                type="button"
+                  type="button"
                   variant="outline"
                   onClick={() => {
                     handleClose();

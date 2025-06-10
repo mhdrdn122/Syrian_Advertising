@@ -3,7 +3,7 @@ import {
   useDeleteRoadSignMutation,
 } from '../../RtkQuery/Slice/RoadSings/RoadSingsSlice';
 import { DynamicTable } from '../../utils/Tables/DynamicTable';
-import HeaderPage from '../../utils/HeaderPage';
+import HeaderComponent from '../../utils/HeaderComponent';
 import { DialogAddRoadSign } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddRoadSign';
 import { DialogEditRoadSign } from '../../utils/Dialogs/EditAddDialog/Edit/DialogEditRoadSign';
 import { DeleteDialog } from '../../utils/Dialogs/DeleteDialog/DeleteDialog';
@@ -52,7 +52,7 @@ const RoadSignsContainer = ({ data, isLoading }) => {
 
   return (
     <div className="p-4 sm:p-6 w-full  mx-auto space-y-6 overflow-x-auto">
-      <HeaderPage
+      <HeaderComponent
         title={'اللوحات الطرقية'}
         titleBtn={'إضافة لوحة'}
         setShow={setOpen}

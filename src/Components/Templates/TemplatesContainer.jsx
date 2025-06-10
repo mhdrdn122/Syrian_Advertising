@@ -3,7 +3,7 @@ import { useGetTemplatesModelQuery } from "../../RtkQuery/Slice/Template/Templat
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "../Summaries/SummariesCard";
 import { DialogAddTemplate } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddTemplate";
-import HeaderPage from "../../utils/HeaderPage";
+import HeaderComponent from "../../utils/HeaderComponent";
 
 const TemplatesContainer = () => {
   const { data, isFetching } = useGetTemplatesModelQuery();
@@ -19,7 +19,7 @@ const TemplatesContainer = () => {
   }
   return (
     <>
-      <HeaderPage
+      <HeaderComponent
         setShow={setShow}
         title={"النماذج"}
         titleBtn={"اضافة نموذج"}

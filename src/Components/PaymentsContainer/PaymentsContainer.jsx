@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
-import HeaderPage from "../../utils/HeaderPage";
+import HeaderComponent from "../../utils/HeaderComponent";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { PaymentsColumns } from "../../utils/Tables/ColumnsTable/PaymentsColumns";
 import { DialogAddPayments } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddPayments";
@@ -15,7 +15,7 @@ const PaymentsContainer = () => {
 
   return (
     <div className="p-4 sm:p-6 w-full  mx-auto space-y-6 overflow-x-auto">
-      <HeaderPage title={"المدفوعات"} titleBtn={"إضافة دفعة"} setShow={setOpen} />
+      <HeaderComponent title={"المدفوعات"} titleBtn={"إضافة دفعة"} setShow={setOpen} />
       <DynamicTable
         data={data || []}
         columns={PaymentsColumns}

@@ -11,7 +11,7 @@ const DialogEditProfile = ({show, handleClose , initData}) => {
          <DynamicDialog
           show={show}
           handleClose={handleClose}
-          title="تعديل نموذج"
+          title="تعديل ملعومات الملف الشخصي"
           fields={ProfileFields}
           validationSchema={ProfileValidationSchema}
           mutationHook={useUpdateProfileMutation}

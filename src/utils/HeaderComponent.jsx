@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 
-const HeaderPage = ( {setShow ,title , titleBtn}) => {
+const HeaderComponent = ( {setShow ,title , titleBtn}) => {
   return (
         <div className="flex my-6 px-3 flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-2">
@@ -20,4 +20,4 @@ const HeaderPage = ( {setShow ,title , titleBtn}) => {
   )
 }
 
-export default HeaderPage
+export default HeaderComponent

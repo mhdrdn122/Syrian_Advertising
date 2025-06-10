@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
-import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import {
-  useDeleteBookingMutation,
   useGetBookingQuery,
 } from "../../RtkQuery/Slice/Booking/BookingSlice";
 import { BookingColumns } from "../../utils/Tables/ColumnsTable/BookingColumns";
 import { useNavigate } from "react-router";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
-// import DialogShow from "../../utils/Dialogs/DialogShow";
 import { format } from "date-fns";
 import DialogShow from "../../utils/Dialogs/DialogShow/DialogShow";
 
@@ -21,10 +18,8 @@ const productTypeMap = {
 };
 
 const BookingContainer = () => {
-  const [openDelete, setOpenDelete] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
   const { data, isLoading } = useGetBookingQuery();
 
   const navigate = useNavigate();
@@ -64,22 +59,7 @@ const BookingContainer = () => {
 
   };
 
-  const handleDelete = (booking) => {
-    setSelectedBooking(booking);
-    setOpenDelete(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (selectedBooking) {
-      try {
-        await deleteBooking(selectedBooking.id).unwrap();
-        setOpenDelete(false);
-        setSelectedBooking(null);
-      } catch (error) {
-        console.error('Failed to delete booking:', error);
-      }
-    }
-  };
+ 
 
   return (
     <div className="p-4 sm:p-6 w-full mx-auto space-y-6 overflow-x-auto">
@@ -101,15 +81,9 @@ const BookingContainer = () => {
         columns={BookingColumns}
         isLoading={isLoading}
         onShow={onShow}
-        onDelete={handleDelete}
         onEdit={onEdit}
       />
-      <DeleteDialog
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        onConfirm={handleConfirmDelete}
-        loading={isDeleting}
-      />
+     
       <DialogShow
         data={selectedBooking}
         show={open}

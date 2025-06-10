@@ -1,6 +1,7 @@
 const BookingType = {
-  1: "مؤقت",
-  2: "دائم",
+  1: "دائم",
+  2: "مؤقت",
+
 };
 
 export const BookingColumns = [

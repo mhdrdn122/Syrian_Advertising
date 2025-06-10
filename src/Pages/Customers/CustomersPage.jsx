@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import CustomersContainer from '../../Components/Customers/CustomersContainer'
-import HeaderPage from '../../utils/HeaderPage'
+import HeaderComponent from '../../utils/HeaderComponent'
 import { DialogAddCustomer } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddCustomer'
 import { useGetCustomersQuery } from '../../RtkQuery/Slice/Customers/CustomersSlice'
 import useSearch from '../../hooks/useSearch'
@@ -19,7 +19,7 @@ const CustomersPage = () => {
 
   return (
     <div>
-      <HeaderPage title={"الزبائن"} setShow={setOpen} titleBtn={"إضافة زبون جديد"} />
+      <HeaderComponent title={"الزبائن"} setShow={setOpen} titleBtn={"إضافة زبون جديد"} />
        <div className="p-4" dir="rtl">
         <input
           type="text"

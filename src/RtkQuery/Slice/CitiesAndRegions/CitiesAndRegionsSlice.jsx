@@ -86,5 +86,5 @@ export const {
   useAddNewRegionMutation,
   useUpdateRegionMutation,
   useDeleteRegionMutation,
-  useGetActiveRegionsByCityMutation
+  useGetActiveRegionsByCityMutation,
 } = CitiesAndRegionsSlice;

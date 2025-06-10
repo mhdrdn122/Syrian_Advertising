@@ -13,15 +13,13 @@ import UserInfo from "./Pages/Users/UserInfo";
 import RoadSignsPage from "./Pages/RoadSigns/RoadSignsPage";
 import PaymentsPages from "./Pages/Payments/PaymentsPages";
 import BookingPage from "./Pages/Booking/BookingPage";
-import ContractsPage from "./Pages/Contracts/ContractsPage";
 import OrdersPage from "./Pages/Orders/OrdersPage";
 import RegionsCityPage from "./Pages/RegionsCity/RegionsCityPage";
 import SummariesPage from "./Pages/Summaries/SummariesPage";
 import AdministrationPageLayout from "./Layout/AdministrationPageLayout/AdministrationPageLayout";
-import AddBooking from "./Components/Booking/AddBooking";
 import ContractPage from "./Components/Booking/ContractPage";
 import ReportsPage from "./Pages/Reports/ReportsPage";
-import BookingForm from "./Components/Booking/BookingForm";
+import BookingForm from "./Components/Booking/BookingForm/BookingForm";
 
 function App() {
   return (
@@ -59,7 +57,6 @@ function App() {
 
             
 
-              <Route path="contracts" element={<ContractsPage />} />
               <Route path="regions-city" element={<RegionsCityPage />} />
               <Route path="brokers" element={<BrokersPage />} />
               <Route path="profile" element={<ProfilePage />} />
