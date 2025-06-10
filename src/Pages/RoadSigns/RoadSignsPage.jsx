@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import RoadSignsContainer from '../../Components/RoadSigns/RoadSignsContainer';
-import { useGetRoadSignsQuery } from '../../RtkQuery/Slice/RoadSings/RoadSingsSlice';
-import { useGetActiveRegionsByCityMutation, useGetCitiesQuery } from '../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsSlice';
+import { useGetRoadSignsQuery } from '../../RtkQuery/Slice/RoadSings/RoadSingsApi';
+import { useGetActiveRegionsByCityMutation, useGetCitiesQuery } from '../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi';
 import RoadSignsPdf from '../../Components/RoadSigns/RoadSignsPdf';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   useDeleteRoadSignMutation,
-} from '../../RtkQuery/Slice/RoadSings/RoadSingsSlice';
+} from '../../RtkQuery/Slice/RoadSings/RoadSingsApi';
 import { DynamicTable } from '../../utils/Tables/DynamicTable';
 import HeaderComponent from '../../utils/HeaderComponent';
 import { DialogAddRoadSign } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddRoadSign';

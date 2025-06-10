@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersSlice";
+import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersApi";
 
 const CartDialog = ({
   openCartDialog,

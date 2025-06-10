@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import {
   useConfirmOneOrderMutation,
   useGetOrdersQuery,
-} from "../../RtkQuery/Slice/Orders/OrdersSlice";
+} from "../../RtkQuery/Slice/Orders/OrdersApi";
 import {
   useGetCitiesQuery,
   useGetActiveRegionsByCityMutation,
-} from "../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsSlice";
+} from "../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { OrderFieldsShow } from "../../utils/Dialogs/Data/Show/OrderFieldsShow";
 import DialogShow from "../../utils/Dialogs/DialogShow/DialogShow";

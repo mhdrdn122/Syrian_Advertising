@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import {
   useGetBookingQuery,
-} from "../../RtkQuery/Slice/Booking/BookingSlice";
+} from "../../RtkQuery/Slice/Booking/BookingApi";
 import { BookingColumns } from "../../utils/Tables/ColumnsTable/BookingColumns";
 import { useNavigate } from "react-router";
 import { Icon } from "@iconify/react";

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 import logo from "../../assets/images/adv_syrian.png";
 import { useParams } from "react-router";
-import { useGetOneBookingsQuery } from "../../RtkQuery/Slice/Booking/BookingSlice";
+import { useGetOneBookingsQuery } from "../../RtkQuery/Slice/Booking/BookingApi";
 import { styles } from "./ContractStyle";
 
 const ContractPage = () => {

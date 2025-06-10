@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
-import { useLoginMutation } from "../../RtkQuery/Slice/Auth/AuthSlice";
+import { useLoginMutation } from "../../RtkQuery/Slice/Auth/AuthApi";
 import Cookies from "universal-cookie";
 import { Loader2 } from "lucide-react";
 import { Toaster } from "react-hot-toast";

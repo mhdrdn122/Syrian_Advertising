@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import UsersContainer from '../../Components/Users/UsersContainer';
 import HeaderComponent from '../../utils/HeaderComponent';
 import { DialogAddUser } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddUser';
-import { useGetUsersQuery } from '../../RtkQuery/Slice/Users/UsersSlice';
+import { useGetUsersQuery } from '../../RtkQuery/Slice/Users/UsersApi';
 import useSearch from '../../hooks/useSearch';
 
 const UsersPage = () => {

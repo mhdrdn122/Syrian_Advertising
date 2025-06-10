@@ -8,7 +8,7 @@ import {
   useAddNewRegionMutation,
   useUpdateRegionMutation,
   useDeleteRegionMutation,
-} from "../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsSlice"; // Adjust path as needed
+} from "../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi"; // Adjust path as needed
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

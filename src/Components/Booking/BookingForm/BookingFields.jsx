@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useGetCustomersQuery } from "../../../RtkQuery/Slice/Customers/CustomersSlice";
+import { useGetCustomersQuery } from "../../../RtkQuery/Slice/Customers/CustomersApi";
 
 
 const typeOptions = [

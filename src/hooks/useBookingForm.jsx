@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 // import { useAddNewBookingMutation } from "../../../RtkQuery/Slice/Booking/BookingSlice";
 // import { showToast } from "../../../utils/Notifictions/showToast";
 import { validationSchema } from "../Components/Booking/AddBooking/constants";
-import { useAddNewBookingMutation } from "../RtkQuery/Slice/Booking/BookingSlice";
+import { useAddNewBookingMutation } from "../RtkQuery/Slice/Booking/BookingApi";
 import { showToast } from "../utils/Notifictions/showToast";
 
 

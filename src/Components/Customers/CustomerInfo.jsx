@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router"
-import { useDeleteCustomerMutation, useShowOneCustomerQuery } from "../../RtkQuery/Slice/Customers/CustomersSlice"
+import { useDeleteCustomerMutation, useShowOneCustomerQuery } from "../../RtkQuery/Slice/Customers/CustomersApi"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"

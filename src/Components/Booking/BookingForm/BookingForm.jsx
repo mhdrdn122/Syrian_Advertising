@@ -6,8 +6,8 @@ import {
   useCalculateReservationMutation,
   useUpdateBookingsMutation,
   useGetOneBookingsQuery,
-} from "../../../RtkQuery/Slice/Booking/BookingSlice";
-import { useGetRoadSignsQuery } from "../../../RtkQuery/Slice/RoadSings/RoadSingsSlice";
+} from "../../../RtkQuery/Slice/Booking/BookingApi";
+import { useGetRoadSignsQuery } from "../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { Button } from "@/components/ui/button";
 
 import { ShoppingCart } from "lucide-react";

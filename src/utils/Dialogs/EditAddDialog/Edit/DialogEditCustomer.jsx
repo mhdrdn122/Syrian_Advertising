@@ -1,4 +1,4 @@
-import {  useUpdateCustomerMutation } from "../../../../RtkQuery/Slice/Customers/CustomersSlice";
+import {  useUpdateCustomerMutation } from "../../../../RtkQuery/Slice/Customers/CustomersApi";
 import { CustomerFields } from "../../Data/Add/CustomerDialogConfiguration/CustomerFields";
 import { CustomerInitialValues } from "../../Data/Add/CustomerDialogConfiguration/CustomerInitialValues";
 import { CustomersValidationSchema } from "../../Data/Add/CustomerDialogConfiguration/CustomerValidationSchema";

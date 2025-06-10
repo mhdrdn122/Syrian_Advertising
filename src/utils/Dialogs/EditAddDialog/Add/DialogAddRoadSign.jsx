@@ -1,5 +1,5 @@
-import {  useGetCitiesQuery, useGetRegionsQuery } from "../../../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsSlice";
-import { useAddRoadSignMutation,  useGetTemplateProductsQuery } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsSlice";
+import {  useGetCitiesQuery, useGetRegionsQuery } from "../../../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
+import { useAddRoadSignMutation,  useGetTemplateProductsQuery } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { roadSignFields } from "../../Data/Add/RoadSignDialogConfiguration/roadSignFields";
 import { roadSignInitialValues } from "../../Data/Add/RoadSignDialogConfiguration/roadSignInitialValues";
 import { roadSignValidationSchema } from "../../Data/Add/RoadSignDialogConfiguration/roadSignValidationSchema";

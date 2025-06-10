@@ -1,5 +1,5 @@
-import { useAddNewPaymentMutation } from "../../../../RtkQuery/Slice/Payments/PaymentsSlice";
-import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersSlice";
+import { useAddNewPaymentMutation } from "../../../../RtkQuery/Slice/Payments/PaymentsApi";
+import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersApi";
 import { PaymentFields } from "../../Data/Add/PaymentsDialogConfiguration/PaymentFields";
 import { PaymentInitialValues } from "../../Data/Add/PaymentsDialogConfiguration/PaymentInitialValues";
 import { PaymentValidationSchema } from "../../Data/Add/PaymentsDialogConfiguration/PaymentValidationSchema";

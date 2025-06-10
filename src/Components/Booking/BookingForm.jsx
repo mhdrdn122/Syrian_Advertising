@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useGetCustomersQuery } from "../../RtkQuery/Slice/Customers/CustomersSlice";
+import { useGetCustomersQuery } from "../../RtkQuery/Slice/Customers/CustomersApi";
 import {
   useAddNewBookingMutation,
   useCalculateReservationMutation,
   useUpdateBookingsMutation,
   useGetOneBookingsQuery,
-} from "../../RtkQuery/Slice/Booking/BookingSlice";
-import { useGetRoadSignsQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsSlice";
+} from "../../RtkQuery/Slice/Booking/BookingApi";
+import { useGetRoadSignsQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

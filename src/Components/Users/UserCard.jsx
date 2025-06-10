@@ -13,7 +13,7 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
-import { useDeleteUserMutation } from "../../RtkQuery/Slice/Users/UsersSlice";
+import { useDeleteUserMutation } from "../../RtkQuery/Slice/Users/UsersApi";
 
 const UserCard = ({
   id,

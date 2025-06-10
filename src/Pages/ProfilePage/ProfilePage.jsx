@@ -1,4 +1,4 @@
-import { useGetProfileQuery, useGetCompanyQuery } from "../../RtkQuery/Slice/Auth/AuthSlice"
+import { useGetProfileQuery, useGetCompanyQuery } from "../../RtkQuery/Slice/Auth/AuthApi"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"

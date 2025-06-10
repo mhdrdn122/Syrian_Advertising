@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // import { useCalculateReservationMutation } from "../../../RtkQuery/Slice/Booking/BookingSlice";
 // import { showToast } from "../../../utils/Notifictions/showToast";
-import { useCalculateReservationMutation } from "../RtkQuery/Slice/Booking/BookingSlice";
+import { useCalculateReservationMutation } from "../RtkQuery/Slice/Booking/BookingApi";
 import { showToast } from "../utils/Notifictions/showToast";
 
 export const useCart = (

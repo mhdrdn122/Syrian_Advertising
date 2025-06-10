@@ -19,7 +19,7 @@ import {
   SidebarHeader,
   SidebarMenu
 } from "@/components/ui/sidebar";
-import { useGetProfileQuery } from "../RtkQuery/Slice/Auth/AuthSlice";
+import { useGetProfileQuery } from "../RtkQuery/Slice/Auth/AuthApi";
 import { useLocation } from "react-router";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

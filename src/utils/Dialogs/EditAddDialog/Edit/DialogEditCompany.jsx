@@ -1,4 +1,4 @@
-import { useUpdateCompanyMutation } from '../../../../RtkQuery/Slice/Auth/AuthSlice'
+import { useUpdateCompanyMutation } from '../../../../RtkQuery/Slice/Auth/AuthApi'
 import { CompanyFields } from '../../Data/Edit/CompanyDialogConfiguration/CompanyFields'
 import { CompanyValidationSchema } from '../../Data/Edit/CompanyDialogConfiguration/CompanyValidationSchema'
 import DynamicDialog from '../../DynamicDialog'

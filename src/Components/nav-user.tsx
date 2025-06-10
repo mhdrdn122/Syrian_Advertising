@@ -23,7 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link, useNavigate } from "react-router";
-import { useLogoutMutation } from "../RtkQuery/Slice/Auth/AuthSlice";
+import { useLogoutMutation } from "../RtkQuery/Slice/Auth/AuthApi";
 import Cookies from "universal-cookie";
 import { showToast } from "../utils/Notifictions/showToast";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,4 @@
-import { useGetCustomersQuery } from "../../RtkQuery/Slice/Customers/CustomersSlice";
+import { useGetCustomersQuery } from "../../RtkQuery/Slice/Customers/CustomersApi";
 import CustomerCard from "./CustomerCard";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 

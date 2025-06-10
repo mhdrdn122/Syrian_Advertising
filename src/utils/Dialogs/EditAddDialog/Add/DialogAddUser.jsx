@@ -1,4 +1,4 @@
-import { useAddNewUsersMutation, useGetRolesQuery } from "../../../../RtkQuery/Slice/Users/UsersSlice";
+import { useAddNewUsersMutation, useGetRolesQuery } from "../../../../RtkQuery/Slice/Users/UsersApi";
 import { UserFields } from "../../Data/Add/UsersDialogConfiguration/UserFields";
 import { userInitialValues } from "../../Data/Add/UsersDialogConfiguration/UserInitialValues";
 import { userValidationSchema } from "../../Data/Add/UsersDialogConfiguration/UserValidationSchema";

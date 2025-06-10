@@ -1,8 +1,8 @@
-import {  useGetTemplateProductsQuery, useUpdateRoadSignMutation } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsSlice";
+import {  useGetTemplateProductsQuery, useUpdateRoadSignMutation } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { roadSignFields } from "../../Data/Add/RoadSignDialogConfiguration/roadSignFields";
 import { roadSignInitialValues } from "../../Data/Add/RoadSignDialogConfiguration/roadSignInitialValues";
 import { roadSignValidationSchema } from "../../Data/Add/RoadSignDialogConfiguration/roadSignValidationSchema";
-import {  useGetCitiesQuery, useGetRegionsQuery } from "../../../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsSlice";
+import {  useGetCitiesQuery, useGetRegionsQuery } from "../../../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
 import DynamicDialog from "../../DynamicDialog";
 
 export const DialogEditRoadSign = ({ show, handleClose , initData }) => {

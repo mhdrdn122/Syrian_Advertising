@@ -1,7 +1,7 @@
 import {
   useDeleteBrokerMutation,
   useGetBrokersQuery,
-} from "../../RtkQuery/Slice/Brokers/BrokersSlice";
+} from "../../RtkQuery/Slice/Brokers/BrokersApi";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import HeaderComponent from "../../utils/HeaderComponent";

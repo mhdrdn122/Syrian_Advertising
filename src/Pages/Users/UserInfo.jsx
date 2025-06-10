@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { DeleteDialog } from '../../utils/Dialogs/DeleteDialog/DeleteDialog';
 import { DialogEditUser } from '../../utils/Dialogs/EditAddDialog/Edit/DialogEditUser';
 // import DialogShow from '../../utils/Dialogs/DialogShow';
-import { useDeleteUserMutation, useGetActivitiesQuery, useShowOneUsersQuery } from '../../RtkQuery/Slice/Users/UsersSlice';
+import { useDeleteUserMutation, useGetActivitiesQuery, useShowOneUsersQuery } from '../../RtkQuery/Slice/Users/UsersApi';
 import DialogShow from '../../utils/Dialogs/DialogShow/DialogShow';
 
 const UserInfo = () => {

@@ -1,4 +1,4 @@
-import { useCreateTemplateMutation } from "../../../../RtkQuery/Slice/Template/TemplateSlice";
+import { useCreateTemplateMutation } from "../../../../RtkQuery/Slice/Template/TemplateApi";
 import { TemplateFields } from "../../Data/Add/TamplateDialogConfiguration/FieldsTamplate";
 import { TemplateInitialValues } from "../../Data/Add/TamplateDialogConfiguration/InitialValuesTemplate";
 import { TemplateValidationSchema } from "../../Data/Add/TamplateDialogConfiguration/TemplateValidationSchema";

@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { Icon } from "@iconify/react"
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog"
 import { useState } from "react"
-import { useDeleteCustomerMutation } from "../../RtkQuery/Slice/Customers/CustomersSlice"
+import { useDeleteCustomerMutation } from "../../RtkQuery/Slice/Customers/CustomersApi"
 import { Button } from "@/components/ui/button"
 
 const CustomerCard = ({ 

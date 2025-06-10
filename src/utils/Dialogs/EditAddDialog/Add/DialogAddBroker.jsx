@@ -1,4 +1,4 @@
-import { useAddNewBrokerMutation } from "../../../../RtkQuery/Slice/Brokers/BrokersSlice";
+import { useAddNewBrokerMutation } from "../../../../RtkQuery/Slice/Brokers/BrokersApi";
 import { BrokerFields } from "../../Data/Add/BrokerDialogConfiguration/BrokerFields";
 import { BrokerInitialValues } from "../../Data/Add/BrokerDialogConfiguration/BrokerInitialValues";
 import { BrokerValidationSchema } from "../../Data/Add/BrokerDialogConfiguration/BrokerValidationSchema";

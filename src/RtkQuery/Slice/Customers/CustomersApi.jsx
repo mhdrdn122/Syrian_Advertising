@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { prepareHeaders } from "../Global.jsx";
-import { BASE_URL } from "../../../Api/baseUrl";
+import { BASE_URL } from "../../../Api/baseUrl.jsx";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,

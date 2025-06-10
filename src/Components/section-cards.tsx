@@ -1,4 +1,4 @@
-import { useGetSummariesQuery } from "../RtkQuery/Slice/Summaries/SummariesSlice";
+import { useGetSummariesQuery } from "../RtkQuery/Slice/Summaries/SummariesApi";
 import LoadingGet from "../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "./Summaries/SummariesCard";
 

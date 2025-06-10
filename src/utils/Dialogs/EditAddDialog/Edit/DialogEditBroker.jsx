@@ -1,4 +1,4 @@
-import {  useUpdataBrokerMutation } from "../../../../RtkQuery/Slice/Brokers/BrokersSlice";
+import {  useUpdataBrokerMutation } from "../../../../RtkQuery/Slice/Brokers/BrokersApi";
 import { BrokerFields } from "../../Data/Add/BrokerDialogConfiguration/BrokerFields";
 import { BrokerValidationSchema } from "../../Data/Add/BrokerDialogConfiguration/BrokerValidationSchema";
 import DynamicDialog from "../../DynamicDialog";

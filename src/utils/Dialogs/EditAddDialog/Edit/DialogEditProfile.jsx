@@ -1,4 +1,4 @@
-import { useUpdateProfileMutation } from '../../../../RtkQuery/Slice/Auth/AuthSlice'
+import { useUpdateProfileMutation } from '../../../../RtkQuery/Slice/Auth/AuthApi'
 import { ProfileFields } from '../../Data/Edit/ProfileDialogConfiguration/ProfileFields'
 import { ProfileInitialValues } from '../../Data/Edit/ProfileDialogConfiguration/ProfileInitialValues'
 import { ProfileValidationSchema } from '../../Data/Edit/ProfileDialogConfiguration/ProfileValidationSchema'

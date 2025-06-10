@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   useDeleteTemplateMutation,
   useGetTemplatesQuery,
-} from "../../RtkQuery/Slice/Template/TemplateSlice";
+} from "../../RtkQuery/Slice/Template/TemplateApi";
 import { useNavigate, useParams } from "react-router";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { DialogAddTemplate } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddTemplate";

@@ -1,16 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { AuthSlice } from "../Slice/Auth/AuthSlice";
-import { TemplateSlice } from "../Slice/Template/TemplateSlice";
-import { RoadSignsSlice } from "../Slice/RoadSings/RoadSingsSlice";
-import { CustomersSlice } from "../Slice/Customers/CustomersSlice";
-import { SummariesSlice } from "../Slice/Summaries/SummariesSlice";
-import { BrokersSlice } from "../Slice/Brokers/BrokersSlice";
-import { UsersSlice } from "../Slice/Users/UsersSlice";
-import { BookingSlice } from "../Slice/Booking/BookingSlice";
-import { OrdersSlice } from "../Slice/Orders/OrdersSlice";
-import { CitiesAndRegionsSlice } from "../Slice/CitiesAndRegions/CitiesAndRegionsSlice";
-import { ReportSlice } from "../Slice/Report/ReportSlice";
-import { PaymentsSlice } from "../Slice/Payments/PaymentsSlice";
+import { AuthSlice } from "../Slice/Auth/AuthApi";
+import { TemplateSlice } from "../Slice/Template/TemplateApi";
+import { RoadSignsSlice } from "../Slice/RoadSings/RoadSingsApi";
+import { CustomersSlice } from "../Slice/Customers/CustomersApi";
+import { SummariesSlice } from "../Slice/Summaries/SummariesApi";
+import { BrokersSlice } from "../Slice/Brokers/BrokersApi";
+import { UsersSlice } from "../Slice/Users/UsersApi";
+import { BookingSlice } from "../Slice/Booking/BookingApi";
+import { OrdersSlice } from "../Slice/Orders/OrdersApi";
+import { CitiesAndRegionsSlice } from "../Slice/CitiesAndRegions/CitiesAndRegionsApi";
+import { ReportSlice } from "../Slice/Report/ReportApi";
+import { PaymentsSlice } from "../Slice/Payments/PaymentsApi";
 
 const store = configureStore({
   reducer: {

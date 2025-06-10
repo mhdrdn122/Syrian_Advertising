@@ -1,4 +1,4 @@
-import { useGetRolesQuery, useUpdateUsersMutation } from "../../../../RtkQuery/Slice/Users/UsersSlice";
+import { useGetRolesQuery, useUpdateUsersMutation } from "../../../../RtkQuery/Slice/Users/UsersApi";
 import { UserFields } from "../../Data/Add/UsersDialogConfiguration/UserFields";
 import { userValidationSchema } from "../../Data/Add/UsersDialogConfiguration/UserValidationSchema";
 import DynamicDialog from "../../DynamicDialog";

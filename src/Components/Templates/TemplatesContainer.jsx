@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGetTemplatesModelQuery } from "../../RtkQuery/Slice/Template/TemplateSlice";
+import { useGetTemplatesModelQuery } from "../../RtkQuery/Slice/Template/TemplateApi";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "../Summaries/SummariesCard";
 import { DialogAddTemplate } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddTemplate";

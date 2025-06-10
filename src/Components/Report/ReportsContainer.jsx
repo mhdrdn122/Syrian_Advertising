@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
-import { useGetRoadSignBookingByWeekQuery, useGetSoadSignDontHaveBookingQuery } from "../../RtkQuery/Slice/Report/ReportSlice";
+import { useGetRoadSignBookingByWeekQuery, useGetSoadSignDontHaveBookingQuery } from "../../RtkQuery/Slice/Report/ReportApi";
 import { ReportBookingsColumns } from "../../utils/Tables/ColumnsTable/ReportBookingsColumns";
 import { ReportUnbookedSignsColumns } from "../../utils/Tables/ColumnsTable/ReportUnbookedSignsColumns";
 

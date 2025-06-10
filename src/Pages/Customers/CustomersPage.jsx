@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import CustomersContainer from '../../Components/Customers/CustomersContainer'
 import HeaderComponent from '../../utils/HeaderComponent'
 import { DialogAddCustomer } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddCustomer'
-import { useGetCustomersQuery } from '../../RtkQuery/Slice/Customers/CustomersSlice'
+import { useGetCustomersQuery } from '../../RtkQuery/Slice/Customers/CustomersApi'
 import useSearch from '../../hooks/useSearch'
 
 const CustomersPage = () => {
