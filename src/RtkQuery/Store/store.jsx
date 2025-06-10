@@ -10,7 +10,7 @@ import { BookingSlice } from "../Slice/Booking/BookingSlice";
 import { OrdersSlice } from "../Slice/Orders/OrdersSlice";
 import { CitiesAndRegionsSlice } from "../Slice/CitiesAndRegions/CitiesAndRegionsSlice";
 import { ReportSlice } from "../Slice/Report/ReportSlice";
-import { PaymentsSlice } from "../Slice/Payments/PaymentsSlice";
+import { PaymentsSlice } from "../Slice/Payments/paymentsSlice";
 
 const store = configureStore({
   reducer: {
