@@ -6,11 +6,11 @@ import { CustomersSlice } from "../Slice/Customers/CustomersSlice";
 import { SummariesSlice } from "../Slice/Summaries/SummariesSlice";
 import { BrokersSlice } from "../Slice/Brokers/BrokersSlice";
 import { UsersSlice } from "../Slice/Users/UsersSlice";
-import { paymentsSlice } from "../Slice/Payments/PaymentsSlice";
 import { BookingSlice } from "../Slice/Booking/BookingSlice";
 import { OrdersSlice } from "../Slice/Orders/OrdersSlice";
 import { CitiesAndRegionsSlice } from "../Slice/CitiesAndRegions/CitiesAndRegionsSlice";
 import { ReportSlice } from "../Slice/Report/ReportSlice";
+import { PaymentsSlice } from "../Slice/Payments/PaymentsSlice";
 
 const store = configureStore({
   reducer: {
@@ -21,7 +21,7 @@ const store = configureStore({
     [UsersSlice.reducerPath]: UsersSlice.reducer,
     [SummariesSlice.reducerPath]: SummariesSlice.reducer,
     [BrokersSlice.reducerPath]: BrokersSlice.reducer,
-    [paymentsSlice.reducerPath]: paymentsSlice.reducer,
+    [PaymentsSlice.reducerPath]: PaymentsSlice.reducer,
     [BookingSlice.reducerPath]: BookingSlice.reducer,
     [OrdersSlice.reducerPath]: OrdersSlice.reducer,
     [CitiesAndRegionsSlice.reducerPath]: CitiesAndRegionsSlice.reducer,
@@ -36,7 +36,7 @@ const store = configureStore({
       UsersSlice.middleware,
       SummariesSlice.middleware,
       BrokersSlice.middleware,
-      paymentsSlice.middleware, 
+      PaymentsSlice.middleware, 
       BookingSlice.middleware, 
       OrdersSlice.middleware, 
       CitiesAndRegionsSlice.middleware, 

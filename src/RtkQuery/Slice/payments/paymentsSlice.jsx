@@ -6,7 +6,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   prepareHeaders,
 });
-export const paymentsSlice = createApi({
+export const PaymentsSlice = createApi({
   reducerPath: "payments",
   baseQuery,
   tagTypes: ["payments"],
@@ -28,4 +28,4 @@ export const paymentsSlice = createApi({
   }),
 });
 
-export const { useGetPaymentsQuery, useAddNewPaymentMutation } = paymentsSlice;
+export const { useGetPaymentsQuery, useAddNewPaymentMutation } = PaymentsSlice;
