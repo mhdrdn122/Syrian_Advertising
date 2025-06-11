@@ -25,7 +25,7 @@ const CustomersContainer = ({customers , isFetching}) => {
             id={item.id}
             fullName={item.full_name}
             companyName={item.company_name}
-            number={item.number}
+            phone_number={item.phone_number}
             discount={item.discount}
             createdAt={item.created_at}
             updatedAt={item.updated_at}

@@ -7,22 +7,12 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useGetCustomersQuery } from "../../../RtkQuery/Slice/Customers/CustomersApi";
+import { productTypeOptions, typeOptions } from "../../../Static/StaticData";
 
-
-const typeOptions = [
-  { value: 1, label: "دائم" },
-  { value: 2, label: "مؤقت" },
-];
-const productTypeOptions = [
-  { value: 1, label: "محلي" },
-  { value: 2, label: "أجنبي" },
-  { value: 3, label: "كلاهما" },
-];
 
 const BookingFields = ({
   formik,
   bookingData,
-
 }) => {
     const { data: customers, isLoading: isLoadingCustomers } =
     useGetCustomersQuery();

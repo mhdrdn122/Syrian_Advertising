@@ -1,7 +1,8 @@
 import "./App.css";
 import { Login } from "./Pages/Auth/Login";
 import { BrowserRouter, Route, Routes } from "react-router";
-import DashboardPage from "./Layout/AdministrationPageLayout/Dashboard/DashboardPage";
+import DashboardPage from "./Layout/DashboardPage";
+import AdministrationPageLayout from "./Layout/AdministrationPageLayout";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 import UsersPage from "./Pages/Users/UsersPage";
 import CustomersPage from "./Pages/Customers/CustomersPage";
@@ -16,10 +17,9 @@ import BookingPage from "./Pages/Booking/BookingPage";
 import OrdersPage from "./Pages/Orders/OrdersPage";
 import RegionsCityPage from "./Pages/RegionsCity/RegionsCityPage";
 import SummariesPage from "./Pages/Summaries/SummariesPage";
-import AdministrationPageLayout from "./Layout/AdministrationPageLayout/AdministrationPageLayout";
 import ContractPage from "./Components/Booking/ContractPage";
 import ReportsPage from "./Pages/Reports/ReportsPage";
-import BookingForm from "./Components/Booking/BookingForm/BookingForm";
+import BookingForm from "./Pages/Booking/BookingForm";
 
 function App() {
   return (
@@ -48,7 +48,6 @@ function App() {
               <Route path="road_signs" element={<RoadSignsPage />} />
               <Route path="payments" element={<PaymentsPages />} />
               <Route path="bookings" element={<BookingPage />} />
-              {/* <Route path="booking/add" element={<AddBooking />} /> */}
               <Route path="booking/add" element={<BookingForm  />} />
               <Route path="booking/edit/:id" element={<BookingForm bookingId={1}  />} />
 

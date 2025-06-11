@@ -27,15 +27,16 @@ export const CitiesAndRegionsSlice = createApi({
     updateCity: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/cities/${id}`,
-        method: "PUT",
-        body: data,
+        method: "POST",
+        body: { ...data, _method: "PUT" },
       }),
       invalidatesTags: ["Cities"],
     }),
     deleteCity: builder.mutation({
       query: (id) => ({
         url: `/cities/${id}`,
-        method: "DELETE",
+        method: "POST",
+        body: { _method: "DELETE" },
       }),
       invalidatesTags: ["Cities"],
     }),
@@ -55,15 +56,16 @@ export const CitiesAndRegionsSlice = createApi({
     updateRegion: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/regions/${id}`,
-        method: "PUT",
-        body: data,
+        method: "POST",
+        body: { ...data, _method: "PUT" },
       }),
       invalidatesTags: ["Regions"],
     }),
     deleteRegion: builder.mutation({
       query: (id) => ({
         url: `/regions/${id}`,
-        method: "DELETE",
+        method: "POST",
+        body: { _method: "DELETE" },
       }),
       invalidatesTags: ["Regions"],
     }),

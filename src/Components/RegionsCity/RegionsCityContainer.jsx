@@ -165,7 +165,7 @@ const RegionsCityContainer = () => {
       : regions.filter((region) => region.city_id === parseInt(cityFilter));
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto ">
       <h1 className="text-2xl font-bold mb-4">Manage Cities and Regions</h1>
       <Tabs defaultValue="cities" className="w-full">
         <TabsList className="grid w-full grid-cols-2">

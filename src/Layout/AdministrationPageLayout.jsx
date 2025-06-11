@@ -87,11 +87,11 @@ const AdministrationPageLayout = () => {
       </nav>
 
       {/* محتوى الصفحة */}
-      <ScrollArea className="flex-1 h-full">
+      {/* <ScrollArea className="flex-1 h-full"> */}
         <div className="p-4 md:p-6 space-y-4">
           <Outlet />
         </div>
-      </ScrollArea>
+      {/* </ScrollArea> */}
     </div>
   )
 }

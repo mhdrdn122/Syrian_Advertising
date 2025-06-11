@@ -212,8 +212,8 @@ const DynamicDialog = ({
   };
 
   return (
-    <Dialog open={show} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px] p-6" dir="rtl">
+    <Dialog  open={show} onOpenChange={handleClose}>
+      <DialogContent   className="sm:max-w-[500px] max-h-[600px] dialog-content overflow-auto p-6" dir="rtl">
         <DialogHeader>
           <DialogTitle className="text-center">{title}</DialogTitle>
           {/* <DialogDescription>

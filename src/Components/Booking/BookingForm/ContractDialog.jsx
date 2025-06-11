@@ -9,8 +9,14 @@ import { Button } from "@/components/ui/button";
 
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import Cookies from "universal-cookie";
 
-const ContractDialog = ({openContractDialog , setOpenContractDialog , formik , notes , setNotes }) => {
+const ContractDialog = ({openContractDialog , setOpenContractDialog , formik , notes , setNotes , isEditMode }) => {
+  const cookis = new Cookies();
+  const superAdminInfo = cookis.get("SuperAdminInfo")
+
+  console.log(superAdminInfo?.user?.company?.contract_note)
+  
   return (
     <Dialog open={openContractDialog} onOpenChange={setOpenContractDialog}>
         <DialogContent dir="rtl" className="w-full max-w-[90vw] max-w-md p-6">
@@ -27,7 +33,7 @@ const ContractDialog = ({openContractDialog , setOpenContractDialog , formik , n
             </label>
             <ReactQuill
               theme="snow"
-              value={notes}
+              value={!isEditMode ? superAdminInfo?.user?.company?.contract_note : notes}
               onChange={setNotes}
               directions="rtl"
               className="w-full text-right dark:text-gray-200"

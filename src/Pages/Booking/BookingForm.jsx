@@ -6,17 +6,17 @@ import {
   useCalculateReservationMutation,
   useUpdateBookingsMutation,
   useGetOneBookingsQuery,
-} from "../../../RtkQuery/Slice/Booking/BookingApi";
-import { useGetRoadSignsQuery } from "../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
+} from "../../RtkQuery/Slice/Booking/BookingApi";
+import { useGetRoadSignsQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { Button } from "@/components/ui/button";
 
 import { ShoppingCart } from "lucide-react";
-import { showToast } from "../../../utils/Notifictions/showToast";
+import { showToast } from "../../utils/Notifictions/showToast";
 import { useNavigate, useParams } from "react-router";
-import ContractDialog from "./ContractDialog";
-import CartDialog from "./Cart/CartDialog";
-import BookingTable from "./BookingTable";
-import BookingFields from "./BookingFields";
+import ContractDialog from "../../Components/Booking/BookingForm/ContractDialog";
+import CartDialog from "../../Components/Booking/BookingForm/Cart/CartDialog";
+import BookingTable from "../../Components/Booking/BookingForm/BookingTable";
+import BookingFields from "../../Components/Booking/BookingForm/BookingFields";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -47,8 +47,9 @@ const BookingForm = ({ bookingId }) => {
     useGetOneBookingsQuery(id, {
       skip: !isEditMode,
     });
-  const [addNewBooking] = useAddNewBookingMutation();
-  const [updateBookings] = useUpdateBookingsMutation();
+    console.log(bookingData)
+  const [addNewBooking , { isLoading : isLoadingAdd }] = useAddNewBookingMutation();
+  const [updateBookings , {isLoading: isLoadingUpdate}] = useUpdateBookingsMutation();
   const [calculateReservation] = useCalculateReservationMutation();
 
   const navigate = useNavigate();
@@ -74,13 +75,16 @@ const BookingForm = ({ bookingId }) => {
             booking_faces,
           })),
           product_type: parseInt(values.product_type),
-          notes,
-          discount_type: discountValue ? parseInt(discountType) : undefined,
-          value: discountValue ? parseInt(discountValue) : undefined,
+          notes:notes,
+          discount_type: discountValue ? parseInt(discountType) : null,
+          value: discountValue ? parseInt(discountValue) : null,
         };
+
 
         if (isEditMode) {
           bookingPayload.id = id;
+        console.log("is edit")
+
           await updateBookings(bookingPayload).unwrap();
           showToast("success", "تم تعديل الحجز بنجاح");
         } else {
@@ -323,6 +327,10 @@ const BookingForm = ({ bookingId }) => {
         roadSigns={roadSigns}
         updateSignFaces={updateSignFaces}
         removeFromCart={removeFromCart}
+
+        isLoadingAdd={isLoadingAdd}
+        isLoadingUpdate={isLoadingUpdate}
+
       />
 
       <ContractDialog
@@ -331,6 +339,7 @@ const BookingForm = ({ bookingId }) => {
         formik={formik}
         notes={notes}
         setNotes={setNotes}
+        isEditMode={isEditMode}
       />
     </div>
   );

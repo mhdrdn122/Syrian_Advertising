@@ -66,10 +66,10 @@ const UserInfo = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-6xl mx-auto">
+    <div className="p-4 md:p-6 max-w-6xl w-full mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">User Details</h1>
-        <div className="flex gap-2">
+        <h1 className="text-2xl md:text-3xl flex-1 font-bold tracking-tight">User Details</h1>
+        <div className="flex flex-1 flex-wrap gap-2">
           <Button onClick={() => setOpen(true)} variant="outline" className="gap-2 cursor-pointer">
             <Icon icon="mdi:pencil" className="text-lg" />
             Edit User
@@ -98,8 +98,8 @@ const UserInfo = () => {
             </Badge>
           </div>
 
-          <div className="flex-1 space-y-6">
-            <div>
+          <div className="flex-1  space-y-6">
+            <div className='md:text-left text-center' >
               <h2 className="text-xl md:text-2xl font-semibold">{user.full_name}</h2>
               <p className="text-muted-foreground">@{user.username}</p>
             </div>

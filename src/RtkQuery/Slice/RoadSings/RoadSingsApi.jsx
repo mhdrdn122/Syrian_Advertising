@@ -30,7 +30,8 @@ export const RoadSignsSlice = createApi({
     deleteRoadSign: builder.mutation({
       query: (id) => ({
         url: `road-signs/${id}`,
-        method: "DELETE",
+        method: "POST",
+        body: { _method: "DELETE" },
       }),
       invalidatesTags: ["RoadSigns"],
     }),
@@ -41,8 +42,8 @@ export const RoadSignsSlice = createApi({
     updateRoadSign: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `road-signs/${id}`,
-        method: "PUT",
-        body: data,
+        method: "POST",
+        body: { ...data, _method: "PUT" },
       }),
       invalidatesTags: ["RoadSigns"],
     }),

@@ -13,7 +13,7 @@ const CustomerCard = ({
   id,
   fullName,
   companyName,
-  number,
+  phone_number,
   discount,
   createdAt,
   updatedAt
@@ -66,7 +66,7 @@ const CustomerCard = ({
             <div className="flex items-start gap-2">
               <Icon icon="mdi:phone" className="mt-0.5 text-blue-500 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-foreground truncate">{number}</p>
+                <p className="text-sm font-medium text-foreground truncate">{phone_number}</p>
               </div>
             </div>
             

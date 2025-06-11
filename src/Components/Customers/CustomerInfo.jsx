@@ -49,7 +49,7 @@ const CustomerInfo = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-6xl mx-auto">
+    <div className="p-4 md:p-6 max-w-6xl w-full mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Customer Details</h1>
         <div  className="flex  gap-2">
@@ -78,7 +78,7 @@ const CustomerInfo = () => {
           </div>
 
           <div className="flex-1 space-y-6">
-            <div>
+            <div className='md:text-left text-center'>
               <h2 className="text-xl md:text-2xl font-semibold">{customer.full_name}</h2>
               <p className="text-muted-foreground">{customer.company_name}</p>
             </div>
@@ -91,7 +91,7 @@ const CustomerInfo = () => {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Phone Number</p>
-                    <p className="font-medium">{customer.number}</p>
+                    <p className="font-medium">{customer.phone_number}</p>
                   </div>
                 </div>
               </div>
@@ -128,11 +128,7 @@ const CustomerInfo = () => {
                   <div>
                     <p className="text-sm text-muted-foreground">Joined Date</p>
                     <p className="font-medium">
-                      {new Date(customer.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
+                      {new Date(customer.created_at).toLocaleDateString('en-US')}
                     </p>
                   </div>
                 </div>
@@ -146,11 +142,7 @@ const CustomerInfo = () => {
                   <div>
                     <p className="text-sm text-muted-foreground">Last Updated</p>
                     <p className="font-medium">
-                      {new Date(customer.updated_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
+                      {new Date(customer.updated_at).toLocaleDateString('en-US')}
                     </p>
                   </div>
                 </div>

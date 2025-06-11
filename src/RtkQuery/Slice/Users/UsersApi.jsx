@@ -41,8 +41,8 @@ export const UsersSlice = createApi({
       query: (id) => {
         return {
           url: `users/${id}`,
-          method: "DELETE",
-          body: {},
+          method: "POST",
+          body: { _method: "DELETE" },
         };
       },
       invalidatesTags: ["users"],
@@ -51,8 +51,8 @@ export const UsersSlice = createApi({
       query: (data) => {
         return {
           url: `users/${data.id}`,
-          method: "PUT",
-          body: data,
+          method: "POST",
+          body: { ...data, _method: "PUT" },
         };
       },
       invalidatesTags: ["users"],

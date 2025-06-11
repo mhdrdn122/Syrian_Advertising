@@ -1,8 +1,4 @@
-const BookingType = {
-  1: "دائم",
-  2: "مؤقت",
-
-};
+import { BookingType } from "../../../Static/StaticData";
 
 export const BookingColumns = [
 
@@ -10,27 +6,19 @@ export const BookingColumns = [
     header: "إلى",
     accessor: "end_date",
     format: (value) =>
-      new Date(value).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
+      new Date(value).toLocaleDateString("en-US"),
     prefixIcon: "mdi:calendar-end",
     className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
-    priority: 4,
+    priority: 3,
   },
   {
     header: "من",
     accessor: "start_date",
     format: (value) =>
-      new Date(value).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
+      new Date(value).toLocaleDateString("en-US"),
     prefixIcon: "mdi:calendar-start",
     className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
-    priority: 3,
+    priority: 4,
   },
   {
     header: "اسم الشركة",

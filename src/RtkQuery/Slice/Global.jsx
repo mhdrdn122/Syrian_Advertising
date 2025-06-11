@@ -1,6 +1,6 @@
 import Cookies from "universal-cookie";
 
-const cookis = new Cookies();
+const cookis = new Cookies(); 
 
 export const prepareHeaders = (headers) => {
     const superAdminInfo = cookis.get("SuperAdminInfo")

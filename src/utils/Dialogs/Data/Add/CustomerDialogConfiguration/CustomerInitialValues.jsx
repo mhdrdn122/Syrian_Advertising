@@ -2,7 +2,8 @@ export const CustomerInitialValues = {
   name: "",
   company_name: "",
   address: "",
-  number: "",
+  phone_number: "",
+  commercial_registration_number:""
   
   // discount: "",
 };

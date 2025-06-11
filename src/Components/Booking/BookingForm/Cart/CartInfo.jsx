@@ -1,14 +1,7 @@
 import React from "react";
+import { productTypeOptions, typeOptions } from "../../../../Static/StaticData";
 
-const typeOptions = [
-  { value: 1, label: "دائم" },
-  { value: 2, label: "مؤقت" },
-];
-const productTypeOptions = [
-  { value: 1, label: "محلي" },
-  { value: 2, label: "أجنبي" },
-  { value: 3, label: "كلاهما" },
-];
+
 const CartInfo = ({ customers, formik }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">

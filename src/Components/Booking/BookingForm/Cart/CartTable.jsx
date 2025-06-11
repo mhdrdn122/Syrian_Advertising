@@ -25,7 +25,7 @@ const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart
       <TableBody>
         {selectedSigns.map((sign) => {
           const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
-          console.log(roadSign.faces_number - roadSign.total_faces_on_date)
+          console.log(roadSign?.faces_number - roadSign?.total_faces_on_date)
           return (
             <TableRow
               key={sign.road_sign_id}
@@ -53,7 +53,7 @@ const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart
                   className="w-16 text-right"
                 />
               </TableCell>
-              <TableCell>{roadSign?.printing_meters || "غير متوفر"}</TableCell>
+              <TableCell>{roadSign?.template?.printing_space || "غير متوفر"}</TableCell>
               <TableCell>
                 <Button
                   type="button"

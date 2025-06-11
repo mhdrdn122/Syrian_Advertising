@@ -46,10 +46,11 @@ export const OrdersSlice = createApi({
       }),
       updateOrder: builder.mutation({
         query: (data) => {
+          
           return {
             url: `orders/${data.id}`,
-            method: "PUT",
-            body: data.data,
+             method: "POST",
+        body: { ...data.data, _method: "PUT" },
           };
         },
         invalidatesTags: ["orders"],

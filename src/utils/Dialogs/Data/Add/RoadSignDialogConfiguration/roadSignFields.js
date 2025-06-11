@@ -7,7 +7,7 @@ export const roadSignFields = [
   { name: "printing_meters", label: "عدد أمتار الطباعة", type: "number", dir: "rtl" },
   {
     name: "template_id",
-    label: "نوع المنتج",
+    label: "نوع النموذج",
     type: "select",
     dir: "rtl",
     dataKey: "template_id",

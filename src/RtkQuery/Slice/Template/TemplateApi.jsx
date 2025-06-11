@@ -37,15 +37,16 @@ export const TemplateSlice = createApi({
     deleteTemplate: builder.mutation({
       query: (id) => ({
         url: `/templates/${id}`,
-        method: "DELETE",
+        method: "POST",
+        body: { _method: "DELETE" },
       }),
       invalidatesTags: ["Templates"],
     }),
     UpdataTemplate: builder.mutation({
       query: ({ id, data }) => ({
         url: `/templates/${id}`,
-        method: "PUT",
-        body: data,
+        method: "POST",
+        body: { ...data, _method: "PUT" },
       }),
       invalidatesTags: ["Templates"],
     }),

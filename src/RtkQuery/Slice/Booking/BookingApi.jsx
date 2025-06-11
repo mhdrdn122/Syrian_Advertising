@@ -27,7 +27,7 @@ export const BookingSlice = createApi({
     }),
     calculateReservation: builder.mutation({
       query: (data) => {
-        console.log(data);
+        
         return {
           url: "get-calculate-Amount",
           method: "POST",
@@ -38,10 +38,13 @@ export const BookingSlice = createApi({
     }),
     getOneBookings: builder.query({
       query: (id) => `bookings/${id}`,
+      providesTags: ["bookings"],
+
     }),
 
     updateBookings: builder.mutation({
       query: (data) => {
+        console.log(data);
         return {
           url: `bookings/${data.id}`,
           method: "POST",

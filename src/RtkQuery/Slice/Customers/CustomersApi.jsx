@@ -31,15 +31,16 @@ export const CustomersSlice = createApi({
     deleteCustomer: builder.mutation({
       query: (id) => ({
         url: `customers/${id}`,
-        method: "DELETE",
+        method: "POST",
+        body: { _method: "DELETE" },
       }),
       invalidatesTags: ["customers"],
     }),
     updateCustomer: builder.mutation({
       query: (data) => ({
         url: `customers/${data.id}`,
-        method: "PUT",
-        body: data,
+        method: "POST",
+        body: { ...data, _method: "PUT" },
       }),
       invalidatesTags: ["customers"],
     }),

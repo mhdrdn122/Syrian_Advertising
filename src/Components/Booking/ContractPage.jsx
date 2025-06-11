@@ -8,23 +8,24 @@ import { styles } from "./ContractStyle";
 const ContractPage = () => {
   const contentRef = useRef(null);
   const param = useParams();
-  const { data: getBooking } = useGetOneBookingsQuery(param.id);
+  const { data: getBooking, isSuccess } = useGetOneBookingsQuery(param.id);
 
   const contractDetails = {
     firstParty: {
       name: getBooking?.user.full_name,
-      company: " الشركة السورية للإعلان",
-      commercialRegister: "20895",
-      address: " شارع العابد دخلة المطعم الصحي",
+      company: getBooking?.user?.company?.name,
+      commercialRegister:
+        getBooking?.user?.company?.commercial_registration_number,
+      address: getBooking?.user?.company?.address,
       phone: getBooking?.user.phone_number,
       role: " مدير مبيعات",
     },
     secondParty: {
       name: getBooking?.customer.full_name,
       company: getBooking?.customer.company_name,
-      commercialRegister: "20895",
+      commercialRegister: getBooking?.customer.commercial_registration_number,
       address: getBooking?.customer.address,
-      phone: getBooking?.customer.number,
+      phone: getBooking?.customer.phone_number,
     },
     introduction: {
       secondPartyDesire:
@@ -32,26 +33,13 @@ const ContractPage = () => {
       firstPartyPossession:
         "يمتلك لوحات إعلانية طرقية بموجب ترخيص المؤسسة العربية للإعلان رقم / 4 / تاريخ 9/5/2012 ويملك حق الاعلان لذا اتفق الفريقان على ما يلي  ",
     },
-    totalContractValue: "2565 $",
-    equivalentSYP: "0 ليرة سورية",
-    contractStartDate: "2025-04-20",
-    contractEndDate: "2025-12-30",
-    totalEXLFaces: "1",
-    notes: [
-      "يتعهد الفريق الاول بدفع كافة الرسوم الإعلانية التي تخص اللوحات المذكورة خلال مدة العقد",
-      "يقدم الفريق الأول الخدمات التي تخص اللوحات المذكورة خلال مدة العقد (أعمال صيانة)",
-      "يقع على عاتق الفريق الثاني تسديد رسم طابع العقد عن النسخة التي تخصه",
-      "يلتزم الطرفان بالحملات الوطنية والانتخابية التي تفرض من قبل المؤسسة العربية للاعلان على الشركات الإعلانية وفي حال اضطر الطرف الأول للتركيب لفترة محددة يتم تمديد الإعلان نفترة مماثلة على حساب الفريق الأول والا يحق له تحميل أية رسوم أو تكاليف على الطرف الثاني",
-      "يعتبر العنوان المبين الى جانب اسم كل فريق في مقدمة العقد عنوانا مختارا لهذا الفريق ترسل اليه التبليغات والإخطارات سواء اوجد المخاطب ام لم يوجد",
-      "لا يحق للفريق الثاني مطالبة الفريق الأول بالتعويضات أو رد كامل أو جزء من قيمة العقد في حالات القوة القاهرة أو الظروف الطارئة التي تمنع تنفيذ الالتزامات أو تؤثر عليها بشكل جوهر",
-    ],
   };
 
   const generatePdf = () => {
     const element = contentRef.current;
     const options = {
       margin: [10, 10, 10, 10],
-      filename: "عقد_إعلاني.pdf",
+      filename: `عقد_إعلاني.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: {
         scale: 2,
@@ -85,8 +73,12 @@ const ContractPage = () => {
     const end = new Date(endDate);
     const diffInMs = end - start;
     const diffInYears = diffInMs / (1000 * 60 * 60 * 24 * 365.25);
-    return Math.round(diffInYears * 10) / 10; // Round to 1 decimal place
+    return Math.round(diffInYears * 10) / 10; 
   };
+
+  if (!isSuccess) {
+    return <div className="text-center mt-5">...جاري توليد العقد </div>;
+  }
 
   return (
     <div style={styles.contractPageContainer}>
@@ -114,7 +106,7 @@ const ContractPage = () => {
           <div style={styles.party}>
             <strong style={styles.partyH2}>الطرف الثاني:</strong> شركة{" "}
             {contractDetails.secondParty.company} المسجلة بالسجل التجاري رقم{" "}
-            {contractDetails.firstParty.commercialRegister} الممثلة بالسيد{" "}
+            {contractDetails.secondParty.commercialRegister} الممثلة بالسيد{" "}
             {contractDetails.secondParty.name} و المتخذ عنوانا -{" "}
             {contractDetails.secondParty.address} - هاتف :{" "}
             {contractDetails.secondParty.phone}
@@ -165,7 +157,11 @@ const ContractPage = () => {
                   <td style={styles.adTableThTd}>{ad?.place}</td>
                   <td style={styles.adTableThTd}>{ad?.faces_number}</td>
                   <td style={styles.adTableThTd}>
-                    {calculateDurationInYears(ad?.pivot.start_date, ad?.pivot.end_date)}
+                    {calculateDurationInYears(
+                      ad?.pivot.start_date,
+                      ad?.pivot.end_date
+                    )}{" "}
+                    سنة
                   </td>
                   <td style={styles.adTableThTd}>{ad?.pivot.face_price}</td>
                 </tr>
@@ -178,17 +174,17 @@ const ContractPage = () => {
           <tbody>
             <tr>
               <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
-                القيمة الكلية قبل الحسم عن 26 يوم فترة إعلانية ( سنة )
+                القيمة الكلية قبل الحسم عن 28 يوم فترة إعلانية ( سنة )
               </th>
-              <td style={styles.adTableThTd}>{getBooking?.total_price} ل.س</td>
+              <td style={styles.adTableThTd}>
+                {getBooking?.total_price_befor_discount} ل.س
+              </td>
             </tr>
             <tr>
               <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
                 حسم خاص مقدم من الشركة السورية
               </th>
-              <td style={styles.adTableThTd}>
-                {getBooking?.total_price_befor_discount} ل.س
-              </td>
+              <td style={styles.adTableThTd}>{getBooking?.total_price} ل.س</td>
             </tr>
           </tbody>
         </table>
@@ -210,6 +206,19 @@ const ContractPage = () => {
         <div>
           <div dangerouslySetInnerHTML={{ __html: getBooking?.notes }} />
         </div>
+
+        <div style={{ margin: "20px 0" }}>
+          <strong>
+            - تبدأ الحملة الإعلانية بتاريخ{" "}
+            {new Date(getBooking?.start_date).toLocaleDateString("en-US")} و
+            تنتهي بتاريخ{" "}
+            {new Date(getBooking?.end_date).toLocaleDateString("en-US")}
+          </strong>
+        </div>
+
+        <p></p>
+
+        <p></p>
 
         <div style={styles.signatures}>
           <div style={styles.signatureParty}>

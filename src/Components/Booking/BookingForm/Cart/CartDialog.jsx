@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersApi";
+import { Loader2 } from "lucide-react";
 
 const CartDialog = ({
   openCartDialog,
@@ -34,6 +35,9 @@ const CartDialog = ({
   roadSigns,
   updateSignFaces,
   removeFromCart,
+
+  isLoadingAdd,
+  isLoadingUpdate,
 }) => {
   const { data: customers, isLoading: isLoadingCustomers } =
     useGetCustomersQuery();
@@ -41,7 +45,7 @@ const CartDialog = ({
     <Dialog open={openCartDialog} onOpenChange={setOpenCartDialog}>
       <DialogContent
         dir="rtl"
-        className="w-full max-w-[90vw] max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden p-6"
+        className="w-full max-w-[90vw] max-w-4xl max-h-[90vh] dialog-content overflow-auto p-6"
       >
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-right">
@@ -88,9 +92,18 @@ const CartDialog = ({
               onClick={() => setContractDialog(true)}
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg"
             >
-              {parseInt(formik.values.type) === 1
-                ? "تصدير عقد دائم"
-                : "تصدير عقد مؤقت"}
+              {isLoadingAdd || isLoadingUpdate ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {parseInt(formik.values.type) === 1
+                    ? "... جاري تصدير عقد دائم"
+                    : "جاري تصدير عقد مؤقت "}
+                </>
+              ) : parseInt(formik.values.type) === 1 ? (
+                "تصدير عقد دائم"
+              ) : (
+                "تصدير عقد مؤقت"
+              )}
             </Button>
           )}
           <Button
@@ -98,7 +111,17 @@ const CartDialog = ({
             onClick={formik.submitForm}
             className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
           >
-            {isEditMode ? "تعديل الحجز" : "تثبيت الحجز"}
+            {isLoadingAdd || isLoadingUpdate ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+
+                {isEditMode ? "... جاري تعديل الحجز " : "جاري تثبيت الحجز ..."}
+              </>
+            ) : isEditMode ? (
+              "تعديل الحجز"
+            ) : (
+              "تثبيت الحجز"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
