@@ -32,7 +32,7 @@ export function NavMain({
           </SidebarMenuItem> */}
         </SidebarMenu>
         <SidebarMenu className="space-y-1">
-          {items.map((item) => (
+          {items?.map((item) => (
             <Link 
               key={item.title}
               to={item.url}

@@ -1,36 +1,25 @@
-import React, { useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Menu, X } from 'lucide-react'
+import React, { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Menu, X } from "lucide-react";
+import { navLinksAdministrationPage } from "../Static/StaticData";
 
 const AdministrationPageLayout = () => {
-  const location = useLocation()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  
-  console.log(location.pathname)
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const isActive = (path) => {
-    if (path === '') {
-      return location.pathname.endsWith('administration-page')
+    if (path === "") {
+      return location.pathname.endsWith("administration-page");
     }
-  console.log(location.pathname.includes(path))
-
-    return location.pathname.includes(path)
-  }
-
-  const navLinks = [
-    { to: "", text: "الاحصائيات", mobileText: "الرئيسية" },
-    { to: "regions-city", text: "المناطق والمدن", mobileText: "المناطق" },
-    { to: "orders", text: " الطلبات", mobileText: "الطلبات" },
-    { to: "report", text: " التقرير الاسبوعي", mobileText: "التقرير الاسبوعي" }
-
-
-  ]
+    return location.pathname.includes(path);
+  };
 
   return (
-    <div style={{direction:"rtl" }} className="flex flex-col h-full">
-      <nav  className="bg-card border-b">
+    <div style={{ direction: "rtl" }} className="flex flex-col h-full">
+      <nav className="bg-card border-b">
         <div className="flex items-center justify-between p-4">
           <Button
             variant="ghost"
@@ -38,62 +27,64 @@ const AdministrationPageLayout = () => {
             className="sm:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
 
-          {/* روابط القائمة (للشاشات الكبيرة) */}
           <div className="hidden sm:flex gap-2">
-            {navLinks.map((link) => (
+            {navLinksAdministrationPage.map((link) => (
               <Button
                 key={link.to}
                 asChild
-                variant={isActive(link.to) ? 'default' : 'ghost'}
+                variant={isActive(link.to) ? "default" : "ghost"}
                 className={cn(
-                  'justify-start',
-                  !isActive(link.to) && 'text-muted-foreground hover:text-primary'
+                  "justify-start",
+                  !isActive(link.to) &&
+                    "text-muted-foreground hover:text-primary"
                 )}
               >
-                <Link to={link.to}>
-                  {link.text}
-                </Link>
+                <Link to={link.to}>{link.text}</Link>
               </Button>
             ))}
           </div>
         </div>
 
-        <div className={cn(
-          'sm:hidden overflow-hidden transition-all duration-300 ease-in-out',
-          mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        )}>
+        <div
+          className={cn(
+            "sm:hidden overflow-hidden transition-all duration-300 ease-in-out",
+            mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
           <div className="flex flex-col gap-2 p-2 border-t">
-            {navLinks.map((link) => (
+            {navLinksAdministrationPage.map((link) => (
               <Button
                 key={link.to}
                 asChild
-                variant={isActive(link.to) ? 'default' : 'ghost'}
+                variant={isActive(link.to) ? "default" : "ghost"}
                 className={cn(
-                  'justify-start w-full transition-colors',
-                  !isActive(link.to) && 'text-muted-foreground hover:text-primary'
+                  "justify-start w-full transition-colors",
+                  !isActive(link.to) &&
+                    "text-muted-foreground hover:text-primary"
                 )}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Link to={link.to}>
-                  {link.mobileText}
-                </Link>
+                <Link to={link.to}>{link.mobileText}</Link>
               </Button>
             ))}
           </div>
         </div>
       </nav>
 
-      {/* محتوى الصفحة */}
       {/* <ScrollArea className="flex-1 h-full"> */}
-        <div className="p-4 md:p-6 space-y-4">
-          <Outlet />
-        </div>
+      <div className="p-4 md:p-6  space-y-4">
+        <Outlet />
+      </div>
       {/* </ScrollArea> */}
     </div>
-  )
-}
+  );
+};
 
-export default AdministrationPageLayout
+export default AdministrationPageLayout;

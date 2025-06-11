@@ -5,6 +5,7 @@ import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import { useGetRoadSignBookingByWeekQuery, useGetSoadSignDontHaveBookingQuery } from "../../RtkQuery/Slice/Report/ReportApi";
 import { ReportBookingsColumns } from "../../utils/Tables/ColumnsTable/ReportBookingsColumns";
 import { ReportUnbookedSignsColumns } from "../../utils/Tables/ColumnsTable/ReportUnbookedSignsColumns";
+import { Loader } from "lucide-react";
 
 const ReportsContainer = () => {
   const [activeTab, setActiveTab] = useState("bookings");
@@ -27,7 +28,7 @@ const ReportsContainer = () => {
   if (isBookingsLoading || isUnbookedLoading) {
     return (
       <div className="w-full h-full flex flex-col justify-center items-center">
-        <LoadingGet />
+        <Loader />
         <p className="text-muted-foreground text-sm">جاري التحميل...</p>
       </div>
     );

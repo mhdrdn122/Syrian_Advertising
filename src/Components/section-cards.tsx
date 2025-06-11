@@ -1,3 +1,4 @@
+import { Loader, Loader2 } from "lucide-react";
 import { useGetSummariesQuery } from "../RtkQuery/Slice/Summaries/SummariesApi";
 import LoadingGet from "../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "./Summaries/SummariesCard";
@@ -9,8 +10,8 @@ export function SectionCards() {
   if (fetchingTemplates) {
     return (
       <div className="w-full h-full flex-col flex justify-center items-center">
-        <LoadingGet />
-        <p>Loading ... </p>
+        <Loader />
+        <p>  جاري التحميل ...</p> 
       </div>
     );
   }

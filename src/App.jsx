@@ -34,9 +34,6 @@ function App() {
               <Route path="regions-city" element={<RegionsCityPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="report" element={<ReportsPage />} />
-
-
-
             </Route>
 
               <Route path="users" element={<UsersPage />} />

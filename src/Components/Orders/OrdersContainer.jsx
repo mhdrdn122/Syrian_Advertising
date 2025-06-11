@@ -16,6 +16,7 @@ import { showToast } from "../../utils/Notifictions/showToast";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { DialogEditOrders } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditOrders";
 import OrdersPdf from "./OrdersPdf";
+import { Loader, Loader2Icon } from "lucide-react";
 
 const OrdersContainer = () => {
   const [orderType, setOrderType] = useState("");
@@ -111,7 +112,7 @@ const OrdersContainer = () => {
   if (isLoading || isCitiesLoading) {
     return (
       <div className="w-full h-full flex flex-col justify-center items-center">
-        <LoadingGet />
+        <Loader />
         <p className="text-muted-foreground text-sm">جاري التحميل...</p>
       </div>
     );

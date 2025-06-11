@@ -1,14 +1,5 @@
 import * as React from "react";
-import {
-  IconDashboard,
-  IconUsers,
-  IconUsersGroup,
-  IconCalendarEvent,
-  IconCash,
-  IconTemplate,
-  IconRoad,
-  IconChartBar
-} from "@tabler/icons-react";
+
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -21,6 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useGetProfileQuery } from "../RtkQuery/Slice/Auth/AuthApi";
 import { useLocation } from "react-router";
+import { navLinkSidebar } from "../Static/StaticData";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: profile, isSuccess } = useGetProfileQuery();
@@ -31,43 +23,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       email: isSuccess ? profile.email : "",
       avatar: "/avatars/shadcn.jpg",
     },
-    navMain: [
-      {
-        title: "الإدارة",
-        url: "/dashboard/administration-page",
-        icon: IconDashboard,
-      },
-      {
-        title: "الموظفين",
-        url: "/dashboard/users",
-        icon: IconUsers,
-      },
-      {
-        title: "الزبائن",
-        url: "/dashboard/customers",
-        icon: IconUsersGroup,
-      },
-      {
-        title: "الحجوزات",
-        url: "/dashboard/bookings",
-        icon: IconCalendarEvent,
-      },
-      {
-        title: "الدفعات",
-        url: "/dashboard/payments",
-        icon: IconCash,
-      },
-      {
-        title: "النماذج",
-        url: "/dashboard/models",
-        icon: IconTemplate,
-      },
-      {
-        title: "اللوحات الطرقية",
-        url: "/dashboard/road_signs",
-        icon: IconRoad,
-      }
-    ],
+    navMain:navLinkSidebar
   };
 
   return (
