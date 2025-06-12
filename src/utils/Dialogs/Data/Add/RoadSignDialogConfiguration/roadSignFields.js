@@ -1,7 +1,7 @@
 export const roadSignFields = [
   { name: "place", label: "مكان التموضع", type: "text", dir: "rtl" },
   { name: "directions", label: "الاتجاه", type: "text", dir: "rtl" },
-  { name: "number", label: "رقم اللوحة", type: "text", dir: "rtl" },
+  // { name: "number", label: "رقم اللوحة", type: "text", dir: "rtl" },
   { name: "faces_number", label: "عدد الوجوه", type: "number", dir: "rtl" },
   { name: "advertising_meters", label: "عدد أمتار الإعلان", type: "number", dir: "rtl" },
   { name: "printing_meters", label: "عدد أمتار الطباعة", type: "number", dir: "rtl" },

@@ -44,7 +44,7 @@ const CartInfo = ({ customers, formik }) => {
           نوع المنتج:
         </span>
         <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-          {productTypeOptions.find(
+          {productTypeOptions.find( 
             (p) => p.value === parseInt(formik.values.product_type)
           )?.label || "غير محدد"}
         </span>

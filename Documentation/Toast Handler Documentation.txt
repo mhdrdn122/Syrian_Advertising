@@ -66,7 +66,7 @@ function App() {
 
 ---
 
-## In English
+## In English 
 
 ### General Concept of the Code
 The `toastHandler.js` file contains a utility function named `showToast` designed to display toast notifications in React applications using the `react-hot-toast` library. The purpose of this function is to provide a standardized and easy-to-use method for showing different types of notifications (success, error, loading, or general) with customizable options like duration and position. It simplifies notification management and ensures consistency across the application.

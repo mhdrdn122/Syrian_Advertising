@@ -11,7 +11,7 @@ const CalculationResult = ({
   discountValue,
   setShowDiscount , 
   showDiscount , 
-  discountType , 
+  discountType ,  
   setDiscountType , 
   setDiscountValue
 }) => {

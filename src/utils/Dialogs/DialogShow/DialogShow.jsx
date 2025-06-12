@@ -5,13 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Icon } from '@iconify/react';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// Mapping for ProductType enum
-const productTypeMap = {
-  1: 'LOCAL',
-  2: 'FOREIGN',
-  3: 'BOTH',
-};
+import { productTypeMap } from '../../../Static/StaticData';
 
 // Utility function to access nested properties
 const getNestedValue = (obj, path) => {
@@ -27,13 +21,11 @@ const getNestedValue = (obj, path) => {
 };
 
 const DialogShow = ({ show, handleClose, data, fields, arrayKey, arrayFields, loading }) => {
-  if (data && !loading) {
-    console.log('DialogShow data:', data); // Debug data
-  }
+  
 
   return (
     <Dialog open={show} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[600px] overflow-auto max-h-[80vh] flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+      <DialogContent className="sm:max-w-[600px] dialog-content overflow-auto max-h-[80vh] flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg">
         <DialogHeader className="border-b border-gray-100 dark:border-gray-700 pb-4">
           <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Details

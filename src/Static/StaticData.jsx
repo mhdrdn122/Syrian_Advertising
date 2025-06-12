@@ -26,6 +26,11 @@ export const productTypeOptions = [
   { value: 3, label: "كلاهما" },
 ];
 
+export const productTypeMap = {
+  1: 'محلي',
+  2: 'أجنبي',
+  3: 'كلاهما',
+};
 export const navLinksAdministrationPage = [
     { to: "", text: "الاحصائيات", mobileText: "الرئيسية" },
     { to: "regions-city", text: "المناطق والمدن", mobileText: "المناطق" },

@@ -136,7 +136,7 @@ const BookingFields = ({
         )}
       </div>
     </div>
-  );
+  ); 
 };
 
 export default BookingFields;

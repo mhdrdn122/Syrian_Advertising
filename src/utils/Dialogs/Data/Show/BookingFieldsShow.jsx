@@ -1,10 +1,6 @@
 import { format } from "date-fns";
-// Mapping for ProductType enum
-const productTypeMap = {
-  1: 'LOCAL',
-  2: 'FOREIGN',
-  3: 'BOTH',
-};
+import { productTypeMap } from "../../../../Static/StaticData";
+
 export const BookingFieldsShow = [
   { label: 'النوع', key: 'type', icon: 'mdi:format-list-bulleted-type', format: (value) => productTypeMap[value] || 'غير معروف' },
   { label: 'تاريخ البدء', key: 'start_date', icon: 'mdi:calendar-start', format: (value) => format(new Date(value), 'MMM dd, yyyy') },

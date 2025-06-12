@@ -97,7 +97,7 @@ const CartDialog = ({
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {parseInt(formik.values.type) === 1
                     ? "... جاري تصدير عقد دائم"
-                    : "جاري تصدير عقد مؤقت "}
+                    : "جاري تصدير عقد مؤقت "} 
                 </>
               ) : parseInt(formik.values.type) === 1 ? (
                 "تصدير عقد دائم"

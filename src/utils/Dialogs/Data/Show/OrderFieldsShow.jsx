@@ -1,9 +1,6 @@
 import { format } from "date-fns";
-const productTypeMap = {
-  1: 'LOCAL',
-  2: 'FOREIGN',
-  3: 'BOTH',
-};
+import { productTypeMap } from "../../../../Static/StaticData";
+
 export const OrderFieldsShow = [
   { label: 'Type', key: 'type', icon: 'mdi:format-list-bulleted-type', format: (value) => productTypeMap[value] || 'Unknown' },
   { label: 'Action Date', key: 'action_date', icon: 'mdi:calendar', format: (value) => format(new Date(value), 'MMM dd, yyyy') },

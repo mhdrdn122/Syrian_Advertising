@@ -31,11 +31,7 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
         : [],
     },
     template_id: {
-      data: isTempProdSuccess ? tempProd : [
-        { id: "1", name: "Local" },
-        { id: "2", name: "Foreign" },
-        { id: "3", name: "Both" },
-      ],
+      data: isTempProdSuccess ? tempProd : [ ],
     },
     is_available: {
       data: [

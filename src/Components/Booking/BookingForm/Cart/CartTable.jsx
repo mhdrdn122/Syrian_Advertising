@@ -20,7 +20,7 @@ const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart
           <TableHead className="text-right w-20">عدد الأوجه</TableHead>
           <TableHead className="text-right w-32">أمتار الطباعة</TableHead>
           <TableHead className="text-right w-16">إجراء</TableHead>
-        </TableRow>
+        </TableRow> 
       </TableHeader>
       <TableBody>
         {selectedSigns.map((sign) => {

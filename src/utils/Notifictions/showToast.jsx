@@ -8,6 +8,7 @@ export const showToast = (type, message, options = {}) => {
     position: 'top-center',
     ...options,
   };
+  
 
   switch (type) {
     case 'success':

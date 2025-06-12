@@ -1,6 +1,6 @@
 export const RoadSignFields = [
   { label: 'نموذج', key: 'template.model', icon: 'mdi:shape-outline' },
-  { label: 'رقم اللوحة', key: 'number', icon: 'mdi:numeric' },
+  // { label: 'رقم اللوحة', key: 'number', icon: 'mdi:numeric' },
   { label: 'عدد الأوجه', key: 'faces_number', icon: 'mdi:cube-outline' },
   { label: 'عدد الأمتار', key: 'advertising_meters', icon: 'mdi:image-area', format: (value) => `${value}m²` },
   { label: 'عدد أمتار الطباعة', key: 'printing_meters', icon: 'mdi:printer', format: (value) => `${value}m²` },

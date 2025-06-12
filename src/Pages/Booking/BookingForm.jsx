@@ -17,6 +17,7 @@ import ContractDialog from "../../Components/Booking/BookingForm/ContractDialog"
 import CartDialog from "../../Components/Booking/BookingForm/Cart/CartDialog";
 import BookingTable from "../../Components/Booking/BookingForm/BookingTable";
 import BookingFields from "../../Components/Booking/BookingForm/BookingFields";
+import { Toaster } from "react-hot-toast";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -305,7 +306,7 @@ const BookingForm = ({ bookingId }) => {
             addedSignIds={addedSignIds}
           />
         </form>
-      )}
+      )} 
 
       <CartDialog
         openCartDialog={openDialog}
@@ -341,6 +342,7 @@ const BookingForm = ({ bookingId }) => {
         setNotes={setNotes}
         isEditMode={isEditMode}
       />
+      <Toaster />
     </div>
   );
 };

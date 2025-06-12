@@ -22,11 +22,6 @@ const TableTemplate = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [deleteTemplate, { isLoading: isDeleting }] =
     useDeleteTemplateMutation();
-  const navigate = useNavigate();
-
-  {
-    // isSuccess && data.length > 0 ? "" : navigate("/dashboard/models/");
-  }
 
   const [initData, setInitDat] = useState({});
 
