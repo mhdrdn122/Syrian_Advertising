@@ -1,20 +1,23 @@
-import React from "react";
+import React, { memo, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { BookingContext } from "../../../../Context/BookingContext";
 
-const CalculationResult = ({
-  calculateDiscountedPrice,
-  handleDiscountValueChange,
-  calculationResult,
-  discountValue,
-  setShowDiscount , 
-  showDiscount , 
-  discountType ,  
-  setDiscountType , 
-  setDiscountValue
-}) => {
+const CalculationResult = () => {
+  const {
+    calculateDiscountedPrice,
+    handleDiscountValueChange,
+    calculationResult,
+    discountValue,
+    setShowDiscount,
+    showDiscount,
+    discountType,
+    setDiscountType,
+    setDiscountValue,
+  } = useContext(BookingContext);
+
   return (
     <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-sm">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 text-right">
@@ -26,7 +29,7 @@ const CalculationResult = ({
             السعر الإجمالي:
           </span>
           <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-            {calculationResult.total_price.toFixed(2)} ليرة
+            {calculationResult?.price_per_period?.toFixed(2)} ليرة
           </span>
         </div>
         {discountValue && (
@@ -44,7 +47,7 @@ const CalculationResult = ({
             مساحة الإعلان:
           </span>
           <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-            {calculationResult.total_advertising_space.toFixed(2)} متر
+            {calculationResult?.amount?.total_advertising_space.toFixed(2)} متر
           </span>
         </div>
         <div className="flex flex-col">
@@ -52,7 +55,7 @@ const CalculationResult = ({
             مساحة الطباعة:
           </span>
           <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-            {calculationResult.total_printing_space.toFixed(2)} متر
+            {calculationResult?.amount?.total_printing_space.toFixed(2)} متر
           </span>
         </div>
       </div>
@@ -107,4 +110,4 @@ const CalculationResult = ({
   );
 };
 
-export default CalculationResult;
+export default memo(CalculationResult);

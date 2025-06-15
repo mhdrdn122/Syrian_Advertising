@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import HeaderComponent from "../../utils/HeaderComponent";
-import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { PaymentsColumns } from "../../utils/Tables/ColumnsTable/PaymentsColumns";
 import { DialogAddPayments } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddPayments";
 import { useGetPaymentsQuery } from "../../RtkQuery/Slice/Payments/PaymentsApi";
@@ -17,7 +16,7 @@ const PaymentsContainer = () => {
   const onShow = (row) => {
     setSelectedPayment(row);
     setOpenViewImage(true); 
-    console.log(row)
+
   };
 
   return (

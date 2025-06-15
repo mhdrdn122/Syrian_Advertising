@@ -1,7 +1,4 @@
-import React from "react";
-import CartInfo from "./CartInfo";
-import CalculationResult from "./CalculationResult";
-import CartTable from "./CartTable";
+import React, { memo, useContext } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,39 +7,27 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersApi";
 import { Loader2 } from "lucide-react";
+import CartInfo from "./CartInfo";
+import CalculationResult from "./CalculationResult";
+import CartTable from "./CartTable";
+import { BookingContext } from "../../../../Context/BookingContext";
 
-const CartDialog = ({
-  openCartDialog,
-  isEditMode,
-  setOpenCartDialog,
-  calculationResult,
-  calculateTotal,
-  formik,
-  setContractDialog,
-  calculateDiscountedPrice,
+const CartDialog = () => {
+  const {
+    openDialog,
+    setOpenDialog,
+    isEditMode,
+    calculationResult,
+    calculateTotal,
+    formik,
+    setContractDialog,
+    isLoadingAdd,
+    isLoadingUpdate,
+  } = useContext(BookingContext);
 
-  handleDiscountValueChange,
-  discountValue,
-  setShowDiscount,
-  showDiscount,
-  discountType,
-  setDiscountType,
-  setDiscountValue,
-
-  selectedSigns,
-  roadSigns,
-  updateSignFaces,
-  removeFromCart,
-
-  isLoadingAdd,
-  isLoadingUpdate,
-}) => {
-  const { data: customers, isLoading: isLoadingCustomers } =
-    useGetCustomersQuery();
   return (
-    <Dialog open={openCartDialog} onOpenChange={setOpenCartDialog}>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent
         dir="rtl"
         className="w-full max-w-[90vw] max-w-4xl max-h-[90vh] dialog-content overflow-auto p-6"
@@ -53,29 +38,12 @@ const CartDialog = ({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6">
-          <CartInfo formik={formik} customers={customers} />
+          <CartInfo />
 
-          {calculationResult && (
-            <CalculationResult
-              calculateDiscountedPrice={calculateDiscountedPrice}
-              handleDiscountValueChange={handleDiscountValueChange}
-              calculationResult={calculationResult}
-              discountValue={discountValue}
-              setShowDiscount={setShowDiscount}
-              showDiscount={showDiscount}
-              discountType={discountType}
-              setDiscountType={setDiscountType}
-              setDiscountValue={setDiscountValue}
-            />
-          )}
+          {calculationResult && <CalculationResult />}
 
           <div className="rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <CartTable
-              selectedSigns={selectedSigns}
-              roadSigns={roadSigns}
-              updateSignFaces={updateSignFaces}
-              removeFromCart={removeFromCart}
-            />
+            <CartTable />
           </div>
         </div>
         <DialogFooter className="flex justify-between mt-6 flex-wrap gap-2">
@@ -97,7 +65,7 @@ const CartDialog = ({
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {parseInt(formik.values.type) === 1
                     ? "... جاري تصدير عقد دائم"
-                    : "جاري تصدير عقد مؤقت "} 
+                    : "جاري تصدير عقد مؤقت "}
                 </>
               ) : parseInt(formik.values.type) === 1 ? (
                 "تصدير عقد دائم"
@@ -114,7 +82,6 @@ const CartDialog = ({
             {isLoadingAdd || isLoadingUpdate ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-
                 {isEditMode ? "... جاري تعديل الحجز " : "جاري تثبيت الحجز ..."}
               </>
             ) : isEditMode ? (
@@ -129,4 +96,4 @@ const CartDialog = ({
   );
 };
 
-export default CartDialog;
+export default memo(CartDialog);

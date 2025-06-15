@@ -1,13 +1,21 @@
 // Columns for Bookings This Week
 export const ReportBookingsColumns = [
-  {
-    header: "اسم الشركة",
-    accessor: "bookings.0.customer.company_name",
+  
+   {
+    header: "عدد الأمتار",
+    accessor: "advertising_meters",
     cellClassName: "text-center",
   },
+ 
   {
-    header: "المنطقة",
-    accessor: "region.name",
+    header: "عدد الوجوه",
+    accessor: "faces_number",
+    cellClassName: "text-center",
+  },
+  
+  {
+    header: "النموذج",
+    accessor: "template.model",
     cellClassName: "text-center",
   },
   {
@@ -16,23 +24,14 @@ export const ReportBookingsColumns = [
     cellClassName: "text-center",
   },
   {
-    header: "النموذج",
-    accessor: "template.model",
+    header: "المنطقة",
+    accessor: "region.name",
     cellClassName: "text-center",
   },
   {
-    header: "عدد اللوحات",
-    accessor: "number",
+    header: "اسم الشركة",
+    accessor: "bookings.0.customer.company_name",
     cellClassName: "text-center",
-  },
-  {
-    header: "عدد الوجوه",
-    accessor: "faces_number",
-    cellClassName: "text-center",
-  },
-  {
-    header: "عدد الأمتار",
-    accessor: "advertising_meters",
-    cellClassName: "text-center",
-  },
+  }
+ 
 ];

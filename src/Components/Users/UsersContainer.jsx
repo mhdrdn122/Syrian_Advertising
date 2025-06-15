@@ -1,10 +1,9 @@
 import UserCard from './UserCard';
 import LoadingGet from '../../utils/Loading/LoadingGet/LoadingGet';
-import Cookies from 'universal-cookie';
+
 
 const UsersContainer = ({ users, isFetching }) => {
-  const cookies = new Cookies();
-  const SuperAdminInfo = cookies.get('SuperAdminInfo') || {};
+  const SuperAdminInfo = JSON.parse(localStorage.getItem("SuperAdminInfo")) || {};
   const currentUserId = SuperAdminInfo?.user?.id;
 
   const filteredUsers = users.filter((user) => user.id !== currentUserId);

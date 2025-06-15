@@ -1,3 +1,4 @@
+import React, { memo, useContext } from "react";
 import {
   Table,
   TableBody,
@@ -8,9 +9,13 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import { BookingContext } from "../../../../Context/BookingContext";
 
-const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart}) => {
+const CartTable = () => {
+  const { selectedSigns, roadSigns, updateSignFaces, removeFromCart } =
+    useContext(BookingContext);
+
   return (
     <Table>
       <TableHeader>
@@ -20,12 +25,11 @@ const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart
           <TableHead className="text-right w-20">عدد الأوجه</TableHead>
           <TableHead className="text-right w-32">أمتار الطباعة</TableHead>
           <TableHead className="text-right w-16">إجراء</TableHead>
-        </TableRow> 
+        </TableRow>
       </TableHeader>
       <TableBody>
         {selectedSigns.map((sign) => {
           const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
-          console.log(roadSign?.faces_number - roadSign?.total_faces_on_date)
           return (
             <TableRow
               key={sign.road_sign_id}
@@ -53,7 +57,9 @@ const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart
                   className="w-16 text-right"
                 />
               </TableCell>
-              <TableCell>{roadSign?.template?.printing_space || "غير متوفر"}</TableCell>
+              <TableCell>
+                {roadSign?.template?.printing_space || "غير متوفر"}
+              </TableCell>
               <TableCell>
                 <Button
                   type="button"
@@ -73,4 +79,4 @@ const CartTable = ({selectedSigns , roadSigns , updateSignFaces , removeFromCart
   );
 };
 
-export default CartTable;
+export default memo(CartTable);

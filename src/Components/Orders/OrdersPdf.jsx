@@ -3,6 +3,7 @@ import autoTable from "jspdf-autotable";
 import "../../assets/fonts/Amiri-Regular.js"; // Import the Amiri font file
 
 const OrdersPdf = ({ orders }) => {
+
   const generatePDF = () => {
     // Initialize jsPDF with A4 landscape settings
     const doc = new jsPDF({
@@ -24,11 +25,10 @@ const OrdersPdf = ({ orders }) => {
     const headers = [
       [
         "الملاحظات",
+        "تاريخ العملية",
         "المنطقة",
 
         "المكان",
-
-        "تاريخ العملية",
 
         "نوع الطلب",
         "اسم الزبون الجديد",
@@ -56,13 +56,14 @@ const OrdersPdf = ({ orders }) => {
       }
 
       return [
-        orderType,
+        item.notes || " .......",
+
         item.action_date,
         item.road_sign.place,
         item.road_sign.region.name,
-        item.customer_new?.full_name || "غير متوفر",
-        item.customer.full_name,
-        item.notes || " .......",
+        orderType,
+        item.customer_new?.company_name || "غير متوفر",
+        item.customer?.company_name,
       ];
     });
 
@@ -110,7 +111,6 @@ const OrdersPdf = ({ orders }) => {
         }
       },
     });
-
     // Save the PDF
     doc.save("طلبات.pdf");
   };

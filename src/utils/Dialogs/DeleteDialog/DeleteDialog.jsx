@@ -45,7 +45,7 @@ export const DeleteDialog = ({
           <Button
             variant="destructive"
             onClick={onConfirm}
-            disabled={false}
+            disabled={loading}
           >
             {loading ? (
               <>

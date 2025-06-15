@@ -33,7 +33,6 @@ const RoadSignsContainer = ({ data, isLoading }) => {
   };
 
   const handleShow = (roadSign) => {
-    console.log('Selected road sign:', roadSign);
     setSelectedRoadSign(roadSign);
     setOpenShow(true);
   };

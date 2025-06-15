@@ -10,7 +10,6 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
   const { data: regionsData, isSuccess: isRegionsSuccess } = useGetRegionsQuery();
 
   const { data: tempProd, isSuccess: isTempProdSuccess } = useGetTemplateProductsQuery();
-  console.log(tempProd)
 
 
   const selectData = {

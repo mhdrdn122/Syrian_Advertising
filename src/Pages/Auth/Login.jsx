@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useLoginMutation } from "../../RtkQuery/Slice/Auth/AuthApi";
-import Cookies from "universal-cookie";
 import { Loader2 } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { showToast } from "../../utils/Notifictions/showToast";
@@ -31,8 +30,6 @@ const LoginSchema = Yup.object().shape({
 export function Login({ className, ...props }) {
   const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
-  const cookies = new Cookies();
-
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -43,13 +40,11 @@ export function Login({ className, ...props }) {
       setSubmitting(true);
       try {
         const res = await login(values).unwrap();
-        localStorage.setItem("SuperAdminInfo", JSON.stringify(res.data));
-        cookies.set("SuperAdminInfo", res);
+        localStorage.setItem("SuperAdminInfo", JSON.stringify(res));
         showToast("success", "تم تسجيل الدخول بنجاح ");
         navigate("/dashboard/administration-page/");
       } catch (error) {
         showToast("error", error.data?.message || "حدث خطأ غير متوقع");
-        console.log(error);
       }
 
       setSubmitting(false);

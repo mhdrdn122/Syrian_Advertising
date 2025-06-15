@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, useNavigate } from "react-router";
 import { useLogoutMutation } from "../RtkQuery/Slice/Auth/AuthApi";
-import Cookies from "universal-cookie";
 import { showToast } from "../utils/Notifictions/showToast";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -42,11 +41,10 @@ export function NavUser({
   const [logout, { isLoading }] = useLogoutMutation();
   const navigate = useNavigate();
 
-  const cookis = new Cookies();
   const logouthandeler = async () => {
     try {
       await logout();
-      cookis.remove("SuperAdminInfo");
+      localStorage.removeItem("SuperAdminInfo");
       navigate("/");
     } catch (e) {
       showToast("error", e.massage);

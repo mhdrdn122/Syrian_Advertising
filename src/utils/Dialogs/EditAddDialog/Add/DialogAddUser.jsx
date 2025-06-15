@@ -7,8 +7,6 @@ import DynamicDialog from "../../DynamicDialog";
 export const DialogAddUser = ({ show, handleClose }) => {
   const { data: rolesData, isSuccess } = useGetRolesQuery();
 
-  console.log("rolesData:", rolesData);
-
   
   const selectData = isSuccess
     ? { 

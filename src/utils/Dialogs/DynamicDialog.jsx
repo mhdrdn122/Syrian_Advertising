@@ -227,7 +227,6 @@ const DynamicDialog = ({
           onSubmit={async (values) => {
             try {
               const transformed = onSubmitTransform(values);
-              console.log("Submitting values:", transformed);
               await mutate(id ? { id, data: transformed } : transformed).unwrap();
               showToast("success" , "تمت المهمة بنجاح")
             } catch (err) {

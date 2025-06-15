@@ -1,8 +1,10 @@
-import React from "react";
+import { memo, useContext } from "react";
 import { productTypeOptions, typeOptions } from "../../../../Static/StaticData";
+import { BookingContext } from "../../../../Context/BookingContext";
 
+const CartInfo = () => {
+  const { customers, formik } = useContext(BookingContext);
 
-const CartInfo = ({ customers, formik }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
       <div className="flex flex-col">
@@ -44,7 +46,7 @@ const CartInfo = ({ customers, formik }) => {
           نوع المنتج:
         </span>
         <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-          {productTypeOptions.find( 
+          {productTypeOptions.find(
             (p) => p.value === parseInt(formik.values.product_type)
           )?.label || "غير محدد"}
         </span>
@@ -53,4 +55,4 @@ const CartInfo = ({ customers, formik }) => {
   );
 };
 
-export default CartInfo;
+export default memo(CartInfo);

@@ -1,3 +1,4 @@
+import React, { memo, useContext } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,29 +7,21 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import Cookies from "universal-cookie";
-import { useEffect } from "react";
+import { BookingContext } from "../../../Context/BookingContext";
+import { Loader2 } from "lucide-react";
 
-const ContractDialog = ({
-  openContractDialog,
-  setOpenContractDialog,
-  formik,
-  notes,
-  setNotes,
-  isEditMode,
-}) => {
-  const cookis = new Cookies();
-  const superAdminInfo = cookis.get("SuperAdminInfo");
-
-  console.log(superAdminInfo?.user?.company?.contract_note);
-  useEffect(() => {
-    if (!isEditMode) {
-      setNotes(superAdminInfo?.user?.company?.contract_note);
-    }
-  }, []);
+const ContractDialog = () => {
+  const {
+    contractDialog: openContractDialog,
+    setContractDialog: setOpenContractDialog,
+    formik,
+    notes,
+    setNotes,
+    isLoadingAdd,
+    isLoadingUpdate,
+  } = useContext(BookingContext);
 
   return (
     <Dialog open={openContractDialog} onOpenChange={setOpenContractDialog}>
@@ -66,7 +59,13 @@ const ContractDialog = ({
             onClick={formik.submitForm}
             className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
           >
-            تأكيد
+            {isLoadingAdd || isLoadingUpdate ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              </>
+            ) : (
+              "تأكيد"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -74,4 +73,4 @@ const ContractDialog = ({
   );
 };
 
-export default ContractDialog;
+export default memo(ContractDialog);

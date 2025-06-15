@@ -44,7 +44,6 @@ export const BookingSlice = createApi({
 
     updateBookings: builder.mutation({
       query: (data) => {
-        console.log(data);
         return {
           url: `bookings/${data.id}`,
           method: "POST",

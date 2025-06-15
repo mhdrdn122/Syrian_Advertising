@@ -10,12 +10,10 @@ const CustomersPage = () => {
 
     const { data: customers, isSuccess  , isFetching} = useGetCustomersQuery();
   
-    console.log(customers)
     const { searchQuery, setSearchQuery, filteredData } = useSearch(
       isSuccess ? customers : [],
       'full_name'
     );
-    console.log(filteredData)
 
   return (
     <div>

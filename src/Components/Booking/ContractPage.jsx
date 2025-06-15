@@ -142,7 +142,7 @@ const ContractPage = () => {
                   عدد الأوجه
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
-                  المدة الإعلانية (سنة)
+                  المدة الإعلانية (شهر)
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
                   الشعر الإفرادي للأوجه شامل الطباعة لمرة واحدة
@@ -157,11 +157,14 @@ const ContractPage = () => {
                   <td style={styles.adTableThTd}>{ad?.place}</td>
                   <td style={styles.adTableThTd}>{ad?.faces_number}</td>
                   <td style={styles.adTableThTd}>
-                    {calculateDurationInYears(
+                    {/* {calculateDurationInYears(
                       ad?.pivot.start_date,
                       ad?.pivot.end_date
-                    )}{" "}
-                    سنة
+                    )} */}
+
+                    {getBooking?.units}
+                    {" "}
+                    شهر
                   </td>
                   <td style={styles.adTableThTd}>{ad?.pivot.face_price}</td>
                 </tr>

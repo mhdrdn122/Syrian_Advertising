@@ -1,9 +1,5 @@
-import Cookies from "universal-cookie";
-
-const cookis = new Cookies(); 
-
 export const prepareHeaders = (headers) => {
-    const superAdminInfo = cookis.get("SuperAdminInfo")
+    const superAdminInfo = JSON.parse(localStorage.getItem("SuperAdminInfo"))
   
     if (superAdminInfo && superAdminInfo.token) {
       headers.set("Authorization", `Bearer ${superAdminInfo.token}`);

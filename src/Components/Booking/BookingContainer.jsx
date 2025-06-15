@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import {
   useGetBookingQuery,
@@ -10,14 +9,11 @@ import { Button } from "@/components/ui/button";
 
 
 const BookingContainer = () => {
-  const [selectedBooking, setSelectedBooking] = useState(null);
   const { data, isLoading } = useGetBookingQuery();
-
   const navigate = useNavigate(); 
 
   const onShow = (row) => {
     navigate(`/dashboard/booking/${row.id}`)
-    setSelectedBooking(row);
   };
 
   const onEdit = (row) => {

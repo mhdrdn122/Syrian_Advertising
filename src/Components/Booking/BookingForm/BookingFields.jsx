@@ -1,3 +1,4 @@
+import React, { memo, useContext } from "react";
 import {
   Select,
   SelectContent,
@@ -6,17 +7,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useGetCustomersQuery } from "../../../RtkQuery/Slice/Customers/CustomersApi";
 import { productTypeOptions, typeOptions } from "../../../Static/StaticData";
+import { BookingContext } from "../../../Context/BookingContext";
 
+const BookingFields = () => {
+  const { formik, customers, isLoadingCustomers, bookingData } =
+    useContext(BookingContext);
 
-const BookingFields = ({
-  formik,
-  bookingData,
-}) => {
-    const { data: customers, isLoading: isLoadingCustomers } =
-    useGetCustomersQuery();
-    
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <div>
@@ -136,7 +133,7 @@ const BookingFields = ({
         )}
       </div>
     </div>
-  ); 
+  );
 };
 
-export default BookingFields;
+export default memo(BookingFields);

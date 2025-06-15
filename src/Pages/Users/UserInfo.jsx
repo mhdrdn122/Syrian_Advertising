@@ -20,7 +20,7 @@ const UserInfo = () => {
   const [openActivities, setOpenActivities] = useState(false);
   const [openDel, setOpenDel] = useState(false);
   const navigate = useNavigate();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteUser , {isLoading}] = useDeleteUserMutation();
 
   const activityFields = [
     {
@@ -189,7 +189,7 @@ const UserInfo = () => {
       </div>
 
       <DialogEditUser show={open} handleClose={() => setOpen(false)} initData={user} />
-      <DeleteDialog open={openDel} onClose={() => setOpenDel(false)} onConfirm={handleDelete} />
+      <DeleteDialog open={openDel} onClose={() => setOpenDel(false)} loading={isLoading} onConfirm={handleDelete} />
       <DialogShow
         show={openActivities}
         handleClose={() => setOpenActivities(false)}

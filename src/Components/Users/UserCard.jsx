@@ -28,7 +28,7 @@ const UserCard = ({
 }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteUser ,{isLoading }] = useDeleteUserMutation();
 
   const handleDelete = async () => {
     await deleteUser(id).unwrap();
@@ -166,6 +166,7 @@ const UserCard = ({
           open={open}
           onClose={() => setOpen(false)}
           onConfirm={handleDelete}
+          loading={isLoading}
         />
       </motion.div>
     </div>
