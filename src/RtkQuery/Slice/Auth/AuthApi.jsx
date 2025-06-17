@@ -1,15 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../../Api/baseUrl";
-import { prepareHeaders } from "../Global";
-
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "../Global";
 
 export const AuthSlice = createApi({
   reducerPath: "auth",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["profile", "companies"],
   endpoints: (builder) => ({
     login: builder.mutation({

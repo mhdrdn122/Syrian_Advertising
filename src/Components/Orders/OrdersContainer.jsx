@@ -248,6 +248,10 @@ const OrdersContainer = () => {
         confirmText="نعم"
         onConfirm={handleConfirmOrUnconfirm}
         loading={iLoadingConfirm}
+        titleLoading={`  ${
+          isConfirmAction ? "جاري التأكيد " : "جاري إلغاء تأكيد"
+        }  `}
+
       />
     </div>
   );

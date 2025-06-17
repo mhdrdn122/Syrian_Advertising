@@ -29,6 +29,7 @@ const DynamicDialog = ({
   initialValues,
   selectData = {},
   id = null,
+  styles="overflow-y-auto",
   onSubmitTransform = (values) => values,
 }) => {
   const hasNotifiedRef = useRef(false);
@@ -213,7 +214,7 @@ const DynamicDialog = ({
 
   return (
     <Dialog  open={show} onOpenChange={handleClose}>
-      <DialogContent   className="sm:max-w-[500px] max-h-[600px] dialog-content overflow-auto p-6" dir="rtl">
+      <DialogContent   className={`sm:max-w-[500px] max-h-[600px] dialog-content  ${styles} p-6`} dir="rtl">
         <DialogHeader>
           <DialogTitle className="text-center">{title}</DialogTitle>
           {/* <DialogDescription>

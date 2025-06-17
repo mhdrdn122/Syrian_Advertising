@@ -1,15 +1,12 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../../Api/baseUrl.jsx";
-import { prepareHeaders } from "../Global.jsx";
+import { baseQueryWithReauth } from "../Global.jsx";
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
+
 
 export const UsersSlice = createApi({
   reducerPath: "superAdminsApi",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["users"],
   endpoints: (builder) => ({
     getUsers: builder.query({

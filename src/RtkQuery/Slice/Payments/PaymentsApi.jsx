@@ -1,18 +1,23 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { prepareHeaders } from "../Global";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "../Global";
 import { BASE_URL } from "../../../Api/baseUrl";
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
+
 export const PaymentsSlice = createApi({
   reducerPath: "payments",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["payments"],
   endpoints: (builder) => ({
     getPayments: builder.query({
-      query: () => "payments",
+      query: ({is_received}= {}) => {
+        console.log(is_received)
+        const params = new URLSearchParams()
+        if(is_received==0) params.append("is_received",is_received)
+
+        const queryString = params.toString();
+        console.log(queryString)
+        return `/payments${queryString ? `?${queryString}` : ""}`;
+      },
       providesTags: ["payments"],
     }),
     addNewPayment: builder.mutation({
@@ -25,7 +30,18 @@ export const PaymentsSlice = createApi({
       },
       invalidatesTags: ["payments"],
     }),
+
+     confirmOnePayment: builder.mutation({
+      query: (id) => ({
+        url: `/payment-is-Received/${id}`,
+        method: "GET", 
+      }),
+      invalidatesTags: ["payments"],
+    }),
+    
+
+
   }),
 });
 
-export const { useGetPaymentsQuery, useAddNewPaymentMutation } = PaymentsSlice;
+export const { useGetPaymentsQuery, useAddNewPaymentMutation , useConfirmOnePaymentMutation} = PaymentsSlice;

@@ -17,6 +17,7 @@ const TemplatesContainer = () => {
       </div>
     );
   }
+  
   return (
     <>
       <HeaderComponent

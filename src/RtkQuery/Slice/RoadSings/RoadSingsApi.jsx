@@ -1,27 +1,29 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../../Api/baseUrl";
-import { prepareHeaders } from "../Global";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "../Global";
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
 
 export const RoadSignsSlice = createApi({
   reducerPath: "roadSigns",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["RoadSigns"],
   endpoints: (builder) => ({
     getRoadSigns: builder.query({
-      query: ({ start_date, end_date, city_id, region_id } = {}) => {
+      query: ({ start_date, end_date, city_id, region_id , model } = {}) => {
+        console.log(model)
         const params = new URLSearchParams();
         if (start_date) params.append("start_date", start_date);
         if (end_date) params.append("end_date", end_date);
         if (city_id) params.append("city_id", city_id);
         if (region_id) params.append("region_id", region_id);
+        if (model) params.append("model", model);
+
         const queryString = params.toString();
         return `/road-signs${queryString ? `?${queryString}` : ""}`;
       },
+      providesTags: ["RoadSigns"],
+    }),
+    getRoadSignsModel: builder.query({
+      query: () => "/get-road-signs-template-by-model",
       providesTags: ["RoadSigns"],
     }),
     getTemplateProducts: builder.query({
@@ -65,4 +67,5 @@ export const {
   useUpdateRoadSignMutation,
   useAddRoadSignMutation,
   useGetTemplateProductsQuery,
+  useGetRoadSignsModelQuery
 } = RoadSignsSlice;

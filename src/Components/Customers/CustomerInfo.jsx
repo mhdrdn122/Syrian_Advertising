@@ -1,28 +1,47 @@
-import { useNavigate, useParams } from "react-router"
-import { useDeleteCustomerMutation, useShowOneCustomerQuery } from "../../RtkQuery/Slice/Customers/CustomersApi"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Icon } from "@iconify/react"
-import { Skeleton } from "@/components/ui/skeleton"
-import { DialogEditCustomer } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditCustomer"
-import { useState } from "react"
-import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog"
+import { useNavigate, useParams } from "react-router";
+import {
+  useDeleteCustomerMutation,
+  useShowOneCustomerQuery,
+} from "../../RtkQuery/Slice/Customers/CustomersApi";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@iconify/react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DialogEditCustomer } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditCustomer";
+import { useState } from "react";
+import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
+import { DynamicTable } from "../../utils/Tables/DynamicTable";
+import { BookingColumns } from "../../utils/Tables/ColumnsTable/BookingColumns";
+import { BookingCustomerColumns } from "../../utils/Tables/ColumnsTable/BookingByCustomerColumns";
+import { PaymentsColumns } from "../../utils/Tables/ColumnsTable/PaymentsColumns";
+import { PaymentsCustomerColumns } from "../../utils/Tables/ColumnsTable/PaymentsCustomerColumns";
+import { ViewImageDialog } from "../Payments/ViewImageDialog";
+import InvoicePdf from "../Payments/InvoicePdf";
 
 const CustomerInfo = () => {
-  const { id } = useParams()
-  const { data: customer, isFetching } = useShowOneCustomerQuery(id)
-  const [ open , setOpen ] = useState(false)
-  const [ openDel , setOpenDel ] = useState(false)
-  
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const {
+    data: customer,
+    isFetching,
+    isLoading: isLoadingCustomer,
+  } = useShowOneCustomerQuery(id);
+  const [open, setOpen] = useState(false);
+  const [showBookings, setShowBooking] = useState(false);
+  const [showPayments, setShowPayments] = useState(false);
+  const [openViewImage, setOpenViewImage] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(false);
 
-  const [deleteCustomer , { isLoading} ] = useDeleteCustomerMutation()
+  const [openDel, setOpenDel] = useState(false);
 
-  const handelDelete =  async () => {
-    await deleteCustomer(id).unwrap()
-    navigate("/dashboard/customers")
-  }
+  const navigate = useNavigate();
+
+  const [deleteCustomer, { isLoading }] = useDeleteCustomerMutation();
+  console.log(customer);
+  const handelDelete = async () => {
+    await deleteCustomer(id).unwrap();
+    navigate("/dashboard/customers");
+  };
 
   if (isFetching) {
     return (
@@ -41,25 +60,68 @@ const CustomerInfo = () => {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   if (!customer) {
-    return <div className="p-4 text-center">Customer not found</div>
+    return <div className="p-4 text-center">Customer not found</div>;
   }
 
+  const onShow = (row) => {
+    navigate(`/dashboard/booking/${row?.id}`);
+  };
+
+  const onShowPayments = (row) => {
+    setOpenViewImage(true);
+    setSelectedPayment(row);
+  };
+
+  onShowPayments;
   return (
-    <div className="p-4 md:p-6 max-w-6xl w-full mx-auto">
+    <div dir="rtl" className="p-4 md:p-6 max-w-6xl w-full mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Customer Details</h1>
-        <div  className="flex  gap-2">
-          <Button onClick={() => {setOpen(true)}} variant="outline" className="gap-2 cursor-pointer">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+          معلومات الزبون
+        </h1>
+        <div className="flex flex-wrap  gap-2">
+          <Button
+            onClick={() => {
+              setOpen(true);
+            }}
+            variant="outline"
+            className="gap-2 cursor-pointer"
+          >
             <Icon icon="mdi:pencil" className="text-lg" />
-            Edit Customer
+            تعديل
           </Button>
-          <Button onClick={() => setOpenDel(true)} variant="destructive"  className="gap-2 cursor-pointer">
+
+          <Button
+            onClick={() => setShowBooking((prev) => !prev)}
+            variant="outline"
+            className="gap-2 bg-green-500 text-white cursor-pointer"
+          >
+            <Icon icon="mdi:shape-outline" className="text-lg" />
+            عرض الحجوزات
+          </Button>
+
+          <Button
+            onClick={() => {
+              setShowPayments((prev) => !prev);
+            }}
+            variant="outline"
+            className="gap-2 bg-blue-500 text-white  cursor-pointer"
+          >
+            <Icon icon="mdi:currency-usd" className="text-lg" />
+            عرض الدفعات
+          </Button>
+
+          <Button
+            onClick={() => setOpenDel(true)}
+            variant="destructive"
+            className="gap-2 cursor-pointer"
+          >
             <Icon icon="mdi:trash" className="text-lg" />
-            Delete Customer
+            حذف
           </Button>
         </div>
       </div>
@@ -69,17 +131,22 @@ const CustomerInfo = () => {
           <div className="flex flex-col items-center">
             <Avatar className="w-24 h-24 md:w-32 md:h-32 border-4 border-blue-100 dark:border-blue-900">
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-300 text-3xl text-white">
-                {customer.full_name.split(' ').map(n => n[0]).join('')}
+                {customer.full_name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </AvatarFallback>
             </Avatar>
             <Badge variant="secondary" className="mt-4 text-sm">
-              Customer ID: {customer.id}
+              الرصيد المتبقي : {customer?.remaining}
             </Badge>
           </div>
 
           <div className="flex-1 space-y-6">
-            <div className='md:text-left text-center'>
-              <h2 className="text-xl md:text-2xl font-semibold">{customer.full_name}</h2>
+            <div className="md:text-left text-center">
+              <h2 className="text-xl md:text-2xl font-semibold">
+                {customer.full_name}
+              </h2>
               <p className="text-muted-foreground">{customer.company_name}</p>
             </div>
 
@@ -87,10 +154,14 @@ const CustomerInfo = () => {
               <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-full">
-                    <Icon icon="mdi:phone" className="text-blue-600 dark:text-blue-300 text-xl" />
+                    <Icon
+                      icon="mdi:phone"
+                      className="text-blue-600 dark:text-blue-300 text-xl"
+                    />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Phone Number</p>
+                    <p className="text-sm text-muted-foreground">
+رقم الهاتف                    </p>
                     <p className="font-medium">{customer.phone_number}</p>
                   </div>
                 </div>
@@ -111,10 +182,13 @@ const CustomerInfo = () => {
               <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-green-100 dark:bg-green-800 rounded-full">
-                    <Icon icon="mdi:map-marker" className="text-green-600 dark:text-green-300 text-xl" />
+                    <Icon
+                      icon="mdi:map-marker"
+                      className="text-green-600 dark:text-green-300 text-xl"
+                    />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Address</p>
+                    <p className="text-sm text-muted-foreground">العنوان</p>
                     <p className="font-medium">{customer.address}</p>
                   </div>
                 </div>
@@ -123,12 +197,17 @@ const CustomerInfo = () => {
               <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-purple-100 dark:bg-purple-800 rounded-full">
-                    <Icon icon="mdi:calendar-plus" className="text-purple-600 dark:text-purple-300 text-xl" />
+                    <Icon
+                      icon="mdi:calendar-plus"
+                      className="text-purple-600 dark:text-purple-300 text-xl"
+                    />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Joined Date</p>
+                    <p className="text-sm text-muted-foreground">تاريخ الإنشاء</p>
                     <p className="font-medium">
-                      {new Date(customer.created_at).toLocaleDateString('en-US')}
+                      {new Date(customer.created_at).toLocaleDateString(
+                        "en-US"
+                      )}
                     </p>
                   </div>
                 </div>
@@ -137,12 +216,19 @@ const CustomerInfo = () => {
               <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-100 dark:border-orange-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-orange-100 dark:bg-orange-800 rounded-full">
-                    <Icon icon="mdi:calendar-sync" className="text-orange-600 dark:text-orange-300 text-xl" />
+                    <Icon
+                      icon="mdi:calendar-sync"
+                      className="text-orange-600 dark:text-orange-300 text-xl"
+                    />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Last Updated</p>
+                    <p className="text-sm text-muted-foreground">
+                      آخر تعديل
+                    </p>
                     <p className="font-medium">
-                      {new Date(customer.updated_at).toLocaleDateString('en-US')}
+                      {new Date(customer.updated_at).toLocaleDateString(
+                        "en-US"
+                      )}
                     </p>
                   </div>
                 </div>
@@ -151,10 +237,62 @@ const CustomerInfo = () => {
           </div>
         </div>
       </div>
-      <DialogEditCustomer show={open} handleClose={() => setOpen(false)} initData={customer} />
-      <DeleteDialog open={openDel} loading={isLoading} onClose={() => setOpenDel(false)} onConfirm={handelDelete}  />
-    </div>
-  )
-}
 
-export default CustomerInfo
+      {showBookings && (
+        <div className="mt-4">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+            الحجوزات
+          </h1>
+
+          <DynamicTable
+            data={customer?.bookings || []}
+            columns={BookingCustomerColumns}
+            isLoading={isLoadingCustomer}
+            onShow={onShow}
+          />
+        </div>
+      )}
+
+      {showPayments && (
+        <div className="mt-4  ">
+          <div className="my-2 flex justify-between items-center">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+              الدفعات
+            </h1>
+            <InvoicePdf customer={customer} showCustomerTable={true} showCustomerPaymentsTable={true} />
+          </div>
+          <DynamicTable
+            data={customer?.payments || []}
+            columns={PaymentsCustomerColumns}
+            isLoading={isLoadingCustomer}
+            onShow={onShowPayments}
+          />
+        </div>
+      )}
+
+      <ViewImageDialog
+        show={openViewImage}
+        handleClose={() => setOpenViewImage(false)}
+        imageUrl={
+          selectedPayment?.payment_image
+            ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
+            : null
+        }
+        paymentNumber={selectedPayment?.payment_number}
+      />
+      <DialogEditCustomer
+        show={open}
+        handleClose={() => setOpen(false)}
+        initData={customer}
+      />
+      <DeleteDialog
+        open={openDel}
+        loading={isLoading}
+        onClose={() => setOpenDel(false)}
+        onConfirm={handelDelete}
+      />
+    </div>
+  );
+};
+
+export default CustomerInfo;

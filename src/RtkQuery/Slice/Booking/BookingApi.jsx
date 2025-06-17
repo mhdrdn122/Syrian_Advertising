@@ -1,14 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { prepareHeaders } from "../Global";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "../Global";
 import { BASE_URL } from "../../../Api/baseUrl";
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
 export const BookingSlice = createApi({
   reducerPath: "booking",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["bookings"],
   endpoints: (builder) => ({
     getBooking: builder.query({

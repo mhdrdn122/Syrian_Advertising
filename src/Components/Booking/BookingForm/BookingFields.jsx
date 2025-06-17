@@ -20,6 +20,7 @@ const BookingFields = () => {
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           الزبون
         </label>
+        
         <Select
           onValueChange={(value) => formik.setFieldValue("customer_id", value)}
           value={bookingData?.customer_id.toString()}

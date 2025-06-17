@@ -24,11 +24,11 @@ const DialogShow = ({ show, handleClose, data, fields, arrayKey, arrayFields, lo
   
 
   return (
-    <Dialog open={show} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[600px] dialog-content overflow-auto max-h-[80vh] flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+    <Dialog  dir="rtl" open={show} onOpenChange={handleClose}>
+      <DialogContent  className="sm:max-w-[600px] dialog-content overflow-auto max-h-[80vh] flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg">
         <DialogHeader className="border-b border-gray-100 dark:border-gray-700 pb-4">
           <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            Details
+            التفاصيل
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="flex-1 px-6 py-4">
@@ -47,7 +47,7 @@ const DialogShow = ({ show, handleClose, data, fields, arrayKey, arrayFields, lo
               </div>
             ) : !data || (!fields && !arrayKey) ? (
               <p className="text-center text-gray-500 dark:text-gray-400 py-4">
-                No data available
+                لا تتوفر بيانات
               </p>
             ) : (
               <>
@@ -57,6 +57,7 @@ const DialogShow = ({ show, handleClose, data, fields, arrayKey, arrayFields, lo
                       const value = getNestedValue(data, field.key);
                       return (
                         <div
+                        dir="rtl"
                           key={field.key}
                           className="flex items-start gap-3 p-3 rounded-md bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition-colors"
                         >
@@ -89,8 +90,9 @@ const DialogShow = ({ show, handleClose, data, fields, arrayKey, arrayFields, lo
                     <div className="space-y-4">
                       {data.map((item) => (
                         <div
+                        
                           key={item.id}
-                          className="flex items-start gap-3 p-3 rounded-md bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition-colors"
+                          className="flex items-start text-right gap-3 p-3 rounded-md bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition-colors"
                         >
                           <Icon
                             icon={arrayFields[0]?.icon || 'mdi:tag-outline'}
@@ -132,7 +134,7 @@ const DialogShow = ({ show, handleClose, data, fields, arrayKey, arrayFields, lo
             onClick={handleClose}
             className="px-4 py-2 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            Close
+            إغلاق
           </Button>
         </DialogFooter>
       </DialogContent>

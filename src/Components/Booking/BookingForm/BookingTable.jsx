@@ -1,4 +1,4 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,19 +9,139 @@ import {
 } from "@/components/ui/table";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
 import { BookingContext } from "../../../Context/BookingContext";
+import useGetRoadSignsByFilter from "../../../hooks/useGetRoadSignsByFilter";
 
 const BookingTable = () => {
-  const { roadSigns, isLoadingRoadSigns, addToCart, addedSignIds } =
+  const { formik, isLoadingRoadSigns, addToCart, addedSignIds } =
     useContext(BookingContext);
+
+  const {
+    setStartDate,
+    setEndDate,
+    cityId,
+    setCityId,
+    regionId,
+    setRegionId,
+    roadSigns,
+    cities,
+    isCitiesLoading,
+    regions,
+    isRegionsLoading,
+    model ,
+    setModel ,
+    getRoadSignsModel ,
+    isGetRoadSignsModel
+  } = useGetRoadSignsByFilter();
+
+  const handleCityChange = (e) => {
+    setCityId(e.target.value);
+    setRegionId(""); // Reset region when city changes
+  };
+
+  const handleRegionChange = (e) => {
+    setRegionId(e.target.value);
+  };
+
+  const handleModelChange = (e) => {
+    setModel(e.target.value);
+  };
+  useEffect(() => {
+    setStartDate(formik.values.start_date);
+    setEndDate(formik.values.end_date);
+  }, []);
 
   return (
     <div className="mt-8">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
         اللوحات الطرقية
       </h2>
-      <div className="rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <Table>
+
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="flex-1">
+          <Label
+            htmlFor="city"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            المدينة
+          </Label>
+          <select
+            id="city"
+            value={cityId}
+            onChange={handleCityChange}
+            disabled={isCitiesLoading}
+            className="w-full p-2 border dark:bg-gray-900 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">اختر مدينة</option>
+            {isCitiesLoading && <option>جاري تحميل المدن ...</option>}
+            {cities?.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex-1">
+          <Label
+            htmlFor="region"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            المنطقة
+          </Label>
+          <select
+            id="region"
+            value={regionId}
+            onChange={handleRegionChange}
+            disabled={isRegionsLoading || !cityId}
+            className={`w-full ${
+              isRegionsLoading || !cityId
+                ? `dark:bg-gray-700`
+                : `dark:bg-gray-900`
+            } p-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 `}
+          >
+            <option value="">اختر منطقة</option>
+            {isRegionsLoading && <option>جاري تحميل المناطق ...</option>}
+            {regions?.map((region) => (
+              <option key={region.id} value={region.id}>
+                {region.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex-1">
+          <Label
+            htmlFor="region"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            النموذج
+          </Label>
+          <select
+            id="model"
+            value={model}
+            onChange={handleModelChange}
+            disabled={isGetRoadSignsModel}
+            className={`w-full ${
+              isGetRoadSignsModel
+                ? `dark:bg-gray-700`
+                : `dark:bg-gray-900`
+            } p-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 `}
+          >
+            <option value="">اختر النموذج</option>
+            {isGetRoadSignsModel && <option>جاري تحميل النماذح ...</option>}
+            {getRoadSignsModel?.map((model) => (
+              <option key={model.model} value={model.model}>
+                {model.model}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="rounded-lg shadow-sm border   border-gray-200 dark:border-gray-700">
+        <Table >
           <TableHeader>
             <TableRow className="bg-gray-100 dark:bg-gray-800">
               <TableHead className="text-right">نموذج</TableHead>
@@ -36,7 +156,7 @@ const BookingTable = () => {
               <TableHead className="text-right">إجراء</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody >
             {isLoadingRoadSigns ? (
               <TableRow>
                 <TableCell colSpan={10} className="text-center py-4">

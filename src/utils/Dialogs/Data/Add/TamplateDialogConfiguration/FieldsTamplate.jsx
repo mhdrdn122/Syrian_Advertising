@@ -10,7 +10,7 @@ export const TemplateFields = [
     options: [
       { value: "طولي", label: "طولي" },
       { value: "عرضي", label: "عرضي" },
-      { value: "منصف", label: "منصف" },
+      // { value: "منصف", label: "منصف" },
 
     ],
   },

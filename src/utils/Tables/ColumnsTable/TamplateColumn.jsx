@@ -1,8 +1,7 @@
-import { format } from "date-fns";
 
 export  const TemplateColumns = [
     {
-      header: "Model",
+      header: "النموذج",
       accessor: "model",
       prefixIcon: "mdi:shape-outline",
       className: "min-w-[100px] sm:min-w-[120px]",
@@ -10,21 +9,21 @@ export  const TemplateColumns = [
       priority: 1,
     },
     {
-      header: "Type",
+      header: "نوع النموذج",
       accessor: "type",
       prefixIcon: "mdi:format-list-bulleted-type",
       className: "min-w-[100px]",
       priority: 2,
     },
     {
-      header: "Size",
+      header: "الحجم",
       accessor: "size",
       prefixIcon: "mdi:ruler-square",
       className: "min-w-[80px]",
       priority: 3,
     },
     {
-      header: "Print Space",
+      header: "مساحة الطباعة",
       accessor: "printing_space",
       prefixIcon: "mdi:image-area",
       format: (value) => `${value}m²`,
@@ -33,7 +32,7 @@ export  const TemplateColumns = [
       priority: 5,
     },
     {
-      header: "Ad Space",
+      header: "مساحة الإعلان",
       accessor: "advertising_space",
       prefixIcon: "mdi:image-area",
       format: (value) => `${value}m²`,
@@ -41,12 +40,12 @@ export  const TemplateColumns = [
       cellClassName: "text-right font-mono",
       priority: 7,
     },
-    {
-      header: "Created",
-      accessor: "created_at",
-      prefixIcon: "mdi:calendar",
-      format: (value) => format(new Date(value), "MMM dd, yyyy"),
-      className: "min-w-[100px] sm:min-w-[120px]",
-      priority: 8,
-    },
+    // {
+    //   header: "Created",
+    //   accessor: "created_at",
+    //   prefixIcon: "mdi:calendar",
+    //   format: (value) => format(new Date(value), "MMM dd, yyyy"),
+    //   className: "min-w-[100px] sm:min-w-[120px]",
+    //   priority: 8,
+    // },
   ];

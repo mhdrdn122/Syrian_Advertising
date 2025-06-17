@@ -1,15 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../../Api/baseUrl";
-import { prepareHeaders } from '../Global'
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from '../Global'
 
-const baseQuery = fetchBaseQuery({
-    baseUrl: BASE_URL,
-    prepareHeaders
-});
+
 
 export const SummariesSlice = createApi({
     reducerPath: 'summaries',
-    baseQuery,
+    baseQuery:baseQueryWithReauth,
     tagTypes: ["summaries"],
     endpoints: (builder) => ({
         getSummaries: builder.query({

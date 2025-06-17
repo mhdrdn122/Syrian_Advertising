@@ -1,15 +1,14 @@
 import { BookingType } from "../../../Static/StaticData";
 
 export const BookingColumns = [
-
-  {
-    header: "إلى",
-    accessor: "end_date",
-    format: (value) =>
-      new Date(value).toLocaleDateString("en-US"),
-    prefixIcon: "mdi:calendar-end",
-    className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
-    priority: 3,
+   {
+    header: "اسم الشركة",
+    accessor: "customer.company_name",
+    prefixIcon: "mdi:office-building",
+    className:
+      "min-w-[120px] sm:min-w-[150px] md:min-w-[200px] lg:min-w-[250px]",
+    cellClassName: "font-medium",
+    priority: 5,
   },
   {
     header: "من",
@@ -20,15 +19,18 @@ export const BookingColumns = [
     className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
     priority: 4,
   },
+
   {
-    header: "اسم الشركة",
-    accessor: "customer.company_name",
-    prefixIcon: "mdi:office-building",
-    className:
-      "min-w-[120px] sm:min-w-[150px] md:min-w-[200px] lg:min-w-[250px]",
-    cellClassName: "font-medium",
-    priority: 5,
+    header: "إلى",
+    accessor: "end_date",
+    format: (value) =>
+      new Date(value).toLocaleDateString("en-US"),
+    prefixIcon: "mdi:calendar-end",
+    className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
+    priority: 3,
   },
+  
+ 
   {
     header: "الحالة",
     accessor: "type",

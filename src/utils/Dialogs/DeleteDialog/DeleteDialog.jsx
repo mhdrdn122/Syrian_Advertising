@@ -20,6 +20,7 @@ export const DeleteDialog = ({
   loading = false,
   error,
   title = "تأكيد عملية الحذف",
+  titleLoading = " جاري الحذف ...",
   description = "هل أنت متأكد من حذف هذا العنصر؟",
   cancelText = "تجاهل",
   confirmText = "حذف",
@@ -50,7 +51,7 @@ export const DeleteDialog = ({
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                جاري الحذف...
+                {titleLoading}
               </>
             ) : (
               confirmText

@@ -1,15 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../../Api/baseUrl";
-import { prepareHeaders } from "../Global";
-
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
+import { baseQueryWithReauth } from "../Global";
 
 export const BrokersSlice = createApi({
   reducerPath: "brokers",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["Brokers"],
   endpoints: (builder) => ({
     getBrokers: builder.query({

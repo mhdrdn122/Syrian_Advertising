@@ -13,8 +13,14 @@ import { Trash2 } from "lucide-react";
 import { BookingContext } from "../../../../Context/BookingContext";
 
 const CartTable = () => {
-  const { selectedSigns, roadSigns, updateSignFaces, removeFromCart } =
-    useContext(BookingContext);
+  const {
+    selectedSigns,
+    roadSigns,
+    updateSignFaces,
+    removeFromCart,
+    isEditMode,
+    bookingData,
+  } = useContext(BookingContext);
 
   return (
     <Table>
@@ -30,6 +36,15 @@ const CartTable = () => {
       <TableBody>
         {selectedSigns.map((sign) => {
           const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
+          const faces_max = roadSign
+            ? isEditMode
+              ? roadSign.faces_number -
+                roadSign.total_faces_on_date +
+                (bookingData?.roadsigns.find(
+                  (rs) => rs.id === sign.road_sign_id
+                )?.pivot.booking_faces || 0)
+              : roadSign.faces_number - roadSign.total_faces_on_date
+            : null;
           return (
             <TableRow
               key={sign.road_sign_id}
@@ -45,11 +60,7 @@ const CartTable = () => {
                 <Input
                   type="number"
                   min="1"
-                  max={
-                    roadSign
-                      ? roadSign.faces_number - roadSign.total_faces_on_date
-                      : 1
-                  }
+                  max={faces_max}
                   value={sign.booking_faces}
                   onChange={(e) =>
                     updateSignFaces(sign.road_sign_id, e.target.value)

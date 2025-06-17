@@ -13,12 +13,13 @@ export const DialogAddPayments = ({ show, handleClose }) => {
       data: isCustomersSuccess
         ? data.map((customer) => ({
             id: String(customer.id),
-            name: customer.full_name,
+            name: customer.company_name,
           }))
         : [],
     },
   };
 
+  console.log(data)
   const onSubmitTransform = (values) => {
     const formData = new FormData();
     formData.append("paid", values.paid);
@@ -41,6 +42,7 @@ export const DialogAddPayments = ({ show, handleClose }) => {
       initialValues={PaymentInitialValues}
       selectData={selectData}
       onSubmitTransform={onSubmitTransform}
+      styles={"overflow-visible"}
     />
   );
 };

@@ -4,6 +4,7 @@ import HeaderComponent from '../../utils/HeaderComponent';
 import { DialogAddUser } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddUser';
 import { useGetUsersQuery } from '../../RtkQuery/Slice/Users/UsersApi';
 import useSearch from '../../hooks/useSearch';
+import InvoicePdf from '../../Components/Payments/InvoicePdf';
 
 const UsersPage = () => {
   const [open, setOpen] = useState(false);

@@ -20,6 +20,7 @@ import SummariesPage from "./Pages/Summaries/SummariesPage";
 import ContractPage from "./Components/Booking/ContractPage";
 import ReportsPage from "./Pages/Reports/ReportsPage";
 import BookingForm from "./Pages/Booking/BookingForm";
+import TableRoadSigns from "./Components/RoadSigns/TableRoadSigns";
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
               <Route path="models" element={<TemplatesPage />} />
               <Route path="models/:id" element={<TableTemplate />} />
               <Route path="road_signs" element={<RoadSignsPage />} />
+              <Route path="road_signs/:id" element={<TableRoadSigns />} />
+
               <Route path="payments" element={<PaymentsPages />} />
               <Route path="bookings" element={<BookingPage />} />
               <Route path="booking/add" element={<BookingForm  />} />

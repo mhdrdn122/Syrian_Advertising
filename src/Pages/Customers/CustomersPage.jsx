@@ -4,6 +4,7 @@ import HeaderComponent from '../../utils/HeaderComponent'
 import { DialogAddCustomer } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddCustomer'
 import { useGetCustomersQuery } from '../../RtkQuery/Slice/Customers/CustomersApi'
 import useSearch from '../../hooks/useSearch'
+import InvoicePdf from '../../Components/Payments/InvoicePdf'
 
 const CustomersPage = () => {
   const [open , setOpen] = useState(false)
@@ -14,10 +15,12 @@ const CustomersPage = () => {
       isSuccess ? customers : [],
       'full_name'
     );
+    console.log(customers)
 
   return (
     <div>
       <HeaderComponent title={"الزبائن"} setShow={setOpen} titleBtn={"إضافة زبون جديد"} />
+      <InvoicePdf showCustomerTable={false}  customer={customers} showCustomerRemainingTable={true}/>
        <div className="p-4" dir="rtl">
         <input
           type="text"

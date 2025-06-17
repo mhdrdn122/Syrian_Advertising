@@ -129,7 +129,7 @@ body {
   --sb-size: 10px;
 }
 
-body::-webkit-scrollbar , .dialog-content::-webkit-scrollbar {
+body::-webkit-scrollbar , .dialog-content::-webkit-scrollbar , .scroll-table {
   width: var(--sb-size)
 }
 

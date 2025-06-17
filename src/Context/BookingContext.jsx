@@ -32,6 +32,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
   const [contractDialog, setContractDialog] = useState(false);
   const [notes, setNotes] = useState("");
   const [queryParams, setQueryParams] = useState({ start_date: "2025-06-30" });
+  
 
   // RTK Query hooks
   const { data: roadSigns, isLoading: isLoadingRoadSigns } =
@@ -115,6 +116,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
     },
   });
 
+  console.log("re render")
   // Populate form with booking data in edit mode
   useEffect(() => {
     if (isEditMode && bookingData && !isLoadingBooking) {
@@ -210,7 +212,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
         },
       ]);
       setAddedSignIds(new Set([...addedSignIds, sign.id]));
-      showToast("success", `تم إضافة لوحة ${sign.number} إلى السلة`);
+      showToast("success", `تم إضافة لوحة إلى السلة`);
     }
   };
 

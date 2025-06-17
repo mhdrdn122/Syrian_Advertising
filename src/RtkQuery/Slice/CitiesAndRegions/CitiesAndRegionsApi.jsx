@@ -1,15 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../../Api/baseUrl";
-import { prepareHeaders } from "../Global";
+import { baseQueryWithReauth } from "../Global";
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders,
-});
 
 export const CitiesAndRegionsSlice = createApi({
   reducerPath: "cities-and-regions",
-  baseQuery,
+  baseQuery:baseQueryWithReauth,
   tagTypes: ["Cities", "Regions"],
   endpoints: (builder) => ({
     getCities: builder.query({

@@ -4,14 +4,14 @@ import LoadingGet from "../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "./Summaries/SummariesCard";
 
 export function SectionCards() {
-  const { data: summaries, isFetching: fetchingTemplates } =
+  const { data: summaries, isFetching: isFetchingSummaries } =
     useGetSummariesQuery();
 
-  if (fetchingTemplates) {
+  if (isFetchingSummaries) {
     return (
-      <div className="w-full h-full flex-col flex justify-center items-center">
-        <Loader />
-        <p>  جاري التحميل ...</p> 
+      <div dir="ltr" className="w-full h-full flex-col flex justify-center items-center">
+        <LoadingGet />
+        <p> ... جاري التحميل </p> 
       </div>
     );
   }

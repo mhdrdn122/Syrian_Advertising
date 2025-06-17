@@ -58,7 +58,7 @@ export const RoadSignColumns = [
     {
       header: "القياس",
       accessor: "template.size",
-      prefixIcon: "mdi:currency-usd",
+      prefixIcon: "mdi:ruler-square",
       // format: (value) => `$${parseFloat(value).toFixed(2)}`,
       className: "text-right min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
       cellClassName: "text-right font-mono",

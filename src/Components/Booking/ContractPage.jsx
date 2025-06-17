@@ -4,7 +4,7 @@ import logo from "../../assets/images/adv_syrian.png";
 import { useParams } from "react-router";
 import { useGetOneBookingsQuery } from "../../RtkQuery/Slice/Booking/BookingApi";
 import { styles } from "./ContractStyle";
-
+import DOMPurify from "dompurify";
 const ContractPage = () => {
   const contentRef = useRef(null);
   const param = useParams();
@@ -73,7 +73,7 @@ const ContractPage = () => {
     const end = new Date(endDate);
     const diffInMs = end - start;
     const diffInYears = diffInMs / (1000 * 60 * 60 * 24 * 365.25);
-    return Math.round(diffInYears * 10) / 10; 
+    return Math.round(diffInYears * 10) / 10;
   };
 
   if (!isSuccess) {
@@ -145,7 +145,7 @@ const ContractPage = () => {
                   المدة الإعلانية (شهر)
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
-                  الشعر الإفرادي للأوجه شامل الطباعة لمرة واحدة
+                  السعر الإفرادي للأوجه شامل الطباعة لمرة واحدة
                 </th>
               </tr>
             </thead>
@@ -155,16 +155,15 @@ const ContractPage = () => {
                   <td style={styles.adTableThTd}>{ad.template?.model}</td>
                   <td style={styles.adTableThTd}>{ad.template?.type}</td>
                   <td style={styles.adTableThTd}>{ad?.place}</td>
-                  <td style={styles.adTableThTd}>{ad?.faces_number}</td>
+                  <td style={styles.adTableThTd}>
+                    {ad?.total_faces_on_date} وجه اعلاني
+                  </td>
                   <td style={styles.adTableThTd}>
                     {/* {calculateDurationInYears(
                       ad?.pivot.start_date,
                       ad?.pivot.end_date
                     )} */}
-
-                    {getBooking?.units}
-                    {" "}
-                    شهر
+                    {getBooking?.units} شهر
                   </td>
                   <td style={styles.adTableThTd}>{ad?.pivot.face_price}</td>
                 </tr>
@@ -183,9 +182,23 @@ const ContractPage = () => {
                 {getBooking?.total_price_befor_discount} ل.س
               </td>
             </tr>
+            {getBooking?.value && (
+              <tr>
+                <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
+                  حسم خاص مقدم من الشركة السورية
+                </th>
+                <td style={styles.adTableThTd}>
+                  {getBooking.discount_type == 1 ? (
+                    <span>{getBooking.value} ل.س </span>
+                  ) : (
+                    <span>{getBooking.value} %</span>
+                  )}
+                </td>
+              </tr>
+            )}
             <tr>
               <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
-                حسم خاص مقدم من الشركة السورية
+                القيمة الكلية بعد الحسم عن 28 يوم فترة إعلانية ( سنة )
               </th>
               <td style={styles.adTableThTd}>{getBooking?.total_price} ل.س</td>
             </tr>
@@ -196,18 +209,33 @@ const ContractPage = () => {
           <strong>
             - السعر يشمل أجور الطباعة لمرة واحدة فقط و تكاليف الرسوم الإعلانية.
           </strong>
-          {getBooking?.roadsigns.map((tem, ind) => (
+          {getBooking?.groupedTemplates.map((tem, ind) => (
             <div key={ind}>
               <p>
-                العدد الكلي لنموذج {tem?.template?.model} بعدد{" "}
-                <span>{tem?.faces_number} وجه إعلاني</span>
+                العدد الكلي لنموذج {tem?.model} بعدد{" "}
+                <span>{tem?.total_faces} وجه إعلاني</span>
               </p>
             </div>
           ))}
         </div>
 
         <div>
-          <div dangerouslySetInnerHTML={{ __html: getBooking?.notes }} />
+          {getBooking?.notes ? (
+            <div className="list-decimal pr-6">
+              {(() => {
+                const cleanText = DOMPurify.sanitize(getBooking.notes, {
+                  ALLOWED_TAGS: [],
+                });
+                return cleanText.split(/(?=\d+-\s)/).map((item, index) => (
+                  <p key={index} className="mb-2">
+                    {item.trim()}
+                  </p>
+                ));
+              })()}
+            </div>
+          ) : (
+            <p>لا توجد ملاحظات</p>
+          )}
         </div>
 
         <div style={{ margin: "20px 0" }}>
@@ -228,11 +256,11 @@ const ContractPage = () => {
             <h3 style={styles.signaturePartyH3}>
               {contractDetails.firstParty.company}
             </h3>
-            <p>الفريق الأول: {contractDetails.firstParty.company}</p>
+            <p>الفريق الأول: {contractDetails.firstParty.name}</p>
           </div>
           <div style={styles.signatureParty}>
             <h3 style={styles.signaturePartyH3}>
-              {contractDetails.secondParty.name}
+              {contractDetails.secondParty.company}
             </h3>
             <p>الفريق الثاني: {contractDetails.secondParty.name}</p>
           </div>

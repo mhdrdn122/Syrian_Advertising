@@ -135,11 +135,11 @@ const UserCard = ({
             >
               <Button
                 variant="default"
-                className="w-full gap-2"
+                className="w-full gap-2 cursor-pointer"
                 onClick={handleViewDetails}
               >
                 <Icon icon="mdi:eye-outline" className="text-lg" />
-                View Details
+                التفاصيل
               </Button>
             </motion.div>
 
@@ -150,14 +150,14 @@ const UserCard = ({
             >
               <Button
                 variant="destructive"
-                className="w-full gap-2"
+                className="w-full gap-2 cursor-pointer "
                 onClick={(e) => {
                   e.preventDefault();
                   setOpen(true);
                 }}
               >
                 <Icon icon="mdi:trash-can-outline" className="text-lg" />
-                Delete
+                حذف
               </Button>
             </motion.div>
           </div>

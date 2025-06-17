@@ -1,92 +1,37 @@
-import React, { useState } from 'react';
-import {
-  useDeleteRoadSignMutation,
-} from '../../RtkQuery/Slice/RoadSings/RoadSingsApi';
-import { DynamicTable } from '../../utils/Tables/DynamicTable';
-import HeaderComponent from '../../utils/HeaderComponent';
-import { DialogAddRoadSign } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddRoadSign';
-import { DialogEditRoadSign } from '../../utils/Dialogs/EditAddDialog/Edit/DialogEditRoadSign';
-import { DeleteDialog } from '../../utils/Dialogs/DeleteDialog/DeleteDialog';
-import { RoadSignColumns } from '../../utils/Tables/ColumnsTable/RoadSignColumns';
-import { RoadSignFields } from '../../utils/Dialogs/Data/Show/RoadSignFieldsShow';
-import DialogShow from '../../utils/Dialogs/DialogShow/DialogShow';
+import { useGetRoadSignsModelQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsApi";
+import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
+import SummariesCard from "../Summaries/SummariesCard";
 
-const RoadSignsContainer = ({ data, isLoading }) => {
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [openShow, setOpenShow] = useState(false);
-  const [selectedRoadSign, setSelectedRoadSign] = useState(null);
+const RoadSignsContainer = () => {
+  const { data, isFetching } = useGetRoadSignsModelQuery();
 
-  const [deleteRoadSign, { isLoading: isDeleting }] = useDeleteRoadSignMutation();
-
-
- 
-  const handleEdit = (roadSign) => {
-    setSelectedRoadSign(roadSign);
-    setOpenEdit(true);
-  };
-
-  const handleDelete = (roadSign) => {
-    setSelectedRoadSign(roadSign);
-    setOpenDelete(true);
-  };
-
-  const handleShow = (roadSign) => {
-    setSelectedRoadSign(roadSign);
-    setOpenShow(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (selectedRoadSign) {
-      try {
-        await deleteRoadSign(selectedRoadSign.id).unwrap();
-        setOpenDelete(false);
-        setSelectedRoadSign(null);
-      } catch (error) {
-        console.error('Failed to delete road sign:', error);
-      }
-    }
-  };
-
+  if (isFetching) {
+    return (
+      <div className="w-full h-full flex-col flex justify-center items-center">
+        <LoadingGet />
+        <p>Loading ... </p>
+      </div>
+    );
+  }
+  
   return (
-    <div className="p-4 sm:p-6 w-full  mx-auto space-y-6 overflow-x-auto">
-      <HeaderComponent
-        title={'اللوحات الطرقية'}
-        titleBtn={'إضافة لوحة'}
-        setShow={setOpen}
-      />
-      <DynamicTable
-        data={data || []}
-        columns={RoadSignColumns}
-        isLoading={isLoading}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onShow={handleShow}
-      />
-      <DialogEditRoadSign
-        show={openEdit}
-        handleClose={() => setOpenEdit(false)}
-        initData={selectedRoadSign}
-      />
-      <DialogAddRoadSign show={open} handleClose={() => setOpen(false)} />
-      <DeleteDialog
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        onConfirm={handleConfirmDelete}
-        loading={isDeleting}
-      />
-      <DialogShow
-        show={openShow}
-        handleClose={() => {
-          setOpenShow(false);
-          setSelectedRoadSign(null);
-        }}
-        data={selectedRoadSign}
-        fields={RoadSignFields}
-        loading={isLoading}
-      />
-    </div>
+    <>
+           <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-2  lg:grid-cols-4 gap-4"
+        dir="rtl"
+      >
+        {data?.map((item, ind) => {
+          return (
+            <SummariesCard
+              key={ind}
+              title={item.model}
+              count={item.count || 0}
+              endPoint={`road_signs/${item.model}`}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 
