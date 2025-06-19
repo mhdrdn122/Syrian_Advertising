@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useAuth } from "../../Context/AuthProvider";
 
 // Utility function to access nested properties
 const getNestedValue = (obj, path) => {
@@ -28,7 +29,10 @@ export const DynamicTable = ({
   onConfirmOrder,
   onUnconfirmOrder,
   className = "",
+  permissions
 }) => {
+  const {hasPermission} = useAuth()
+  console.log(permissions)
   return (
     <div
       className={`rounded-xl border border-gray-100 dark:border-gray-800 bg-background shadow-sm w-full ${className}`}
@@ -130,7 +134,7 @@ export const DynamicTable = ({
                     onUnconfirmOrder) && (
                     <TableCell className="py-2">
                       <div className="flex justify-end gap-2">
-                        {onShow && (
+                        {(onShow && hasPermission(permissions?.show)) && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -170,7 +174,7 @@ export const DynamicTable = ({
                             )}
                           </>
                         )}
-                        {onEdit && (
+                        {(onEdit && hasPermission(permissions?.edit))  && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -180,7 +184,7 @@ export const DynamicTable = ({
                             <Icon icon="mdi:pencil" className="text-primary" />
                           </Button>
                         )}
-                        {onDelete && (
+                        {(onDelete && hasPermission(permissions?.delete)) &&(
                           <Button
                             variant="destructive"
                             size="sm"

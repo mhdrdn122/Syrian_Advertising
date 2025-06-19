@@ -78,3 +78,54 @@ export const isAvailableRoadSign = [
   { id: "1", name: "متاح" },
   { id: "0", name: "غير متاح" },
 ];
+  
+
+export const Permissions = {
+  CreateBookings: "create-bookings",
+  CreateBrokers: "create-brokers",
+  CreateCities: "create-cities",
+  CreateCustomers: "create-customers",
+  // CreateOrders: "create-orders",
+  CreatePayments: "create-payments",
+  CreateProducts: "create-products",
+  CreateRegions: "create-regions",
+  CreateRoadSigns: "create-road-signs",
+  CreateTemplates: "create-templates",
+  CreateUsers: "create-users",
+
+  // DeleteBookings: "delete-bookings",
+  DeleteBrokers: "delete-brokers",
+  DeleteCities: "delete-cities",//
+  DeleteCustomers: "delete-customers",//
+  // DeleteOrders: "delete-orders",
+  // DeletePayments: "delete-payments",
+  // DeleteProducts: "delete-products",
+  DeleteRegions: "delete-regions",//
+  DeleteRoadSigns: "delete-road-signs",
+  DeleteTemplates: "delete-templates",
+  DeleteUsers: "delete-users", 
+
+  EditBookings: "edit-bookings",
+  EditBrokers: "edit-brokers",
+  EditCities: "edit-cities",//
+  EditCustomers: "edit-customers",//
+  EditOrders: "edit-orders",//
+  // EditPayments: "edit-payments",
+  // EditProducts: "edit-products",
+  EditRegions: "edit-regions",//
+  EditRoadSigns: "edit-road-signs",
+  EditTemplates: "edit-templates",
+  EditUsers: "edit-users",
+
+  ViewBookings: "view-bookings",
+  ViewBrokers: "view-brokers",
+  ViewCities: "view-cities",//
+  ViewCustomers: "view-customers",//
+  ViewOrders: "view-orders",//
+  ViewPayments: "view-payments",//
+  // ViewProducts: "view-products",
+  ViewRegions: "view-regions",//
+  ViewRoadSigns: "view-road-signs",
+  ViewTemplates: "view-templates",
+  ViewUsers: "view-users",
+};

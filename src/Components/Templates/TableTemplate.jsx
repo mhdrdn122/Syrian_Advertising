@@ -12,6 +12,7 @@ import { TemplateFieldsShow } from "../../utils/Dialogs/Data/Show/Tamplatefields
 import DialogShow from "../../utils/Dialogs/DialogShow/DialogShow";
 import { showToast } from "../../utils/Notifictions/showToast";
 import { TemplateColumns } from "../../utils/Tables/ColumnsTable/TamplateColumn";
+import { Permissions } from "../../Static/StaticData";
 const TableTemplate = () => {
   const { id } = useParams();
   const { data, isLoading, isSuccess } = useGetTemplatesQuery(id);
@@ -61,6 +62,12 @@ const TableTemplate = () => {
     }
   };
 
+    const permissions = {
+        delete : Permissions.DeleteRoadSigns,
+        show : Permissions.ViewTemplates,
+        edit : Permissions.EditTemplates,
+      }
+
   return (
     <div className="p-4 sm:p-6 max-w-full mx-auto space-y-6 overflow-x-auto">
       <DynamicTable
@@ -70,6 +77,7 @@ const TableTemplate = () => {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onShow={handleShow}
+        permissions={permissions}
       />
 
       <DialogAddTemplate show={show} handleClose={() => setShow(false)} />

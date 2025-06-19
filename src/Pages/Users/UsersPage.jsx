@@ -5,6 +5,7 @@ import { DialogAddUser } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddUs
 import { useGetUsersQuery } from '../../RtkQuery/Slice/Users/UsersApi';
 import useSearch from '../../hooks/useSearch';
 import InvoicePdf from '../../Components/Payments/InvoicePdf';
+import { Permissions } from '../../Static/StaticData';
 
 const UsersPage = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +18,7 @@ const UsersPage = () => {
 
   return (
     <div>
-      <HeaderComponent title={'الموظفين'} titleBtn={'إضافة موظف'} setShow={setOpen} />
+      <HeaderComponent title={'الموظفين'} permission={Permissions.CreateUsers} titleBtn={'إضافة موظف'} setShow={setOpen} />
       <div className="p-4" dir="rtl">
         <input
           type="text"

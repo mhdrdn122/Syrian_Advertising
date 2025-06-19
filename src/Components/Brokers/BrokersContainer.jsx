@@ -10,12 +10,15 @@ import { DialogAddBroker } from "../../utils/Dialogs/EditAddDialog/Add/DialogAdd
 import { DialogEditBroker } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditBroker";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { BrokersColumns } from "../../utils/Tables/ColumnsTable/BrokersColumns";
+import { useAuth } from "../../Context/AuthProvider";
+import { Permissions } from "../../Static/StaticData";
 
 const BrokersContainer = () => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(null);
   const [selectBroker, setSelectBroker] = useState({});
+  
 
   const { data: brokers, isLoading } = useGetBrokersQuery(undefined, {
     refetchOnMountOrArgChange: false,
@@ -54,15 +57,23 @@ const BrokersContainer = () => {
     );
   }
 
+  const permissions = {
+    delete : Permissions.DeleteBrokers,
+    show : Permissions.ViewBrokers,
+    edit : Permissions.EditBrokers,
+  }
+
   return (
     <div className="p-4 sm:p-6 max-w-full mx-auto space-y-6">
-      <HeaderComponent title={"الوسطاء"} titleBtn={"إضافة وسيط"} setShow={setOpen} />
+      <HeaderComponent title={"الوسطاء"} titleBtn={"إضافة وسيط"} permission={Permissions.CreateBrokers} setShow={setOpen} />
       <DynamicTable
         data={brokers || []}
         columns={BrokersColumns}
         isLoading={isLoading}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        permissions={permissions}
+
       />
       <DialogAddBroker show={open} handleClose={() => setOpen(false)} />
       <DialogEditBroker

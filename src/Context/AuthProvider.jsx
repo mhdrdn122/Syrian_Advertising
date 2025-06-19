@@ -13,16 +13,10 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const hasPermission = (permission) => {
-        console.log(permission);
-        console.log(permissions);
-        console.log(permissions[0]?.name);
-
         if (!user.user) {
             console.log("no user");
             return false; 
         }
-
-        
         return permissions.some(permissionItem => permissionItem.name === permission);
     };
 

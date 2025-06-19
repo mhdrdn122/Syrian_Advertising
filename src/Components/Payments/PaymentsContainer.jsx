@@ -12,6 +12,7 @@ import InvoicePdf from "./InvoicePdf";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { showToast } from "../../utils/Notifictions/showToast";
+import { Permissions } from "../../Static/StaticData";
 
 const PaymentsContainer = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -107,6 +108,7 @@ const PaymentsContainer = () => {
               title={"المدفوعات"}
               titleBtn={"إضافة دفعة"}
               setShow={setOpenAdd}
+              permission={Permissions.CreatePayments}
             />
             <InvoicePdf
               customer={dataInvoicePdf}

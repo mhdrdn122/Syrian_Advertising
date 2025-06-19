@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { useDeleteUserMutation } from "../../RtkQuery/Slice/Users/UsersApi";
 import { showToast } from "../../utils/Notifictions/showToast";
+import { useAuth } from "../../Context/AuthProvider";
+import { Permissions } from "../../Static/StaticData";
 
 const UserCard = ({
   id,
@@ -30,6 +32,9 @@ const UserCard = ({
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [deleteUser ,{isLoading }] = useDeleteUserMutation();
+  const {hasPermission} = useAuth()
+
+
 
   const handleDelete = async () => {
     try{
@@ -139,7 +144,9 @@ const UserCard = ({
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.2 }}
             >
-              <Button
+              {
+                hasPermission(Permissions.ViewUsers) && (
+                    <Button
                 variant="default"
                 className="w-full gap-2 cursor-pointer"
                 onClick={handleViewDetails}
@@ -147,6 +154,9 @@ const UserCard = ({
                 <Icon icon="mdi:eye-outline" className="text-lg" />
                 التفاصيل
               </Button>
+                )
+              }
+            
             </motion.div>
 
             <motion.div
@@ -154,7 +164,9 @@ const UserCard = ({
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.2 }}
             >
-              <Button
+              {
+                hasPermission(Permissions.DeleteUsers) && (
+                  <Button
                 variant="destructive"
                 className="w-full gap-2 cursor-pointer "
                 onClick={(e) => {
@@ -165,6 +177,9 @@ const UserCard = ({
                 <Icon icon="mdi:trash-can-outline" className="text-lg" />
                 حذف
               </Button>
+                )
+              }
+              
             </motion.div>
           </div>
         </Card>

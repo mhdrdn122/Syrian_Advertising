@@ -26,6 +26,8 @@ import {
 import { TabsContent } from "@/components/ui/tabs";
 import { Trash2, Edit, Plus, Loader2, Loader } from "lucide-react";
 import { RegionsCityContext } from "../../Context/RegionsCityContextApi";
+import { useAuth } from "../../Context/AuthProvider";
+import { Permissions } from "../../Static/StaticData";
 
 const RegionsTab = () => {
   const {
@@ -44,6 +46,7 @@ const RegionsTab = () => {
     handleEdit,
     handleDeleteDialog,
   } = useContext(RegionsCityContext);
+  const { hasPermission } = useAuth();
 
   return (
     <TabsContent value="regions">
@@ -62,11 +65,14 @@ const RegionsTab = () => {
           </SelectContent>
         </Select>
         <Dialog open={isRegionDialogOpen} onOpenChange={setIsRegionDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> إضافة منطقة
-            </Button>
-          </DialogTrigger>
+          {hasPermission(Permissions.CreateRegions) && (
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" /> إضافة منطقة
+              </Button>
+            </DialogTrigger>
+          )}
+
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
@@ -112,7 +118,9 @@ const RegionsTab = () => {
                   <SelectItem value="0">غير متوفر</SelectItem>
                 </SelectContent>
               </Select>
-              <Button onClick={() => handleSubmit("region", editRegionId, regionForm)}>
+              <Button
+                onClick={() => handleSubmit("region", editRegionId, regionForm)}
+              >
                 {addRegionLoading ? (
                   <Loader2 />
                 ) : (
@@ -145,24 +153,32 @@ const RegionsTab = () => {
                 <TableCell>{region.id}</TableCell>
                 <TableCell>{region.name}</TableCell>
                 <TableCell>
-                  {cities.find((city) => city.id === region.city_id)?.name || "Unknown"}
+                  {cities.find((city) => city.id === region.city_id)?.name ||
+                    "Unknown"}
                 </TableCell>
-                <TableCell>{region.is_active ? "متوفر" : "غير متوفر"}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleEdit("region", region)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteDialog("region", region.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  {region.is_active ? "متوفر" : "غير متوفر"}
+                </TableCell>
+                <TableCell>
+                  {hasPermission(Permissions.EditRegions) && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEdit("region", region)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                  )}
+
+                  {hasPermission(Permissions.DeleteRegions) && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteDialog("region", region.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

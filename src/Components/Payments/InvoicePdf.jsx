@@ -51,8 +51,10 @@ const InvoicePdf = ({
       // Define customer info table headers and data
       const customerHeaders = [
         [
+          "المبلغ المتبقي",
+          "المبلغ المدفوع",
           "المبلغ الكلي",
-          "تاريخ الكشف",
+          // "تاريخ الكشف",
           "رقم الهاتف",
           "اسم الشركة",
           "اسم الزبون",
@@ -61,8 +63,11 @@ const InvoicePdf = ({
 
       const customerData = [
         [
+          customer?.remaining || "0.00",
+          customer?.total_paid || "0.00",
+
           customer?.total || "0.00",
-          new Date().toLocaleDateString("en-US"),
+          // new Date().toLocaleDateString("en-US"),
           customer.phone_number || "غير متوفر",
           customer.company_name || "غير متوفر",
           customer.full_name || "غير متوفر",
@@ -115,7 +120,15 @@ const InvoicePdf = ({
         },
       });
       currentY = doc.lastAutoTable.finalY + 10; // Update starting Y for the next table
+
+      
+    const paymentInfo = "تفاصيل الدفعات"
+    doc.setFontSize(18); // Slightly larger title for emphasis
+
+    doc.text(paymentInfo, pageWidth / 2, margin + 45, { align: "center" });
     }
+
+  
 
     // Conditionally render customer Remaining  table
     if (showCustomerRemainingTable) {
@@ -123,7 +136,10 @@ const InvoicePdf = ({
       const customerHeaders = [
         [
           "المبلغ المتبقي",
-          "تاريخ الكشف",
+          "المبلغ المدفوع",
+          "المبلغ الكلي",
+
+          " العنوان",
           "رقم الهاتف",
           "اسم الشركة",
           "اسم الزبون",
@@ -132,6 +148,9 @@ const InvoicePdf = ({
 
       const customerData = customer?.map((c) => [
         c?.remaining || "0.00",
+        c?.total_paid || "0.00",
+        c?.total || "0.00",
+
         c?.address,
         c?.phone_number || "غير متوفر",
         c.company_name || "غير متوفر",
@@ -194,22 +213,34 @@ const InvoicePdf = ({
               "الرصيد المتبقي",
               "المبلغ المدفوع",
               "تاريخ الدفع",
-              "رقم الدفعة",
+              " المبلغ الكلي",
+              " اسم الموظف",
               "رقم الهاتف",
               " اسم الزبون",
+              "رقم الدفعة",
+
             ],
           ]
-        : [["الرصيد المتبقي", "المبلغ المدفوع", "تاريخ الدفع", "رقم الدفعة"]];
+        : [["الرصيد المتبقي", "المبلغ المدفوع",  "المبلغ الكلي",  "تاريخ الدفع", "رقم الدفعة"]];
 
       // Map payment data to table rows
-      const tableData = customer.payments.map((payment) => [
+      const tableData = !showCustomerTable ? customer.payments.map((payment) => [
         payment.remaining || "0.00",
         payment.paid || "0.00",
         payment.date || "غير متوفر",
+        payment.total || "غير متوفر",
+        payment?.user?.full_name || customer?.phone_number || "غير متوفر",
+        payment?.customer?.phone_number || customer?.phone_number || "غير متوفر",
+        payment?.customer?.full_name || customer?.full_name || "غير متوفر",
         payment.payment_number || "غير متوفر",
-        payment?.user?.phone_number || customer?.phone_number || "غير متوفر",
-        payment?.user?.full_name || customer?.full_name || "غير متوفر",
-      ]);
+
+      ]) : customer.payments.map((payment) => [
+        payment.remaining || "0.00",
+        payment.paid || "0.00",
+        payment.total || "غير متوفر",
+        payment.date || "غير متوفر",
+        payment.payment_number || "غير متوفر",
+      ])
 
       // Calculate optimal column widths for payment table
       const numPaymentColumns = paymentHeaders[0].length;

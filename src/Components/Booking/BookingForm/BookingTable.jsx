@@ -106,7 +106,7 @@ const BookingTable = () => {
           >
             {
               isRegionsLoading || !cityId ? (
-                <option>جاري تحميل المناطق ...</option>
+                <option>اختر مدينة لإظهار المناطق</option>
               ) : (
                 regions?.map((region) => (
               <option key={region.id} value={region.id}>

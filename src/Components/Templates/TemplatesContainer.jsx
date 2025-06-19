@@ -4,6 +4,7 @@ import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "../Summaries/SummariesCard";
 import { DialogAddTemplate } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddTemplate";
 import HeaderComponent from "../../utils/HeaderComponent";
+import { Permissions } from "../../Static/StaticData";
 
 const TemplatesContainer = () => {
   const { data, isFetching } = useGetTemplatesModelQuery();
@@ -24,6 +25,7 @@ const TemplatesContainer = () => {
         setShow={setShow}
         title={"النماذج"}
         titleBtn={"اضافة نموذج"}
+        permission={Permissions.CreateTemplates}
       />
 
       <div

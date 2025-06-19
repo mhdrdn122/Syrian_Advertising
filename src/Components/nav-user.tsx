@@ -43,7 +43,7 @@ export function NavUser({
 
   const logouthandeler = async () => {
     try {
-      await logout();
+       const res = await logout();
       localStorage.removeItem("SuperAdminInfo");
       navigate("/");
     } catch (e) {

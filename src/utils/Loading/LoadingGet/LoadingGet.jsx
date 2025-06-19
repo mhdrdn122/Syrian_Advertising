@@ -2,7 +2,7 @@ import './LoadingGet.css'
 
 const LoadingGet = () => {
   return (
-    <div class="loader"></div>
+    <div className="loader"></div>
     
   )
 }

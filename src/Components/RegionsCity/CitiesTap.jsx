@@ -26,6 +26,8 @@ import {
 import { TabsContent } from "@/components/ui/tabs";
 import { Trash2, Edit, Plus, Loader2, Loader } from "lucide-react";
 import { RegionsCityContext } from "../../Context/RegionsCityContextApi";
+import { useAuth } from "../../Context/AuthProvider";
+import { Permissions } from "../../Static/StaticData";
 // import { RegionsCityContext } from "./RegionsCityContext";
 
 const CitiesTap = () => {
@@ -42,16 +44,22 @@ const CitiesTap = () => {
     handleEdit,
     handleDeleteDialog,
   } = useContext(RegionsCityContext);
+  const {hasPermission} =  useAuth()
 
   return (
     <TabsContent value="cities">
       <div className="flex justify-end mb-4">
         <Dialog open={isCityDialogOpen} onOpenChange={setIsCityDialogOpen}>
-          <DialogTrigger asChild>
+          {
+            hasPermission(Permissions.CreateCities) && ( <DialogTrigger asChild>
+
             <Button>
               <Plus className="mr-2 h-4 w-4" /> اضافة مدينة
             </Button>
-          </DialogTrigger>
+
+          </DialogTrigger>)
+          }
+         
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
@@ -113,6 +121,8 @@ const CitiesTap = () => {
                 <TableCell>{city.name}</TableCell>
                 <TableCell>{city.is_active ? "متوفر" : "غير متوفر"}</TableCell>
                 <TableCell>
+
+                
                   <Button
                     variant="ghost"
                     size="icon"

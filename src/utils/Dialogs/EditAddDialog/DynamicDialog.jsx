@@ -115,10 +115,10 @@ const DynamicDialog = ({
           <div key={field.name} className="space-y-2">
             <Label>{field.label}</Label>
             <div>
-              {formik.values[field.name]?.map((_, index) => (
+              {formik.values[field.name]?.map((item, index) => (
                 <div key={index} className="flex items-center gap-2 mb-2">
                   <Label htmlFor={`${field.name}[${index}].price`} className="w-24">
-                    {index === 0 ? "محلي" : index === 1 ? "أجنبي" : "كلاهما"}
+                    {item.type === 1 ? "محلي" : item.type === 2 ? "أجنبي" : "كلاهما"}
                   </Label>
                   <Input
                     type="number"
@@ -126,7 +126,7 @@ const DynamicDialog = ({
                     value={formik.values[field.name][index]?.price || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder={`سعر ${index === 0 ? "محلي" : index === 1 ? "أجنبي" : "كلاهما"}`}
+                    placeholder={`سعر ${item.type === 1 ? "محلي" : item.type === 2 ? "أجنبي" : "كلاهما"}`}
                     className={formik.touched[field.name]?.[index]?.price && formik.errors[field.name]?.[index]?.price ? "border-destructive" : ""}
                   />
                 </div>

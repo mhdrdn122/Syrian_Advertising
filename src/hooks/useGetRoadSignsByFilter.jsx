@@ -7,7 +7,7 @@ import {
   useGetActiveRegionsByCityMutation,
   useGetCitiesQuery,
 } from "../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const useGetRoadSignsByFilter = () => {
   const [startDate, setStartDate] = useState("");
@@ -23,7 +23,7 @@ const useGetRoadSignsByFilter = () => {
   const { data: cities, isLoading: isCitiesLoading } = useGetCitiesQuery();
   const [
     getActiveRegionsByCity,
-    { data: regions, isLoading: isRegionsLoading },
+    { data: regions, isLoading: isRegionsLoading , isFetching: isRegionsFetching },
   ] = useGetActiveRegionsByCityMutation();
   const { data: getRoadSignsModel, isLoading: isGetRoadSignsModel } =
     useGetRoadSignsModelQuery();
@@ -70,11 +70,13 @@ const useGetRoadSignsByFilter = () => {
     getActiveRegionsByCity,
     regions,
     isRegionsLoading,
+    isRegionsFetching,
     model,
     setModel,
     getRoadSignsModel,
     isGetRoadSignsModel,
     isRoadSignsFetching,
+
   };
 };
 

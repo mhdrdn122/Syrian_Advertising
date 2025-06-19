@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router";
+import { Permissions } from "../../Static/StaticData";
 
 const TableRoadSigns = ({ isLoading }) => {
   const [openDelete, setOpenDelete] = useState(false);
@@ -94,6 +95,12 @@ const TableRoadSigns = ({ isLoading }) => {
       </div>
     );
   }
+
+   const permissions = {
+      delete : Permissions.DeleteRoadSigns,
+      show : Permissions.ViewRegions,
+      edit : Permissions.EditRoadSigns,
+    }
 
   return (
     <div dir="rtl" className="p-4 sm:p-6 w-full  mx-auto space-y-6 overflow-x-auto">
@@ -193,6 +200,7 @@ const TableRoadSigns = ({ isLoading }) => {
         title={"اللوحات الطرقية"}
         titleBtn={"إضافة لوحة"}
         setShow={setOpen}
+        permission={Permissions.CreateRoadSigns}
       />
       <DynamicTable
         data={roadSigns || []}
@@ -201,6 +209,7 @@ const TableRoadSigns = ({ isLoading }) => {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onShow={handleShow}
+        permissions={permissions}
       />
       <DialogEditRoadSign
         show={openEdit}
