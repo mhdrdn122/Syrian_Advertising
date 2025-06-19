@@ -15,7 +15,7 @@ const CustomersPage = () => {
       isSuccess ? customers : [],
       'full_name'
     );
-    console.log(customers)
+    
 
   return (
     <div>

@@ -1,8 +1,8 @@
 import { useCreateTemplateMutation } from "../../../../RtkQuery/Slice/Template/TemplateApi";
-import { TemplateFields } from "../../Data/Add/TamplateDialogConfiguration/FieldsTamplate";
-import { TemplateInitialValues } from "../../Data/Add/TamplateDialogConfiguration/InitialValuesTemplate";
-import { TemplateValidationSchema } from "../../Data/Add/TamplateDialogConfiguration/TemplateValidationSchema";
-import DynamicDialog from "../../DynamicDialog";
+import { TemplateFields } from "../../Data/DynamicDialogConfiguration/TamplateDialogConfiguration/FieldsTamplate";
+import { TemplateInitialValues } from "../../Data/DynamicDialogConfiguration/TamplateDialogConfiguration/InitialValuesTemplate";
+import { TemplateValidationSchema } from "../../Data/DynamicDialogConfiguration/TamplateDialogConfiguration/TemplateValidationSchema";
+import DynamicDialog from "../DynamicDialog";
 
 export const DialogAddTemplate = ({ show, handleClose }) => {
   return (

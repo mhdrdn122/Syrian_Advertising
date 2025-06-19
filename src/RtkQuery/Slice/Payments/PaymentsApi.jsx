@@ -10,12 +10,10 @@ export const PaymentsSlice = createApi({
   endpoints: (builder) => ({
     getPayments: builder.query({
       query: ({is_received}= {}) => {
-        console.log(is_received)
         const params = new URLSearchParams()
         if(is_received==0) params.append("is_received",is_received)
 
         const queryString = params.toString();
-        console.log(queryString)
         return `/payments${queryString ? `?${queryString}` : ""}`;
       },
       providesTags: ["payments"],

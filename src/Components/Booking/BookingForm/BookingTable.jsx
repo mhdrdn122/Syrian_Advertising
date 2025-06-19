@@ -16,8 +16,9 @@ import { BookingContext } from "../../../Context/BookingContext";
 import useGetRoadSignsByFilter from "../../../hooks/useGetRoadSignsByFilter";
 
 const BookingTable = () => {
-  const { formik, isLoadingRoadSigns, addToCart, addedSignIds } =
+  const { formik, addToCart, addedSignIds } =
     useContext(BookingContext);
+ 
 
   const {
     setStartDate,
@@ -34,7 +35,8 @@ const BookingTable = () => {
     model ,
     setModel ,
     getRoadSignsModel ,
-    isGetRoadSignsModel
+    isGetRoadSignsModel ,
+    isRoadSignsFetching
   } = useGetRoadSignsByFilter();
 
   const handleCityChange = (e) => {
@@ -102,13 +104,24 @@ const BookingTable = () => {
                 : `dark:bg-gray-900`
             } p-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 `}
           >
-            <option value="">اختر منطقة</option>
+            {
+              isRegionsLoading || !cityId ? (
+                <option>جاري تحميل المناطق ...</option>
+              ) : (
+                regions?.map((region) => (
+              <option key={region.id} value={region.id}>
+                {region.name}
+              </option>
+              )))
+            }
+          
+            {/* <option value="">اختر منطقة</option>
             {isRegionsLoading && <option>جاري تحميل المناطق ...</option>}
             {regions?.map((region) => (
               <option key={region.id} value={region.id}>
                 {region.name}
               </option>
-            ))}
+            ))} */}
           </select>
         </div>
 
@@ -117,7 +130,7 @@ const BookingTable = () => {
             htmlFor="region"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
-            النموذج
+            القياس
           </Label>
           <select
             id="model"
@@ -130,11 +143,11 @@ const BookingTable = () => {
                 : `dark:bg-gray-900`
             } p-2 border border-gray-300 rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 `}
           >
-            <option value="">اختر النموذج</option>
-            {isGetRoadSignsModel && <option>جاري تحميل النماذح ...</option>}
+            <option value="">اختر القياس</option>
+            {isGetRoadSignsModel && <option>جاري تحميل القياس ...</option>}
             {getRoadSignsModel?.map((model) => (
               <option key={model.model} value={model.model}>
-                {model.model}
+                {`${model.model} (${model.count} نماذج متوفرة من هذا القياس)`}
               </option>
             ))}
           </select>
@@ -157,7 +170,7 @@ const BookingTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody >
-            {isLoadingRoadSigns ? (
+            {isRoadSignsFetching ? (
               <TableRow>
                 <TableCell colSpan={10} className="text-center py-4">
                   جاري التحميل...

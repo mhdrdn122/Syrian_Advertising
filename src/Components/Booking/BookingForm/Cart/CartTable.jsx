@@ -60,7 +60,7 @@ const CartTable = () => {
                 <Input
                   type="number"
                   min="1"
-                  max={faces_max}
+                  max={faces_max > 2 ? 2 : faces_max  }
                   value={sign.booking_faces}
                   onChange={(e) =>
                     updateSignFaces(sign.road_sign_id, e.target.value)

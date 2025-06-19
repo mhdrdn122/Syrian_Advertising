@@ -41,6 +41,8 @@ export function Login({ className, ...props }) {
       try {
         const res = await login(values).unwrap();
         localStorage.setItem("SuperAdminInfo", JSON.stringify(res));
+        localStorage.setItem("permissions", JSON.stringify(res?.user?.roles[0]?.permissions));
+
         showToast("success", "تم تسجيل الدخول بنجاح ");
         navigate("/dashboard/administration-page/");
       } catch (error) {

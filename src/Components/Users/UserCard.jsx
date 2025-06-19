@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { useDeleteUserMutation } from "../../RtkQuery/Slice/Users/UsersApi";
+import { showToast } from "../../utils/Notifictions/showToast";
 
 const UserCard = ({
   id,
@@ -31,7 +32,12 @@ const UserCard = ({
   const [deleteUser ,{isLoading }] = useDeleteUserMutation();
 
   const handleDelete = async () => {
-    await deleteUser(id).unwrap();
+    try{
+       await deleteUser(id).unwrap();
+        showToast("success" , "تم حذف الموظف بنجاح")
+    }catch(err){
+        showToast("error" , err.data.message)
+    }
     setOpen(false);
   };
 

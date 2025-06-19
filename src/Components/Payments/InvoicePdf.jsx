@@ -58,7 +58,6 @@ const InvoicePdf = ({
           "اسم الزبون",
         ],
       ];
-      console.log(customer);
 
       const customerData = [
         [
@@ -133,7 +132,7 @@ const InvoicePdf = ({
 
       const customerData = customer?.map((c) => [
         c?.remaining || "0.00",
-        new Date().toLocaleDateString("en-US"),
+        c?.address,
         c?.phone_number || "غير متوفر",
         c.company_name || "غير متوفر",
         c.full_name || "غير متوفر",

@@ -3,8 +3,7 @@ import autoTable from "jspdf-autotable";
 import "../../assets/fonts/Amiri-Regular.js"; // Import the Amiri font file
 
 const RoadSignsPdf = ({ roadSigns , endDate , startDate  }) => {
-  console.log(startDate)
-    console.log(endDate)
+
   const generatePDF = () => {
     // Initialize jsPDF with A4 landscape settings
     const doc = new jsPDF({

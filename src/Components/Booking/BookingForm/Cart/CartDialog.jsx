@@ -24,6 +24,7 @@ const CartDialog = () => {
     setContractDialog,
     isLoadingAdd,
     isLoadingUpdate,
+    isLoadingCalculateReservation,
   } = useContext(BookingContext);
 
   return (
@@ -50,9 +51,17 @@ const CartDialog = () => {
           <Button
             type="button"
             onClick={calculateTotal}
+            disabled={isLoadingCalculateReservation}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
           >
-            حساب السعر الإجمالي
+            {isLoadingCalculateReservation ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span>جاري حساب التكلفة</span>
+              </>
+            ) : (
+              " حساب التكلفة"
+            )}
           </Button>
           {formik.values.type && (
             <Button

@@ -41,6 +41,16 @@ const PaymentsContainer = () => {
     setSelectedPayment(row);
     setOpenViewImage(true);
   };
+
+   const onShowReceived = (row) => {
+    setSelectedPayment(row);
+    setOpenViewImage(true);
+  };
+
+   const onShowNotRecived = (row) => {
+    setSelectedPayment(row);
+    setOpenViewImage(true);
+  };
   const onConfirmPayment = (row) => {
     setSelectedPayment(row);
     setIsConfirmAction(true);
@@ -48,7 +58,6 @@ const PaymentsContainer = () => {
   };
 
   const handleConfirm = async () => {
-    console.log(selectedPayment);
     try {
       await confirmPayment(selectedPayment.id).unwrap();
       showToast(
@@ -77,23 +86,23 @@ const PaymentsContainer = () => {
         dir="rtl"
         defaultValue="payments"
         onValueChange={setActiveTab}
-        className="w-full"
+        className="w-full p-4 "
       >
-        <TabsList className="grid w-full max-w-[400px] grid-cols-3 bg-card rounded-lg border border-border">
-          <TabsTrigger value="payments" className="text-sm font-medium">
+        <TabsList className="grid w-full   grid-cols-3 bg-card rounded-lg border border-border">
+          <TabsTrigger value="payments" className=" text-xs md:text-sm font-medium">
             جميع الدفعات
           </TabsTrigger>
-          <TabsTrigger value="received" className="text-sm font-medium">
+          <TabsTrigger value="received" className="text-xs md:text-sm font-medium">
             الدفعات  المستلمة
           </TabsTrigger>
-          <TabsTrigger value="not-received" className="text-sm font-medium">
+          <TabsTrigger value="not-received" className="text-xs md:text-sm font-medium">
             الدفعات غير المستلمة
           </TabsTrigger>
           
         </TabsList>
 
         <TabsContent value="payments">
-          <div className="p-4 sm:p-6 w-full mx-auto space-y-6 overflow-x-auto">
+          <div className=" p-0 w-full mx-auto space-y-6 overflow-x-auto">
             <HeaderComponent
               title={"المدفوعات"}
               titleBtn={"إضافة دفعة"}
@@ -130,7 +139,7 @@ const PaymentsContainer = () => {
         </TabsContent>
 
         <TabsContent value="not-received">
-          <div className="p-4 sm:p-6 w-full mx-auto space-y-6 overflow-x-auto">
+          <div className=" w-full mx-auto space-y-6 overflow-x-auto">
             <DynamicTable
               data={paymentIsNotReceived || []}
               columns={PaymentsColumns}
@@ -139,17 +148,40 @@ const PaymentsContainer = () => {
               onConfirmOrder={onConfirmPayment}
               // onUnconfirmOrder={onConfirmOrder}
             />{" "}
+
+            <ViewImageDialog
+              show={openViewImage}
+              handleClose={() => setOpenViewImage(false)}
+              imageUrl={
+                selectedPayment?.payment_image
+                  ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
+                  : null
+              }
+              paymentNumber={selectedPayment?.payment_number}
+            />
           </div>
+          
         </TabsContent>
 
         <TabsContent value="received">
-          <div className="p-4 sm:p-6 w-full mx-auto space-y-6 overflow-x-auto">
+          <div className=" w-full mx-auto space-y-6 overflow-x-auto">
             <DynamicTable
               data={paymentIsReceived || []}
               columns={PaymentsColumns}
               isLoading={isLoadingPaymentsReceived}
               onShow={onShow}
             />{" "}
+
+            <ViewImageDialog
+              show={openViewImage}
+              handleClose={() => setOpenViewImage(false)}
+              imageUrl={
+                selectedPayment?.payment_image
+                  ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
+                  : null
+              }
+              paymentNumber={selectedPayment?.payment_number}
+            />
           </div>
         </TabsContent>
       </Tabs>

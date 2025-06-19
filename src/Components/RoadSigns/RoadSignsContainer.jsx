@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { useGetRoadSignsModelQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 import SummariesCard from "../Summaries/SummariesCard";
+import HeaderComponent from "../../utils/HeaderComponent";
+import { DialogAddRoadSign } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddRoadSign";
 
 const RoadSignsContainer = () => {
   const { data, isFetching } = useGetRoadSignsModelQuery();
+  const [open, setOpen] = useState(false);
 
   if (isFetching) {
     return (
@@ -13,13 +17,19 @@ const RoadSignsContainer = () => {
       </div>
     );
   }
-  
+
   return (
-    <>
-           <div
+    <div dir="rtl">
+     <HeaderComponent
+          title={"اللوحات الطرقية"}
+          titleBtn={"إضافة لوحة"}
+          setShow={setOpen}
+        />
+      <div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-2  lg:grid-cols-4 gap-4"
         dir="rtl"
       >
+       
         {data?.map((item, ind) => {
           return (
             <SummariesCard
@@ -30,8 +40,9 @@ const RoadSignsContainer = () => {
             />
           );
         })}
+        <DialogAddRoadSign show={open} handleClose={() => setOpen(false)} />
       </div>
-    </>
+    </div>
   );
 };
 

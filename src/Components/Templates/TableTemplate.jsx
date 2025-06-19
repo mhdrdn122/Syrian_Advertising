@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteTemplateMutation,
   useGetTemplatesQuery,
@@ -22,8 +22,15 @@ const TableTemplate = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [deleteTemplate, { isLoading: isDeleting }] =
     useDeleteTemplateMutation();
+    const navigate = useNavigate()
 
   const [initData, setInitDat] = useState({});
+
+  useEffect(() => {
+
+    data?.length == 0 ? navigate("/dashboard/models") : " "
+
+  },[data])
 
   const handleEdit = (template) => {
     setSelectedTemplate(template);

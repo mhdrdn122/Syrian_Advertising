@@ -1,8 +1,8 @@
 import { useAddNewUsersMutation, useGetRolesQuery } from "../../../../RtkQuery/Slice/Users/UsersApi";
-import { UserFields } from "../../Data/Add/UsersDialogConfiguration/UserFields";
-import { userInitialValues } from "../../Data/Add/UsersDialogConfiguration/UserInitialValues";
-import { userValidationSchema } from "../../Data/Add/UsersDialogConfiguration/UserValidationSchema";
-import DynamicDialog from "../../DynamicDialog";
+import { UserFields } from "../../Data/DynamicDialogConfiguration/UsersDialogConfiguration/UserFields";
+import { userInitialValues } from "../../Data/DynamicDialogConfiguration/UsersDialogConfiguration/UserInitialValues";
+import { userValidationSchema } from "../../Data/DynamicDialogConfiguration/UsersDialogConfiguration/UserValidationSchema";
+import DynamicDialog from "../DynamicDialog";
 
 export const DialogAddUser = ({ show, handleClose }) => {
   const { data: rolesData, isSuccess } = useGetRolesQuery();
@@ -29,7 +29,7 @@ export const DialogAddUser = ({ show, handleClose }) => {
     <DynamicDialog
       show={show}
       handleClose={handleClose}
-      title="إضافة مدير"
+      title="إضافة موظف"
       fields={UserFields}
       validationSchema={userValidationSchema}
       mutationHook={useAddNewUsersMutation}

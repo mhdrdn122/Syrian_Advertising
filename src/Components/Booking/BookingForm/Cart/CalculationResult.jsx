@@ -58,6 +58,15 @@ const CalculationResult = () => {
             {calculationResult?.amount?.total_printing_space.toFixed(2)} متر
           </span>
         </div>
+
+        <div className="flex flex-col">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            عدد الدورات ( الأشهر ) :
+          </span>
+          <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
+            {calculationResult?.units || "غير متوفر"} 
+          </span>
+        </div>
       </div>
       {calculationResult && (
         <div className="mt-4">

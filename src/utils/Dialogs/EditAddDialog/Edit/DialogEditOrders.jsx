@@ -1,7 +1,7 @@
 import { useUpdateOrderMutation } from "../../../../RtkQuery/Slice/Orders/OrdersApi";
-import { orderFields } from "../../Data/Edit/OrderDialogConfiguration/orderFields";
-import { orderValidationSchema } from "../../Data/Edit/OrderDialogConfiguration/orderValidationSchema";
-import DynamicDialog from "../../DynamicDialog";
+import { orderFields } from "../../Data/DynamicDialogConfiguration/OrderDialogConfiguration/orderFields";
+import { orderValidationSchema } from "../../Data/DynamicDialogConfiguration/OrderDialogConfiguration/orderValidationSchema";
+import DynamicDialog from "../DynamicDialog";
 
 export const DialogEditOrders = ({ show, handleClose , initData }) => {
   return (

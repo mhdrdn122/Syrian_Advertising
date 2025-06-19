@@ -9,7 +9,6 @@ export const RoadSignsSlice = createApi({
   endpoints: (builder) => ({
     getRoadSigns: builder.query({
       query: ({ start_date, end_date, city_id, region_id , model } = {}) => {
-        console.log(model)
         const params = new URLSearchParams();
         if (start_date) params.append("start_date", start_date);
         if (end_date) params.append("end_date", end_date);

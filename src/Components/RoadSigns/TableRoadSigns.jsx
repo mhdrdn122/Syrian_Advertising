@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDeleteRoadSignMutation } from "../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import HeaderComponent from "../../utils/HeaderComponent";
@@ -13,6 +13,7 @@ import RoadSignsPdf from "./RoadSignsPdf";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useParams } from "react-router";
 
 const TableRoadSigns = ({ isLoading }) => {
   const [openDelete, setOpenDelete] = useState(false);
@@ -20,6 +21,7 @@ const TableRoadSigns = ({ isLoading }) => {
   const [open, setOpen] = useState(false);
   const [openShow, setOpenShow] = useState(false);
   const [selectedRoadSign, setSelectedRoadSign] = useState(null);
+  const {id} = useParams()
 
   const [deleteRoadSign, { isLoading: isDeleting }] =
     useDeleteRoadSignMutation();
@@ -33,13 +35,21 @@ const TableRoadSigns = ({ isLoading }) => {
     regionId,
     setRegionId,
     roadSigns,
-    isRoadSignsLoading,
+    isRoadSignsFetching,
     isError,
     cities,
     isCitiesLoading,
     regions,
     isRegionsLoading,
+    setModel
+
   } = useGetRoadSignsByFilter();
+
+  useEffect(() => {
+    setModel(id)
+  } , [id])
+
+  
 
   const handleCityChange = (e) => {
     setCityId(e.target.value);
@@ -86,7 +96,7 @@ const TableRoadSigns = ({ isLoading }) => {
   }
 
   return (
-    <div className="p-4 sm:p-6 w-full  mx-auto space-y-6 overflow-x-auto">
+    <div dir="rtl" className="p-4 sm:p-6 w-full  mx-auto space-y-6 overflow-x-auto">
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="flex-1">
           <Label
@@ -138,7 +148,7 @@ const TableRoadSigns = ({ isLoading }) => {
             ))}
           </select>
         </div>
-        <div className="flex-1">
+        {/* <div className="flex-1">
           <Label
             htmlFor="startDate"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -167,7 +177,7 @@ const TableRoadSigns = ({ isLoading }) => {
             onChange={(e) => setEndDate(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md"
           />
-        </div>
+        </div> */}
       </div>
       <Button
         onClick={() => {
@@ -175,7 +185,7 @@ const TableRoadSigns = ({ isLoading }) => {
           generatePDF();
         }}
         className="mb-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-        disabled={isRoadSignsLoading || !roadSigns?.length}
+        disabled={isRoadSignsFetching || !roadSigns?.length}
       >
         تحميل ملف تموضع اللوحات
       </Button>
@@ -187,7 +197,7 @@ const TableRoadSigns = ({ isLoading }) => {
       <DynamicTable
         data={roadSigns || []}
         columns={RoadSignColumns}
-        isLoading={isLoading}
+        isLoading={isRoadSignsFetching}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onShow={handleShow}

@@ -1,9 +1,9 @@
 import { useAddNewPaymentMutation } from "../../../../RtkQuery/Slice/Payments/PaymentsApi";
 import { useGetCustomersQuery } from "../../../../RtkQuery/Slice/Customers/CustomersApi";
-import { PaymentFields } from "../../Data/Add/PaymentsDialogConfiguration/PaymentFields";
-import { PaymentInitialValues } from "../../Data/Add/PaymentsDialogConfiguration/PaymentInitialValues";
-import { PaymentValidationSchema } from "../../Data/Add/PaymentsDialogConfiguration/PaymentValidationSchema";
-import DynamicDialog from "../../DynamicDialog";
+import { PaymentFields } from "../../Data/DynamicDialogConfiguration/PaymentsDialogConfiguration/PaymentFields";
+import { PaymentInitialValues } from "../../Data/DynamicDialogConfiguration/PaymentsDialogConfiguration/PaymentInitialValues";
+import { PaymentValidationSchema } from "../../Data/DynamicDialogConfiguration/PaymentsDialogConfiguration/PaymentValidationSchema";
+import DynamicDialog from "../DynamicDialog";
 
 export const DialogAddPayments = ({ show, handleClose }) => {
   const { data, isSuccess: isCustomersSuccess } = useGetCustomersQuery();
@@ -19,7 +19,6 @@ export const DialogAddPayments = ({ show, handleClose }) => {
     },
   };
 
-  console.log(data)
   const onSubmitTransform = (values) => {
     const formData = new FormData();
     formData.append("paid", values.paid);

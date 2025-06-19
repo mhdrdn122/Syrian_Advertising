@@ -1,8 +1,8 @@
 import { useAddNewBrokerMutation } from "../../../../RtkQuery/Slice/Brokers/BrokersApi";
-import { BrokerFields } from "../../Data/Add/BrokerDialogConfiguration/BrokerFields";
-import { BrokerInitialValues } from "../../Data/Add/BrokerDialogConfiguration/BrokerInitialValues";
-import { BrokerValidationSchema } from "../../Data/Add/BrokerDialogConfiguration/BrokerValidationSchema";
-import DynamicDialog from "../../DynamicDialog";
+import { BrokerFields } from "../../Data/DynamicDialogConfiguration/BrokerDialogConfiguration/BrokerFields";
+import { BrokerInitialValues } from "../../Data/DynamicDialogConfiguration/BrokerDialogConfiguration/BrokerInitialValues";
+import { BrokerValidationSchema } from "../../Data/DynamicDialogConfiguration/BrokerDialogConfiguration/BrokerValidationSchema";
+import DynamicDialog from "../DynamicDialog";
 
 export const DialogAddBroker = ({ show, handleClose }) => {
   return (

@@ -21,8 +21,13 @@ import ContractPage from "./Components/Booking/ContractPage";
 import ReportsPage from "./Pages/Reports/ReportsPage";
 import BookingForm from "./Pages/Booking/BookingForm";
 import TableRoadSigns from "./Components/RoadSigns/TableRoadSigns";
+// import { useAuth } from "./Context/AuthProvider";
 
 function App() {
+  // const {user , hasPermission } = useAuth()
+  // console.log(user)
+  // console.log(hasPermission("manage bookings"))
+
   return (
     <div className="bg-primary">
       <BrowserRouter>

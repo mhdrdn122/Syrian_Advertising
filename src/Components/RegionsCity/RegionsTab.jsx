@@ -108,8 +108,8 @@ const RegionsTab = () => {
                   <SelectValue placeholder="الحالة" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">منشطة</SelectItem>
-                  <SelectItem value="0">غير منشطة</SelectItem>
+                  <SelectItem value="1">متوفر</SelectItem>
+                  <SelectItem value="0">غير متوفر</SelectItem>
                 </SelectContent>
               </Select>
               <Button onClick={() => handleSubmit("region", editRegionId, regionForm)}>
@@ -147,7 +147,7 @@ const RegionsTab = () => {
                 <TableCell>
                   {cities.find((city) => city.id === region.city_id)?.name || "Unknown"}
                 </TableCell>
-                <TableCell>{region.is_active ? "منشطة" : "غير منشطة"}</TableCell>
+                <TableCell>{region.is_active ? "متوفر" : "غير متوفر"}</TableCell>
                 <TableCell>
                   <Button
                     variant="ghost"

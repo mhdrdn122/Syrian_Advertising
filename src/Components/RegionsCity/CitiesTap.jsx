@@ -76,8 +76,8 @@ const CitiesTap = () => {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">منشطة</SelectItem>
-                  <SelectItem value="0">غير منشطة</SelectItem>
+                  <SelectItem value="1">متوفر</SelectItem>
+                  <SelectItem value="0">غير متوفرة</SelectItem>
                 </SelectContent>
               </Select>
               <Button onClick={() => handleSubmit("city", editCityId, cityForm)}>
@@ -111,7 +111,7 @@ const CitiesTap = () => {
               <TableRow key={city.id}>
                 <TableCell>{city.id}</TableCell>
                 <TableCell>{city.name}</TableCell>
-                <TableCell>{city.is_active ? "منشطة" : "غير منشطة"}</TableCell>
+                <TableCell>{city.is_active ? "متوفر" : "غير متوفر"}</TableCell>
                 <TableCell>
                   <Button
                     variant="ghost"

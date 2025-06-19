@@ -1,7 +1,7 @@
 import {  useUpdataBrokerMutation } from "../../../../RtkQuery/Slice/Brokers/BrokersApi";
-import { BrokerFields } from "../../Data/Add/BrokerDialogConfiguration/BrokerFields";
-import { BrokerValidationSchema } from "../../Data/Add/BrokerDialogConfiguration/BrokerValidationSchema";
-import DynamicDialog from "../../DynamicDialog";
+import { BrokerFields } from "../../Data/DynamicDialogConfiguration/BrokerDialogConfiguration/BrokerFields";
+import { BrokerValidationSchema } from "../../Data/DynamicDialogConfiguration/BrokerDialogConfiguration/BrokerValidationSchema";
+import DynamicDialog from "../DynamicDialog";
 
 export const DialogEditBroker = ({ show, handleClose , initData }) => {
   return (

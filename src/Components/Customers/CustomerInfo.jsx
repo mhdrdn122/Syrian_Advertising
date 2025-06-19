@@ -37,7 +37,6 @@ const CustomerInfo = () => {
   const navigate = useNavigate();
 
   const [deleteCustomer, { isLoading }] = useDeleteCustomerMutation();
-  console.log(customer);
   const handelDelete = async () => {
     await deleteCustomer(id).unwrap();
     navigate("/dashboard/customers");

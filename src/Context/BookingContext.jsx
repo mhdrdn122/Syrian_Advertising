@@ -47,7 +47,10 @@ export const BookingContextApi = ({ children, bookingId }) => {
     useAddNewBookingMutation();
   const [updateBookings, { isLoading: isLoadingUpdate }] =
     useUpdateBookingsMutation();
-  const [calculateReservation] = useCalculateReservationMutation();
+  const [calculateReservation ,{ isLoading:isLoadingCalculateReservation}] = useCalculateReservationMutation();
+
+  // console.log(isLoading)
+  // console.log(calculateReservation)
 
   const { data: company, isFetching: isCompanyFetching } = useGetCompanyQuery();
 
@@ -116,7 +119,6 @@ export const BookingContextApi = ({ children, bookingId }) => {
     },
   });
 
-  console.log("re render")
   // Populate form with booking data in edit mode
   useEffect(() => {
     if (isEditMode && bookingData && !isLoadingBooking) {
@@ -332,6 +334,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
     calculateTotal,
     handleDiscountValueChange,
     calculateDiscountedPrice,
+    isLoadingCalculateReservation
   };
 
   return (

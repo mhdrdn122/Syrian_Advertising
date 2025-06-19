@@ -25,7 +25,6 @@ const UserInfo = () => {
 
  
 
-  console.log(user)
   const handleDelete = async () => {
     await deleteUser(id).unwrap();
     navigate('/dashboard/users');
