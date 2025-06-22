@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "react-router"
+import { useAuth } from "../Context/AuthProvider"
 
 export function NavMain({
   items,
@@ -19,6 +20,7 @@ export function NavMain({
   }[]
 }) {
   const { pathname } = useLocation()
+  const {hasPermission} =  useAuth()
 
   const isActive = (url) => {
     return pathname === url || pathname.startsWith(`${url}/`)
@@ -33,7 +35,8 @@ export function NavMain({
         </SidebarMenu>
         <SidebarMenu className="space-y-1">
           {items?.map((item) => (
-            <Link 
+            hasPermission(item.permission) ?
+            (<Link 
               key={item.title}
               to={item.url}
               className={`block transition-all duration-200 ${
@@ -59,7 +62,7 @@ export function NavMain({
                   <span className="mr-2">{item.title}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            </Link>
+            </Link>) : null
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

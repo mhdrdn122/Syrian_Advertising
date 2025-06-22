@@ -21,7 +21,7 @@ const CustomerCard = ({
   fullName,
   companyName,
   phone_number,
-  discount,
+  remaining,
   createdAt,
   updatedAt,
 }) => {
@@ -94,9 +94,9 @@ const CustomerCard = ({
               />
               <div>
                 <p className="text-sm font-medium text-foreground">
-                  Discount:{" "}
+                  المتبقي:{" "}
                   <Badge variant="outline" className="ml-1">
-                    {discount}%
+                    {remaining}$
                   </Badge>
                 </p>
               </div>

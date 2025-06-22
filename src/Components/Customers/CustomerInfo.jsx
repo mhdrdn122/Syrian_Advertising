@@ -20,6 +20,8 @@ import { ViewImageDialog } from "../Payments/ViewImageDialog";
 import InvoicePdf from "../Payments/InvoicePdf";
 import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
+import { DialogAddPayments } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddPayments";
+import HeaderComponent from "../../utils/HeaderComponent";
 
 const CustomerInfo = () => {
   const { id } = useParams();
@@ -29,6 +31,8 @@ const CustomerInfo = () => {
     isLoading: isLoadingCustomer,
   } = useShowOneCustomerQuery(id);
   const [open, setOpen] = useState(false);
+  const [openAddPAyment, setOpenAddPayment] = useState(false);
+
   const [showBookings, setShowBooking] = useState(false);
   const [showPayments, setShowPayments] = useState(false);
   const [openViewImage, setOpenViewImage] = useState(false);
@@ -144,7 +148,7 @@ const CustomerInfo = () => {
               </AvatarFallback>
             </Avatar>
             <Badge variant="secondary" className="mt-4 text-sm">
-              الرصيد المتبقي : {customer?.remaining}
+              الرصيد المتبقي : {customer?.remaining} $
             </Badge>
           </div>
 
@@ -260,10 +264,14 @@ const CustomerInfo = () => {
 
       {showPayments && (
         <div className="mt-4  ">
+           <HeaderComponent
+              title={"المدفوعات"}
+              titleBtn={"إضافة دفعة"}
+              setShow={setOpenAddPayment}
+              permission={Permissions.CreatePayments}
+            />
           <div className="my-2 flex justify-between items-center">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-              الدفعات
-            </h1>
+           
             <InvoicePdf
               customer={customer}
               showCustomerTable={true}
@@ -299,6 +307,12 @@ const CustomerInfo = () => {
         loading={isLoading}
         onClose={() => setOpenDel(false)}
         onConfirm={handelDelete}
+      />
+
+      <DialogAddPayments
+        show={openAddPAyment}
+        handleClose={() => setOpenAddPayment(false)}
+        id={id}
       />
     </div>
   );

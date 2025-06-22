@@ -3,7 +3,14 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 
-const SummariesCard = ({ title, count, subTitle, endPoint, imageUrl }) => {
+const SummariesCard = ({
+  title,
+  count,
+  subTitle,
+  endPoint,
+  imageUrl,
+  facesNumber,
+}) => {
   return (
     <Link to={`/dashboard/${endPoint}`} className="block w-full">
       <motion.div
@@ -38,6 +45,11 @@ const SummariesCard = ({ title, count, subTitle, endPoint, imageUrl }) => {
             </h3>
             {subTitle && (
               <p className="mt-1 text-xs text-gray-400">{subTitle}</p>
+            )}
+            {facesNumber && (
+              <p className="mt-1 text-xs text-gray-400">
+                عدد الأوجه :<span>{facesNumber} </span>
+              </p>
             )}
           </div>
         </Card>

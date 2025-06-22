@@ -30,10 +30,6 @@ const PaymentsContainer = () => {
 
   const { data: paymentIsReceived, isLoading: isLoadingPaymentsReceived } =
     useGetPaymentsQuery({ is_received: true });
-    console.log(paymentIsReceived)
-    console.log(payments)
-    console.log(paymentIsNotReceived)
-
 
 
   const [activeTab, setActiveTab] = useState("payments");

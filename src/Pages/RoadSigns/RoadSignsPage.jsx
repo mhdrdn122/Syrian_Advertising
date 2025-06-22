@@ -22,8 +22,7 @@ const RoadSignsPage = () => {
               تحميل ملف تموضع جميع اللوحات  اللوحات
             </Button> */}
      
-      <RoadSignsContainer
-      />
+      <RoadSignsContainer />
     </div>
   );
 };

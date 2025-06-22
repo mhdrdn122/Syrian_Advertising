@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Menu, X } from "lucide-react";
 import { navLinksAdministrationPage } from "../Static/StaticData";
+import { useAuth } from "../Context/AuthProvider";
 
 const AdministrationPageLayout = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const {hasPermission} = useAuth()
 
   const isActive = (path) => {
     if (path === "") {
@@ -35,8 +37,12 @@ const AdministrationPageLayout = () => {
           </Button>
 
           <div className="hidden sm:flex gap-2">
-            {navLinksAdministrationPage.map((link) => (
-              <Button
+            {
+            navLinksAdministrationPage.map((link) => (
+              
+              (hasPermission(link.permission)) ?
+              (
+                <Button
                 key={link.to}
                 asChild
                 variant={isActive(link.to) ? "default" : "ghost"}
@@ -48,6 +54,7 @@ const AdministrationPageLayout = () => {
               >
                 <Link to={link.to}>{link.text}</Link>
               </Button>
+              ) : null
             ))}
           </div>
         </div>
@@ -60,7 +67,11 @@ const AdministrationPageLayout = () => {
         >
           <div className="flex flex-col gap-2 p-2 border-t">
             {navLinksAdministrationPage.map((link) => (
-              <Button
+
+              
+                (hasPermission(link.permission)) ?
+                (
+                  <Button
                 key={link.to}
                 asChild
                 variant={isActive(link.to) ? "default" : "ghost"}
@@ -73,6 +84,10 @@ const AdministrationPageLayout = () => {
               >
                 <Link to={link.to}>{link.mobileText}</Link>
               </Button>
+                ) : null
+
+              
+              
             ))}
           </div>
         </div>

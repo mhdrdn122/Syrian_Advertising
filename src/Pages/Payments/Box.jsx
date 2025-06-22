@@ -7,7 +7,7 @@ const Box = () => {
   const [fromDate, setFromDate] = useState();
   const [toDate, setToDate] = useState();
 
-  const { data } = useGetTotalPaymentAndRemainingQuery({
+  const { data , isLoading} = useGetTotalPaymentAndRemainingQuery({
     from_date: fromDate,
     to_date: toDate,
   });
@@ -49,7 +49,7 @@ const Box = () => {
           />
         </div>
       </div>
-      <DynamicTable data={dataBox} columns={BoxColumns} />
+      <DynamicTable data={dataBox} isLoading={isLoading} columns={BoxColumns} />
     </div>
   );
 };

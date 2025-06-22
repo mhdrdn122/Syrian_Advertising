@@ -4,7 +4,6 @@ import { TemplateValidationSchema } from "../../Data/DynamicDialogConfiguration/
 import DynamicDialog from "../DynamicDialog";
 
 export const DialogEditTemplate = ({ show, handleClose, initData }) => {
-  console.log(initData)
   return (
     <>
       <DynamicDialog

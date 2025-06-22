@@ -12,6 +12,7 @@ import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { BrokersColumns } from "../../utils/Tables/ColumnsTable/BrokersColumns";
 import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
+import { Loader, Loader2 } from "lucide-react";
 
 const BrokersContainer = () => {
   const [open, setOpen] = useState(false);
@@ -51,8 +52,8 @@ const BrokersContainer = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex flex-col justify-center items-center">
-        <LoadingGet />
-        <p>Loading...</p>
+        <Loader />
+        <p>جاري التحميل ...</p>
       </div>
     );
   }

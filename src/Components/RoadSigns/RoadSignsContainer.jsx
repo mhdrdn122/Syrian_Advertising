@@ -39,6 +39,7 @@ const RoadSignsContainer = () => {
               title={item.model}
               count={item.count || 0}
               endPoint={`road_signs/${item.model}`}
+              facesNumber={item.faces_number || 0}
             />
           );
         })}

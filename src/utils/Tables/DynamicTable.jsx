@@ -32,6 +32,7 @@ export const DynamicTable = ({
   permissions,
 }) => {
   const { hasPermission } = useAuth();
+
   return (
     <div
       className={`rounded-xl border border-gray-100 dark:border-gray-800 bg-background shadow-sm w-full ${className}`}

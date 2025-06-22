@@ -22,51 +22,50 @@ import ReportsPage from "./Pages/Reports/ReportsPage";
 import BookingForm from "./Pages/Booking/BookingForm";
 import TableRoadSigns from "./Components/RoadSigns/TableRoadSigns";
 import Box from "./Pages/Payments/Box";
-// import { useAuth } from "./Context/AuthProvider";
 
 function App() {
-  // const {user , hasPermission } = useAuth()
-  // console.log(user)
-  // console.log(hasPermission("manage bookings"))
-
   return (
     <div className="bg-primary">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<DashboardPage />}>
-         
-            <Route path="administration-page" element={<AdministrationPageLayout />}>
+            <Route
+              path="administration-page"
+              element={<AdministrationPageLayout />}
+            >
               <Route index element={<SummariesPage />} />
-              <Route path="regions-city" element={<RegionsCityPage />} />
               <Route path="orders" element={<OrdersPage />} />
+              <Route path="payments" element={<PaymentsPages />} />
+              <Route path="regions-city" element={<RegionsCityPage />} />
+
               <Route path="report" element={<ReportsPage />} />
               <Route path="box" element={<Box />} />
-
-            </Route>
-
-              <Route path="users" element={<UsersPage />} />
-              <Route path="users/:id" element={<UserInfo />} />
-              <Route path="customers" element={<CustomersPage />} />
-              <Route path="customers/:id" element={<CustomerInfo />} />
-              <Route path="models" element={<TemplatesPage />} />
-              <Route path="models/:id" element={<TableTemplate />} />
-              <Route path="road_signs" element={<RoadSignsPage />} />
-              <Route path="road_signs/:id" element={<TableRoadSigns />} />
-
-              <Route path="payments" element={<PaymentsPages />} />
-              <Route path="bookings" element={<BookingPage />} />
-              <Route path="booking/add" element={<BookingForm  />} />
-              <Route path="booking/edit/:id" element={<BookingForm bookingId={1}  />} />
-
-
-              <Route path="booking/:id" element={<ContractPage />} />
-
-            
-
-              <Route path="regions-city" element={<RegionsCityPage />} />
               <Route path="brokers" element={<BrokersPage />} />
-              <Route path="profile" element={<ProfilePage />} />
+            </Route>
+            <Route path="payments" element={<PaymentsPages />} />
+
+            <Route path="users" element={<UsersPage />} />
+            <Route path="users/:id" element={<UserInfo />} />
+            <Route path="customers" element={<CustomersPage />} />
+            <Route path="customers/:id" element={<CustomerInfo />} />
+            <Route path="models" element={<TemplatesPage />} />
+            <Route path="models/:id" element={<TableTemplate />} />
+            <Route path="road_signs" element={<RoadSignsPage />} />
+            <Route path="road_signs/:id" element={<TableRoadSigns />} />
+
+            <Route path="bookings" element={<BookingPage />} />
+            <Route path="booking/add" element={<BookingForm />} />
+            <Route
+              path="booking/edit/:id"
+              element={<BookingForm bookingId={1} />}
+            />
+
+            <Route path="booking/:id" element={<ContractPage />} />
+            <Route path="brokers" element={<BrokersPage />} />
+
+            <Route path="regions-city" element={<RegionsCityPage />} />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

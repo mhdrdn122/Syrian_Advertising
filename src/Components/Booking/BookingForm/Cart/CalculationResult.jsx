@@ -29,7 +29,7 @@ const CalculationResult = () => {
             السعر الإجمالي:
           </span>
           <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-            {calculationResult?.price_per_period?.toFixed(2)} ليرة
+            {calculationResult?.price_per_period?.toFixed(2)} $
           </span>
         </div>
         {discountValue && (
@@ -38,7 +38,7 @@ const CalculationResult = () => {
               السعر بعد الحسم:
             </span>
             <span className="mt-1 text-gray-900 dark:text-gray-100 font-medium">
-              {calculateDiscountedPrice()?.toFixed(2)} ليرة
+              {calculateDiscountedPrice()?.toFixed(2)} $
             </span>
           </div>
         )}

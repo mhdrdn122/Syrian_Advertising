@@ -49,9 +49,6 @@ export const BookingContextApi = ({ children, bookingId }) => {
     useUpdateBookingsMutation();
   const [calculateReservation ,{ isLoading:isLoadingCalculateReservation}] = useCalculateReservationMutation();
 
-  // console.log(isLoading)
-  // console.log(calculateReservation)
-
   const { data: company, isFetching: isCompanyFetching } = useGetCompanyQuery();
 
   // Validation schema

@@ -179,7 +179,7 @@ const ContractPage = () => {
                 القيمة الكلية قبل الحسم عن 28 يوم فترة إعلانية ( سنة )
               </th>
               <td style={styles.adTableThTd}>
-                {getBooking?.total_price_befor_discount} ل.س
+                {getBooking?.total_price_befor_discount} $
               </td>
             </tr>
             {getBooking?.value && (
@@ -189,7 +189,7 @@ const ContractPage = () => {
                 </th>
                 <td style={styles.adTableThTd}>
                   {getBooking.discount_type == 1 ? (
-                    <span>{getBooking.value} ل.س </span>
+                    <span>{getBooking.value} $ </span>
                   ) : (
                     <span>{getBooking.value} %</span>
                   )}
@@ -200,7 +200,7 @@ const ContractPage = () => {
               <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
                 القيمة الكلية بعد الحسم عن 28 يوم فترة إعلانية ( سنة )
               </th>
-              <td style={styles.adTableThTd}>{getBooking?.total_price} ل.س</td>
+              <td style={styles.adTableThTd}>{getBooking?.total_price} $ </td>
             </tr>
           </tbody>
         </table>

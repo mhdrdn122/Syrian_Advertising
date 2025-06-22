@@ -10,7 +10,7 @@ export const PaymentsSlice = createApi({
     getPayments: builder.query({
       query: ({ is_received } = {}) => {
         const params = new URLSearchParams();
-        if (is_received) params.append("is_received", is_received);
+        if (typeof is_received === "boolean") params.append("is_received", is_received);
 
         const queryString = params.toString();
         return `/payments${queryString ? `?${queryString}` : ""}`;
