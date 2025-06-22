@@ -173,7 +173,7 @@ const UserCard = ({
                   e.preventDefault();
                   setOpen(true);
                 }}
-              >
+              > 
                 <Icon icon="mdi:trash-can-outline" className="text-lg" />
                 حذف
               </Button>

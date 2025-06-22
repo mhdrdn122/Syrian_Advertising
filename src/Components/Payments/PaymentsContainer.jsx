@@ -28,10 +28,13 @@ const PaymentsContainer = () => {
     isLoading: isLoadingPaymentsNotReceived,
   } = useGetPaymentsQuery({ is_received: false });
 
-  const {
-    data: paymentIsReceived,
-    isLoading: isLoadingPaymentsReceived,
-  } = useGetPaymentsQuery({ is_received: true });
+  const { data: paymentIsReceived, isLoading: isLoadingPaymentsReceived } =
+    useGetPaymentsQuery({ is_received: true });
+    console.log(paymentIsReceived)
+    console.log(payments)
+    console.log(paymentIsNotReceived)
+
+
 
   const [activeTab, setActiveTab] = useState("payments");
 
@@ -43,15 +46,7 @@ const PaymentsContainer = () => {
     setOpenViewImage(true);
   };
 
-   const onShowReceived = (row) => {
-    setSelectedPayment(row);
-    setOpenViewImage(true);
-  };
-
-   const onShowNotRecived = (row) => {
-    setSelectedPayment(row);
-    setOpenViewImage(true);
-  };
+ 
   const onConfirmPayment = (row) => {
     setSelectedPayment(row);
     setIsConfirmAction(true);
@@ -80,6 +75,11 @@ const PaymentsContainer = () => {
     payments: payments,
   };
 
+  const permissions = {
+    confirm: Permissions.EditPayments,
+    show: Permissions.ViewPayments,
+  };
+
   return (
     <>
       {/* Tabs for switching between payments and unbooked signs */}
@@ -90,16 +90,24 @@ const PaymentsContainer = () => {
         className="w-full p-4 "
       >
         <TabsList className="grid w-full   grid-cols-3 bg-card rounded-lg border border-border">
-          <TabsTrigger value="payments" className=" text-xs md:text-sm font-medium">
+          <TabsTrigger
+            value="payments"
+            className=" text-xs md:text-sm font-medium"
+          >
             جميع الدفعات
           </TabsTrigger>
-          <TabsTrigger value="received" className="text-xs md:text-sm font-medium">
-            الدفعات  المستلمة
+          <TabsTrigger
+            value="received"
+            className="text-xs md:text-sm font-medium"
+          >
+            الدفعات المستلمة
           </TabsTrigger>
-          <TabsTrigger value="not-received" className="text-xs md:text-sm font-medium">
+          <TabsTrigger
+            value="not-received"
+            className="text-xs md:text-sm font-medium"
+          >
             الدفعات غير المستلمة
           </TabsTrigger>
-          
         </TabsList>
 
         <TabsContent value="payments">
@@ -120,6 +128,7 @@ const PaymentsContainer = () => {
               columns={PaymentsColumns}
               isLoading={isLoadingPayments}
               onShow={onShow}
+              permissions={permissions}
             />
 
             <DialogAddPayments
@@ -148,9 +157,10 @@ const PaymentsContainer = () => {
               isLoading={isLoadingPaymentsNotReceived}
               onShow={onShow}
               onConfirmOrder={onConfirmPayment}
+              permissions={permissions}
+
               // onUnconfirmOrder={onConfirmOrder}
             />{" "}
-
             <ViewImageDialog
               show={openViewImage}
               handleClose={() => setOpenViewImage(false)}
@@ -162,7 +172,6 @@ const PaymentsContainer = () => {
               paymentNumber={selectedPayment?.payment_number}
             />
           </div>
-          
         </TabsContent>
 
         <TabsContent value="received">
@@ -172,8 +181,8 @@ const PaymentsContainer = () => {
               columns={PaymentsColumns}
               isLoading={isLoadingPaymentsReceived}
               onShow={onShow}
+              permissions={permissions}
             />{" "}
-
             <ViewImageDialog
               show={openViewImage}
               handleClose={() => setOpenViewImage(false)}

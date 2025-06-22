@@ -29,10 +29,9 @@ export const DynamicTable = ({
   onConfirmOrder,
   onUnconfirmOrder,
   className = "",
-  permissions
+  permissions,
 }) => {
-  const {hasPermission} = useAuth()
-  console.log(permissions)
+  const { hasPermission } = useAuth();
   return (
     <div
       className={`rounded-xl border border-gray-100 dark:border-gray-800 bg-background shadow-sm w-full ${className}`}
@@ -134,7 +133,7 @@ export const DynamicTable = ({
                     onUnconfirmOrder) && (
                     <TableCell className="py-2">
                       <div className="flex justify-end gap-2">
-                        {(onShow && hasPermission(permissions?.show)) && (
+                        {onShow && hasPermission(permissions?.show) && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -146,35 +145,39 @@ export const DynamicTable = ({
                         )}
                         {(onConfirmOrder || onUnconfirmOrder) && (
                           <>
-                            {(row.status === 0 || true) &&  onConfirmOrder && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => onConfirmOrder(row)}
-                                className="h-7 w-7 p-0"
-                              >
-                                <Icon
-                                  icon="mdi:check-circle-outline"
-                                  className="text-green-500"
-                                />
-                              </Button>
-                            )}
-                            {row.status === 1 && onUnconfirmOrder && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => onUnconfirmOrder(row)}
-                                className="h-7 w-7 p-0"
-                              >
-                                <Icon
-                                  icon="mdi:close-circle-outline"
-                                  className="text-red-500"
-                                />
-                              </Button>
-                            )}
+                            {(row.status === 0 || true) &&
+                              onConfirmOrder &&
+                              hasPermission(permissions?.confirm) && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => onConfirmOrder(row)}
+                                  className="h-7 w-7 p-0"
+                                >
+                                  <Icon
+                                    icon="mdi:check-circle-outline"
+                                    className="text-green-500"
+                                  />
+                                </Button>
+                              )}
+                            {row.status === 1 &&
+                              onUnconfirmOrder &&
+                              hasPermission(permissions?.unConfirm) && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => onUnconfirmOrder(row)}
+                                  className="h-7 w-7 p-0"
+                                >
+                                  <Icon
+                                    icon="mdi:close-circle-outline"
+                                    className="text-red-500"
+                                  />
+                                </Button>
+                              )}
                           </>
                         )}
-                        {(onEdit && hasPermission(permissions?.edit))  && (
+                        {onEdit && hasPermission(permissions?.edit) && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -184,7 +187,7 @@ export const DynamicTable = ({
                             <Icon icon="mdi:pencil" className="text-primary" />
                           </Button>
                         )}
-                        {(onDelete && hasPermission(permissions?.delete)) &&(
+                        {onDelete && hasPermission(permissions?.delete) && (
                           <Button
                             variant="destructive"
                             size="sm"

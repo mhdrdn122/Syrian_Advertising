@@ -18,6 +18,8 @@ import { PaymentsColumns } from "../../utils/Tables/ColumnsTable/PaymentsColumns
 import { PaymentsCustomerColumns } from "../../utils/Tables/ColumnsTable/PaymentsCustomerColumns";
 import { ViewImageDialog } from "../Payments/ViewImageDialog";
 import InvoicePdf from "../Payments/InvoicePdf";
+import { useAuth } from "../../Context/AuthProvider";
+import { Permissions } from "../../Static/StaticData";
 
 const CustomerInfo = () => {
   const { id } = useParams();
@@ -35,6 +37,7 @@ const CustomerInfo = () => {
   const [openDel, setOpenDel] = useState(false);
 
   const navigate = useNavigate();
+  const { hasPermission } = useAuth();
 
   const [deleteCustomer, { isLoading }] = useDeleteCustomerMutation();
   const handelDelete = async () => {
@@ -83,16 +86,18 @@ const CustomerInfo = () => {
           معلومات الزبون
         </h1>
         <div className="flex flex-wrap  gap-2">
-          <Button
-            onClick={() => {
-              setOpen(true);
-            }}
-            variant="outline"
-            className="gap-2 cursor-pointer"
-          >
-            <Icon icon="mdi:pencil" className="text-lg" />
-            تعديل
-          </Button>
+          {hasPermission(Permissions.EditCustomers) && (
+            <Button
+              onClick={() => {
+                setOpen(true);
+              }}
+              variant="outline"
+              className="gap-2 cursor-pointer"
+            >
+              <Icon icon="mdi:pencil" className="text-lg" />
+              تعديل
+            </Button>
+          )}
 
           <Button
             onClick={() => setShowBooking((prev) => !prev)}
@@ -114,14 +119,16 @@ const CustomerInfo = () => {
             عرض الدفعات
           </Button>
 
-          <Button
-            onClick={() => setOpenDel(true)}
-            variant="destructive"
-            className="gap-2 cursor-pointer"
-          >
-            <Icon icon="mdi:trash" className="text-lg" />
-            حذف
-          </Button>
+          {hasPermission(Permissions.DeleteCustomers) && (
+            <Button
+              onClick={() => setOpenDel(true)}
+              variant="destructive"
+              className="gap-2 cursor-pointer"
+            >
+              <Icon icon="mdi:trash" className="text-lg" />
+              حذف
+            </Button>
+          )}
         </div>
       </div>
 
@@ -159,8 +166,7 @@ const CustomerInfo = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
-رقم الهاتف                    </p>
+                    <p className="text-sm text-muted-foreground">رقم الهاتف </p>
                     <p className="font-medium">{customer.phone_number}</p>
                   </div>
                 </div>
@@ -202,7 +208,9 @@ const CustomerInfo = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">تاريخ الإنشاء</p>
+                    <p className="text-sm text-muted-foreground">
+                      تاريخ الإنشاء
+                    </p>
                     <p className="font-medium">
                       {new Date(customer.created_at).toLocaleDateString(
                         "en-US"
@@ -221,9 +229,7 @@ const CustomerInfo = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
-                      آخر تعديل
-                    </p>
+                    <p className="text-sm text-muted-foreground">آخر تعديل</p>
                     <p className="font-medium">
                       {new Date(customer.updated_at).toLocaleDateString(
                         "en-US"
@@ -258,7 +264,11 @@ const CustomerInfo = () => {
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
               الدفعات
             </h1>
-            <InvoicePdf customer={customer} showCustomerTable={true} showCustomerPaymentsTable={true} />
+            <InvoicePdf
+              customer={customer}
+              showCustomerTable={true}
+              showCustomerPaymentsTable={true}
+            />
           </div>
           <DynamicTable
             data={customer?.payments || []}

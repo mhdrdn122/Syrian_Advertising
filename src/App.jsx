@@ -21,6 +21,7 @@ import ContractPage from "./Components/Booking/ContractPage";
 import ReportsPage from "./Pages/Reports/ReportsPage";
 import BookingForm from "./Pages/Booking/BookingForm";
 import TableRoadSigns from "./Components/RoadSigns/TableRoadSigns";
+import Box from "./Pages/Payments/Box";
 // import { useAuth } from "./Context/AuthProvider";
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
               <Route path="regions-city" element={<RegionsCityPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="report" element={<ReportsPage />} />
+              <Route path="box" element={<Box />} />
+
             </Route>
 
               <Route path="users" element={<UsersPage />} />

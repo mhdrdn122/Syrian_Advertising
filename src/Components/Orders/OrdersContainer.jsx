@@ -17,6 +17,7 @@ import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { DialogEditOrders } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditOrders";
 import OrdersPdf from "./OrdersPdf";
 import { Loader, Loader2Icon } from "lucide-react";
+import { Permissions } from "../../Static/StaticData";
 
 const OrdersContainer = () => {
   const [orderType, setOrderType] = useState("");
@@ -116,6 +117,13 @@ const OrdersContainer = () => {
         <p className="text-muted-foreground text-sm">جاري التحميل...</p>
       </div>
     );
+  }
+
+  const permission = {
+    edit:Permissions.EditOrders,
+    confirm:Permissions.EditOrders,
+    unConfirm:Permissions.EditOrders,
+
   }
 
   return (
@@ -220,6 +228,7 @@ const OrdersContainer = () => {
         onShow={handleShow}
         onConfirmOrder={onConfirmOrder}
         onUnconfirmOrder={onUnconfirmOrder}
+        permissions={permission}
         className="bg-card rounded-lg shadow-sm border border-border w-full"
       />
       <DialogEditOrders

@@ -34,6 +34,8 @@ export const navLinksAdministrationPage = [
   { to: "regions-city", text: "المناطق والمدن", mobileText: "المناطق" },
   { to: "orders", text: " الطلبات", mobileText: "الطلبات" },
   { to: "report", text: " التقرير الاسبوعي", mobileText: "التقرير الاسبوعي" },
+  { to: "box", text: "  الصندوق", mobileText: "الصندوق " },
+
 ];
 
 export const navLinkSidebar = [
@@ -95,24 +97,24 @@ export const Permissions = {
 
   // DeleteBookings: "delete-bookings",
   DeleteBrokers: "delete-brokers",
-  DeleteCities: "delete-cities",//
-  DeleteCustomers: "delete-customers",//
+  DeleteCities: "delete-cities",
+  DeleteCustomers: "delete-customers",
   // DeleteOrders: "delete-orders",
   // DeletePayments: "delete-payments",
   // DeleteProducts: "delete-products",
-  DeleteRegions: "delete-regions",//
+  DeleteRegions: "delete-regions",
   DeleteRoadSigns: "delete-road-signs",
   DeleteTemplates: "delete-templates",
   DeleteUsers: "delete-users", 
 
   EditBookings: "edit-bookings",
   EditBrokers: "edit-brokers",
-  EditCities: "edit-cities",//
-  EditCustomers: "edit-customers",//
+  EditCities: "edit-cities",
+  EditCustomers: "edit-customers",
   EditOrders: "edit-orders",//
-  // EditPayments: "edit-payments",
+  EditPayments: "edit-payments",
   // EditProducts: "edit-products",
-  EditRegions: "edit-regions",//
+  EditRegions: "edit-regions",
   EditRoadSigns: "edit-road-signs",
   EditTemplates: "edit-templates",
   EditUsers: "edit-users",
