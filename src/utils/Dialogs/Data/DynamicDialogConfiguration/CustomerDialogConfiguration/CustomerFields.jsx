@@ -4,4 +4,5 @@ export const CustomerFields = [
   { name: "address", label: "العنوان" },
   { name: "phone_number", label: "رقم الهاتف" },
   { name: "commercial_registration_number", label: "رقم السجل التجاري" },
+  
 ];

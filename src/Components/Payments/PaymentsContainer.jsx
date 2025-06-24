@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { showToast } from "../../utils/Notifictions/showToast";
 import { Permissions } from "../../Static/StaticData";
+import InvoiceExcel from "./InvoiceExcel";
 
 const PaymentsContainer = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -114,11 +115,20 @@ const PaymentsContainer = () => {
               setShow={setOpenAdd}
               permission={Permissions.CreatePayments}
             />
-            <InvoicePdf
+            <div className="flex gap-3 justify-between">
+               <InvoicePdf
               customer={dataInvoicePdf}
               showCustomerTable={false}
               showCustomerPaymentsTable={true}
             />
+
+            <InvoiceExcel
+              customer={dataInvoicePdf}
+              showCustomerTable={false}
+              showCustomerPaymentsTable={true}
+            />
+            </div>
+           
             <DynamicTable
               data={payments || []}
               columns={PaymentsColumns}

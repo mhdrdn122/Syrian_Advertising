@@ -16,4 +16,4 @@ export const DialogAddTemplate = ({ show, handleClose }) => {
       initialValues={TemplateInitialValues}
     />
   );
-};
+}; 

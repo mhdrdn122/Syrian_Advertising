@@ -23,6 +23,13 @@ export  const TemplateColumns = [
       priority: 3,
     },
     {
+      header: "عدد الأوجه",
+      accessor: "faces_number",
+      prefixIcon: "mdi:image-area",
+      className: "min-w-[80px]",
+      priority: 3,
+    },
+    {
       header: "مساحة الطباعة",
       accessor: "printing_space",
       prefixIcon: "mdi:image-area",

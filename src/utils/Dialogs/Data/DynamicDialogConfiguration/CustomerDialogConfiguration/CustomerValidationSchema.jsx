@@ -5,11 +5,11 @@ export const CustomersValidationSchema = Yup.object({
   company_name: Yup.string().required("أسم الشركة مطلوب"),
   address: Yup.string().required("العنوان مطلوب"),
   phone_number: Yup.number().required("رقم الهاتف"),
-  commercial_registration_number: Yup.number()
-    .required("رقم السجل التجاري مطلوب")
-    .test(
-      "len",
-      "يجب أن يتكون رقم السجل التجاري من 4 أرقام فقط",
-      (val) => val && val.toString().length === 4
-    ),
+  commercial_registration_number: Yup.number(),
+  
+    // .test(
+    //   "len",
+    //   "يجب أن يتكون رقم السجل التجاري من 4 أرقام فقط",
+    //   (val) => val && val.toString().length === 4
+    // ),
 });

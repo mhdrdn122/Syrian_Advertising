@@ -9,6 +9,7 @@ const ContractPage = () => {
   const contentRef = useRef(null);
   const param = useParams();
   const { data: getBooking, isSuccess } = useGetOneBookingsQuery(param.id);
+  console.log(getBooking);
 
   const contractDetails = {
     firstParty: {
@@ -139,22 +140,29 @@ const ContractPage = () => {
                   مكان التموضع
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
+                   الإتجاه
+                </th>
+                <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
                   عدد الأوجه
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
                   المدة الإعلانية (شهر)
                 </th>
+               
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
-                  السعر الإفرادي للأوجه شامل الطباعة لمرة واحدة
+                  السعر الإفرادي للأوجه  شامل الطباعة لمرة واحدة
                 </th>
+                
               </tr>
             </thead>
             <tbody>
               {getBooking?.roadsigns?.map((ad, index) => (
-                <tr key={index}>
+                <tr key={index} >
                   <td style={styles.adTableThTd}>{ad.template?.model}</td>
                   <td style={styles.adTableThTd}>{ad.template?.type}</td>
                   <td style={styles.adTableThTd}>{ad?.place}</td>
+                  <td style={styles.adTableThTd}>{ad?.directions}</td>
+
                   <td style={styles.adTableThTd}>
                     {ad?.total_faces_on_date} وجه اعلاني
                   </td>
@@ -165,7 +173,8 @@ const ContractPage = () => {
                     )} */}
                     {getBooking?.units} شهر
                   </td>
-                  <td style={styles.adTableThTd}>{ad?.pivot.face_price}</td>
+                  <td style={styles.adTableThTd}>{ad?.pivot.face_price*getBooking?.units}</td>
+
                 </tr>
               ))}
             </tbody>

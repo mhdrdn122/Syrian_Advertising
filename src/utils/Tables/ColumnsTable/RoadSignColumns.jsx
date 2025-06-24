@@ -5,55 +5,13 @@ const ProductType = {
 };
 
 export const RoadSignColumns = [
-    // {
-    //   header: "مكان التموضع",
-    //   accessor: "place",
-    //   prefixIcon: "mdi:map-marker",
-    //   className:
-    //     "min-w-[120px] sm:min-w-[150px] md:min-w-[200px] lg:min-w-[250px]",
-    //   cellClassName: "font-medium",
-    //   priority: 1,
-    // },
-    // {
-    //   header: "الحالة",
-    //   accessor: "is_available",
-    //   prefixIcon: "mdi:check-circle",
-    //   format: (value) => (value ? "متاح" : "غير متاح"),
-    //   className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
-    //   priority: 2,
-    // },
-    // {
-    //   header: "عدد الأوجه",
-    //   accessor: "faces_number",
-    //   prefixIcon: "mdi:numeric",
-    //   className: "text-right min-w-[70px] sm:min-w-[80px] md:min-w-[100px]",
-    //   cellClassName: "text-right font-mono",
-    //   priority: 3,
-    // },
-    // {
-    //   header: "الاتجاه",
-    //   accessor: "directions",
-    //   prefixIcon: "mdi:compass",
-    //   className: "min-w-[70px] sm:min-w-[80px] md:min-w-[100px]",
-    //   priority: 4,
-    // },
-    // {
-    //   header: "عدد الأمتار",
-    //   accessor: "advertising_meters",
-    //   prefixIcon: "mdi:image-area",
-    //   format: (value) => `${parseFloat(value).toFixed(2)}م²`,
-    //   className: "text-right min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
-    //   cellClassName: "text-right font-mono",
-    //   priority: 5,
-    // },
-    {
-      header: "عدد أمتار الطباعة",
-      accessor: "printing_meters",
-      prefixIcon: "mdi:image-area",
-      format: (value) => `${parseFloat(value).toFixed(2)}م²`,
-      className: "text-right min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
-      cellClassName: "text-right font-mono",
-      priority: 6,
+   
+     {
+      header: "نموذج",
+      accessor: "template.model",
+      prefixIcon: "mdi:package-variant",
+      className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
+      priority: 8,
     },
     {
       header: "القياس",
@@ -63,14 +21,6 @@ export const RoadSignColumns = [
       className: "text-right min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
       cellClassName: "text-right font-mono",
       priority: 7,
-    },
-    {
-      header: "نموذج",
-      accessor: "template.model",
-      prefixIcon: "mdi:package-variant",
-      // format: (value) => ProductType[value] || "غير معروف",
-      className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
-      priority: 8,
     },
     {
       header: "المدينة",
@@ -86,4 +36,15 @@ export const RoadSignColumns = [
       className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
       priority: 10,
     },
+    {
+      header: "  الإتجاه",
+      accessor: "directions",
+      prefixIcon: "mdi:compass",
+      className: "text-right min-w-[80px]  sm:min-w-[100px] md:min-w-[120px]",
+      cellClassName: "text-right font-mono",
+      priority: 6,
+    },
+    
+   
+    
   ];

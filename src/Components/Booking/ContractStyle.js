@@ -71,8 +71,8 @@ export const styles = {
   },
   adDetailsSection: {
     paddingBottom: "20px",
-    pageBreakInside: "avoid",
-    breakInside: "avoid",
+    // pageBreakInside: "avoid",
+    // breakInside: "avoid",
   },
   adDetailsSectionH2: {
     fontSize: "1.3em",

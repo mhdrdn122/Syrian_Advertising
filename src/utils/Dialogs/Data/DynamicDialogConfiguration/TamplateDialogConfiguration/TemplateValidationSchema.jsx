@@ -3,6 +3,7 @@ import * as Yup from "yup";
 export const TemplateValidationSchema = Yup.object({
   model: Yup.string().required("حقل النموذج مطلوب"),
   type: Yup.string().required("حقل النوع مطلوب"),
+  faces_number:Yup.number().required("حقل النوع مطلوب").max(2,"لا يمكن إضافة اكثر من وجهين للنموذج الواحد"),
   size: Yup.string().required("حقل الحجم مطلوب"),
   advertising_space: Yup.number()
     .typeError("يجب أن يكون حقل مساحة الإعلان رقمًا")

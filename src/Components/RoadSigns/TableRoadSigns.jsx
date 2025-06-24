@@ -88,6 +88,7 @@ const TableRoadSigns = ({ isLoading }) => {
     }
   };
 
+  console.log(roadSigns)
   if (isError) {
     return (
       <div className="text-center p-4 text-red-500">

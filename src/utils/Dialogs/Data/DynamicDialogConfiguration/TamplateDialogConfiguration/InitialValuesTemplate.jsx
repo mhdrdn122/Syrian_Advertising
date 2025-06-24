@@ -2,6 +2,7 @@ export const TemplateInitialValues = {
   model: "",
   type: "",
   size: "",
+  faces_number:"",
   advertising_space: "",
   printing_space: "",
   products: [

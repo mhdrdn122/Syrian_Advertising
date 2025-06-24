@@ -1,5 +1,5 @@
 export const CustomerInitialValues = {
-  name: "",
+  full_name: "",
   company_name: "",
   address: "",
   phone_number: "",

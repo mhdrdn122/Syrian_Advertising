@@ -5,19 +5,38 @@ import { PaymentInitialValues } from "../../Data/DynamicDialogConfiguration/Paym
 import { PaymentValidationSchema } from "../../Data/DynamicDialogConfiguration/PaymentsDialogConfiguration/PaymentValidationSchema";
 import DynamicDialog from "../DynamicDialog";
 
-export const DialogAddPayments = ({ show, handleClose }) => {
-  const { data, isSuccess: isCustomersSuccess } = useGetCustomersQuery();
+export const DialogAddPayments = ({ show, handleClose, id }) => {
+  const { data: customersData, isSuccess: isCustomersSuccess } = useGetCustomersQuery();
 
+  // Find the customer only if id is provided and data is available
+  const customer = isCustomersSuccess && id
+    ? customersData?.find((customer) => String(customer.id) === String(id))
+    : undefined;
+
+  // Prepare selectData based on whether an ID is provided
   const selectData = {
     customers: {
-      data: isCustomersSuccess
-        ? data.map((customer) => ({
-            id: String(customer.id),
-            name: customer.company_name,
-          }))
-        : [],
+      data: [], // Initialize with an empty array
     },
   };
+
+  if (isCustomersSuccess && customersData) {
+    if (id && customer) {
+      // If an ID is provided and a customer is found, use only that customer
+      selectData.customers.data = [
+        {
+          id: String(customer.id),
+          name: customer.company_name,
+        },
+      ];
+    } else if (!id) {
+      // If no ID is provided, map all customers
+      selectData.customers.data = customersData.map((customer) => ({
+        id: String(customer.id),
+        name: customer.company_name,
+      }));
+    }
+  }
 
   const onSubmitTransform = (values) => {
     const formData = new FormData();

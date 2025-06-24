@@ -23,18 +23,22 @@ const BookingContent = () => {
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
           {isEditMode ? "تعديل الحجز" : "إضافة حجز جديد"}
         </h1>
-        <Button
+        <button
           type="button"
           variant="outline"
           onClick={() => setOpenDialog(true)}
           disabled={selectedSigns.length === 0}
-          className="flex items-center gap-2 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg px-4 py-2"
+          className={`flex items-center gap-2 border-2 ${
+            selectedSigns.length > 0
+              ? "bg-red-500"
+              : " border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+          }  transition-colors rounded-lg px-4 py-2`}
         >
-          <ShoppingCart className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+          <ShoppingCart className="h-5 w-5  text-gray-600 dark:text-gray-300" />
           <span className="text-sm font-medium">
             سلة الحجز ({selectedSigns.length})
           </span>
-        </Button>
+        </button>
       </div>
 
       {isEditMode && isLoadingBooking ? (

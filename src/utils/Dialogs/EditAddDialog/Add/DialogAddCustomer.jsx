@@ -16,4 +16,4 @@ export const DialogAddCustomer = ({ show, handleClose }) => {
       initialValues={CustomerInitialValues}
     />
   );
-};
+}; 

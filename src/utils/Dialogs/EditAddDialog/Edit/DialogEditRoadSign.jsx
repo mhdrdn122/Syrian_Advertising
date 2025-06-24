@@ -2,11 +2,11 @@ import {
   useGetTemplateProductsQuery,
   useUpdateRoadSignMutation,
 } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
-import { roadSignFields } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignFields";
-import { roadSignValidationSchema } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
+import {  roadSignFields1, roadSignFields2, roadSignFieldsEdit } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignFields";
+import {  roadSignValidationSchema1, roadSignValidationSchema2, roadSignValidationSchemaEdit } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
 import {
   useGetActiveRegionsByCityMutation,
-  useGetCitiesQuery
+  useGetCitiesQuery,
 } from "../../../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
 import DynamicDialog from "../DynamicDialog";
 import { isAvailableRoadSign } from "../../../../Static/StaticData";
@@ -87,6 +87,8 @@ export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
     setCityId(value);
   };
 
+
+
   const transformedInitialValues = useMemo(() => {
     return {
       ...initData,
@@ -104,8 +106,8 @@ export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
       show={show}
       handleClose={handleClose}
       title="تعديل لوحة طرقية"
-      fields={roadSignFields}
-      validationSchema={roadSignValidationSchema}
+      fields={roadSignFieldsEdit}
+      validationSchema={roadSignValidationSchemaEdit}
       mutationHook={useUpdateRoadSignMutation}
       initialValues={transformedInitialValues}
       selectData={selectData}
@@ -114,6 +116,7 @@ export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
         if (fieldName === "city_id") {
           handleCityChange(value);
         }
+       
       }}
       styles={"overflow-visible"}
     />

@@ -8,15 +8,23 @@ import {
   useGetTemplateProductsQuery,
 } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
 import { isAvailableRoadSign } from "../../../../Static/StaticData";
-import { roadSignFields } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignFields";
+import {
+  roadSignFields1,
+  roadSignFields2,
+} from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignFields";
 import { roadSignInitialValues } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignInitialValues";
-import { roadSignValidationSchema } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
+// import { roadSignValidationSchema } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
 import DynamicDialog from "../DynamicDialog";
+import {
+  roadSignValidationSchema1,
+  roadSignValidationSchema2,
+} from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
 
 export const DialogAddRoadSign = ({ show, handleClose }) => {
-
   const [regions, setRegions] = useState([]);
   const [cityId, setCityId] = useState([]);
+  const [templateId, setTemplateId] = useState([]);
+  const [faceNumber, setFaceNumber] = useState(1);
 
   const { data: citiesData, isSuccess: isCitiesSuccess } = useGetCitiesQuery();
 
@@ -24,7 +32,7 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
     activeRegionsByCityMutation,
     { isSuccess: isSuccessActiveRegionsByCityMutation },
   ] = useGetActiveRegionsByCityMutation();
- const { data: tempProd, isSuccess: isTempProdSuccess } =
+  const { data: tempProd, isSuccess: isTempProdSuccess } =
     useGetTemplateProductsQuery();
 
   const getRegionsByCityId = async (cityId) => {
@@ -43,7 +51,6 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
     }
   }, [cityId]);
 
- 
   const selectData = {
     cities: {
       data: isCitiesSuccess
@@ -88,6 +95,13 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
 
   const handleCityChange = (value) => {
     setCityId(value);
+    console.log(value);
+  };
+
+  const handleTemplateChange = (value) => {
+    setTemplateId(value);
+    const temp = tempProd.find((item) => item.id == value);
+    setFaceNumber(temp?.faces_number);
   };
 
   return (
@@ -95,8 +109,10 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
       show={show}
       handleClose={handleClose}
       title="إضافة لوحة طرقية"
-      fields={roadSignFields}
-      validationSchema={roadSignValidationSchema}
+      fields={faceNumber == 1 ? roadSignFields1 : roadSignFields2}
+      validationSchema={
+        faceNumber == 1 ? roadSignValidationSchema1 : roadSignValidationSchema2
+      }
       mutationHook={useAddRoadSignMutation}
       initialValues={roadSignInitialValues}
       selectData={selectData}
@@ -104,6 +120,9 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
       onFieldChange={(fieldName, value) => {
         if (fieldName === "city_id") {
           handleCityChange(value);
+        }
+        if (fieldName === "template_id") {
+          handleTemplateChange(value);
         }
       }}
     />

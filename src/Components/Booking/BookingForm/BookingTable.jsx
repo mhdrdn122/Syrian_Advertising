@@ -186,7 +186,11 @@ const BookingTable = () => {
               roadSigns.map((sign) => (
                 <TableRow
                   key={sign.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className={` ${
+                        addedSignIds?.has?.(sign.id)
+                          ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300"
+                          : "hover:bg-gray-50 dark:hover:bg-gray-700"
+                      }`}
                 >
                   <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
                     {sign.template?.model || "غير متوفر"}
