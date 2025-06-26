@@ -26,9 +26,11 @@ const CartTable = () => {
     <Table>
       <TableHeader>
         <TableRow className="bg-gray-100 dark:bg-gray-800">
+          <TableHead className="text-right w-auto">رمز النموذج</TableHead>
+
           <TableHead className="text-right w-auto">المنطقة</TableHead>
           <TableHead className="text-right w-auto">المكان</TableHead>
-          <TableHead className="text-right w-20">عدد الأوجه</TableHead>
+          <TableHead className="text-right w-20">عدد اللوحات</TableHead>
           <TableHead className="text-right w-32">أمتار الطباعة</TableHead>
           <TableHead className="text-right w-16">إجراء</TableHead>
         </TableRow>
@@ -36,20 +38,28 @@ const CartTable = () => {
       <TableBody>
         {selectedSigns.map((sign) => {
           const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
+  console.log(roadSign)
+          
           const faces_max = roadSign
             ? isEditMode
-              ? roadSign.faces_number -
-                roadSign.total_faces_on_date +
+              ? roadSign.panels_number -
+                roadSign.total_panels_on_date +
                 (bookingData?.roadsigns.find(
                   (rs) => rs.id === sign.road_sign_id
-                )?.pivot.booking_faces || 0)
-              : roadSign.faces_number - roadSign.total_faces_on_date
+                )?.pivot.number_of_reserved_panels || 0)
+              : roadSign.panels_number - roadSign.total_panels_on_date
             : null;
+            {
+              console.log(selectedSigns)
+            }
           return (
             <TableRow
               key={sign.road_sign_id}
               className="hover:bg-gray-50 dark:hover:bg-gray-700"
             >
+              <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
+                {roadSign?.template.model}
+              </TableCell>
               <TableCell className="truncate max-w-[120px] sm:max-w-[150px]">
                 {roadSign?.region.name}
               </TableCell>
@@ -60,8 +70,8 @@ const CartTable = () => {
                 <Input
                   type="number"
                   min="1"
-                  max={faces_max > 2 ? 2 : faces_max  }
-                  value={sign.booking_faces}
+                  max={faces_max}
+                  value={sign?.booking_faces}
                   onChange={(e) =>
                     updateSignFaces(sign.road_sign_id, e.target.value)
                   }

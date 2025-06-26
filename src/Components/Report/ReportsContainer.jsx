@@ -1,30 +1,18 @@
 import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
-import {
-  useGetRoadSignBookingByDateQuery,
-  useGetRoadSignBookingByWeekQuery,
-  useGetSoadSignDontHaveBookingQuery,
-} from "../../RtkQuery/Slice/Report/ReportApi";
-import { ReportBookingsColumns } from "../../utils/Tables/ColumnsTable/ReportBookingsColumns";
-import { ReportUnbookedSignsColumns } from "../../utils/Tables/ColumnsTable/ReportUnbookedSignsColumns";
+import { useGetRoadSignBookingByDateQuery } from "../../RtkQuery/Slice/Report/ReportApi";
 import { Loader } from "lucide-react";
 import { ReportBookingsCustomersColumns } from "../../utils/Tables/ColumnsTable/ReportBookingsCustomersColumns";
 import { ReportPdf } from "./ReportPdf";
+import { productTypeOptions } from "../../Static/StaticData";
+import { Label } from "@/components/ui/label";
 
 const ReportsContainer = () => {
   const [activeTab, setActiveTab] = useState("bookings");
   const [fromDate, setFromDate] = useState();
   const [toDate, setToDate] = useState();
-
-  // Fetch data for bookings this week
-  const {
-    data: bookingsData,
-    isLoading: isBookingsLoading,
-    isFetching: isBookingsFetching,
-  } = useGetRoadSignBookingByWeekQuery();
-  console.log(bookingsData);
+  const [productId, setProductId] = useState();
 
   // Fetch data for bookings this Date
   const {
@@ -34,18 +22,11 @@ const ReportsContainer = () => {
   } = useGetRoadSignBookingByDateQuery({
     from_date: fromDate,
     to_date: toDate,
+    product_type: productId,
   });
-  console.log(data);
-
-  // Fetch data for unbooked signs
-  const {
-    data: unbookedSignsData,
-    isLoading: isUnbookedLoading,
-    isFetching: isUnbookedFetching,
-  } = useGetSoadSignDontHaveBookingQuery();
 
   // Handle loading state
-  if (isBookingsLoading || isUnbookedLoading) {
+  if (isBookingsDateLoading) {
     return (
       <div className="w-full h-full flex flex-col justify-center items-center">
         <Loader />
@@ -58,6 +39,65 @@ const ReportsContainer = () => {
     <div className="p-4 sm:p-6 max-w-full mx-auto space-y-6 bg-background rounded-lg shadow-sm dark:shadow-gray-800">
       <h2 className="text-2xl font-bold text-foreground mb-4">التقارير</h2>
 
+      {/*  Filters */}
+      <div className="flex justify-between flex-wrap items-center gap-3 mb-5">
+        <div className="flex-1">
+          <Label
+            htmlFor="region"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            المنتج
+          </Label>
+          <select
+            id="product"
+            value={productId}
+            onChange={(e) => setProductId(e.target.value)}
+            disabled={isBookingsDateLoading}
+            className={`w-full ${
+              isBookingsDateLoading ? `dark:bg-gray-700` : `dark:bg-gray-900`
+            } p-2 border border-gray-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 `}
+          >
+            <option value={""}>اختر المنتج</option>
+            {isBookingsDateLoading ? (
+              <option>يرجى الانتظار...</option>
+            ) : (
+              productTypeOptions?.map((product) => (
+                <option
+                  className="text-white"
+                  key={product.value}
+                  value={product.value}
+                >
+                  {product.label}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
+        <div className="flex flex-col flex-1">
+          <label className="mb-2 text-sm font-medium text-right text-foreground">
+            {" "}
+            من{" "}
+          </label>
+          <input
+            type="date"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+            className="p-2.5 border rounded-lg bg-card text-foreground text-sm shadow-sm focus:ring-2 focus:ring-primary focus:border-primary w-full transition-colors duration-200"
+          />
+        </div>
+        <div className="flex flex-col flex-1 ">
+          <label className="mb-2 text-sm font-medium text-right  text-foreground">
+            إلى{" "}
+          </label>
+          <input
+            type="date"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+            className="p-2.5 border rounded-lg bg-card text-foreground text-sm shadow-sm focus:ring-2 focus:ring-primary focus:border-primary w-full transition-colors duration-200"
+          />
+        </div>
+      </div>
+
       <ReportPdf
         customers={data?.customers}
         globalModelCounts={data?.globalModelCounts}
@@ -66,20 +106,15 @@ const ReportsContainer = () => {
         }
         from_date={fromDate}
         to_date={toDate}
+        product={productTypeOptions[productId || 0].label}
       />
       {/* Tabs for switching between bookings and unbooked signs */}
       <Tabs
-        defaultValue="bookings"
+        defaultValue="customer-booking"
         onValueChange={setActiveTab}
         className="w-full"
       >
         <TabsList className="grid w-full overflow-auto  grid-cols-5 justify-between flex bg-card rounded-lg border border-border">
-          <TabsTrigger value="bookings" className="text-sm font-medium">
-            الحجوزات هذا الأسبوع
-          </TabsTrigger>
-          <TabsTrigger value="unbooked" className="text-sm font-medium">
-            اللوحات الغير محجوزة
-          </TabsTrigger>
           <TabsTrigger value="customer-booking" className="text-sm font-medium">
             حجوزات الزبائن
           </TabsTrigger>
@@ -88,55 +123,8 @@ const ReportsContainer = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* Bookings This Week Table */}
-        <TabsContent value="bookings">
-          <DynamicTable
-            data={bookingsData || []}
-            columns={ReportBookingsColumns}
-            isLoading={isBookingsFetching}
-            className="bg-card rounded-lg shadow-sm border border-border w-full"
-          />
-        </TabsContent>
-
-        {/* Unbooked Signs Table */}
-        <TabsContent value="unbooked">
-          <DynamicTable
-            data={unbookedSignsData || []}
-            columns={ReportUnbookedSignsColumns}
-            isLoading={isUnbookedFetching}
-            className="bg-card rounded-lg shadow-sm border border-border w-full"
-          />
-        </TabsContent>
-
         {/* customer-booking This Date Tables */}
         <TabsContent value="customer-booking">
-          {/* Date Filter */}
-          <div className="flex justify-between items-center gap-3 mb-5">
-            <div className="flex flex-col flex-1">
-              <label className="mb-2 text-sm font-medium text-foreground">
-                {" "}
-                من{" "}
-              </label>
-              <input
-                type="date"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-                className="p-2.5 border rounded-lg bg-card text-foreground text-sm shadow-sm focus:ring-2 focus:ring-primary focus:border-primary w-full transition-colors duration-200"
-              />
-            </div>
-
-            <div className="flex flex-col flex-1 ">
-              <label className="mb-2 text-sm font-medium text-foreground">
-                إلى{" "}
-              </label>
-              <input
-                type="date"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-                className="p-2.5 border rounded-lg bg-card text-foreground text-sm shadow-sm focus:ring-2 focus:ring-primary focus:border-primary w-full transition-colors duration-200"
-              />
-            </div>
-          </div>
           <div className="my-3 text-center text-red-600 text-[20px]">
             <span>عدد الأمتار الإجمالي : </span>
             <span>{data?.total_advertising_space_all_customers} </span>
@@ -156,7 +144,7 @@ const ReportsContainer = () => {
                 <DynamicTable
                   data={customer?.roadSigns || []}
                   columns={ReportBookingsCustomersColumns}
-                  isLoading={isBookingsFetching}
+                  isLoading={isBookingsDateFetching}
                   className="bg-card rounded-lg shadow-sm border border-border w-full"
                 />
               </div>
@@ -170,17 +158,17 @@ const ReportsContainer = () => {
             data={data?.globalModelCounts || []}
             columns={[
               {
-                header: "عدد الأمتار الإعلانية",
+                header: "النموذج ",
                 accessor: "model",
                 cellClassName: "text-center",
               },
               {
-                header: "عدد الأمتار الإعلانية",
+                header: "عدد النماذج",
                 accessor: "count",
                 cellClassName: "text-center",
               },
             ]}
-            isLoading={isBookingsFetching}
+            isLoading={isBookingsDateFetching}
             className="bg-card rounded-lg shadow-sm border border-border w-full"
           />
         </TabsContent>

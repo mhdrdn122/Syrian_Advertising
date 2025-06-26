@@ -22,6 +22,7 @@ import ReportsPage from "./Pages/Reports/ReportsPage";
 import BookingForm from "./Pages/Booking/BookingForm";
 import TableRoadSigns from "./Components/RoadSigns/TableRoadSigns";
 import Box from "./Pages/Payments/Box";
+import RoadSignsReport from "./Components/Report/RoadSignsReport";
 
 function App() {
   return (
@@ -40,8 +41,11 @@ function App() {
               <Route path="regions-city" element={<RegionsCityPage />} />
 
               <Route path="report" element={<ReportsPage />} />
+              <Route path="roadSignReports" element={<RoadSignsReport />} />
+
               <Route path="box" element={<Box />} />
               <Route path="brokers" element={<BrokersPage />} />
+
             </Route>
             <Route path="payments" element={<PaymentsPages />} />
 

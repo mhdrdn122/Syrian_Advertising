@@ -123,7 +123,7 @@ const CustomerCard = ({
                 onClick={handleViewDetails}
               >
                 <Icon icon="mdi:eye-outline" className="text-lg" />
-                View Details
+                عرض التفاصيل
               </Button>
             </motion.div>
 
@@ -142,7 +142,7 @@ const CustomerCard = ({
                   }}
                 >
                   <Icon icon="mdi:trash-can-outline" className="text-lg" />
-                  Delete
+                  حذف
                 </Button>
               )}
             </motion.div>

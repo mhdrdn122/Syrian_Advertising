@@ -3,6 +3,7 @@ import {
   useDeleteCustomerMutation,
   useShowOneCustomerQuery,
   useUpdateCustomerMutation,
+  useAddDiscountMutation, // Import the new mutation hook
 } from "../../RtkQuery/Slice/Customers/CustomersApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +25,10 @@ import InvoiceExcel from "../Payments/InvoiceExcel";
 import CustomerFormDialog from "../../Pages/Customers/CustomerFormDialog";
 import { showToast } from "../../utils/Notifictions/showToast";
 import { Toaster } from "react-hot-toast";
+import DetailCard from "../../utils/DetailCard";
+// Import the new discount dialog component
+import AddDiscountDialog from "./AddDiscountDialog"; // New import
+import { BookingCustomerDiscounts } from "../../utils/Tables/ColumnsTable/BookingCustomerDiscounts";
 
 const CustomerInfo = () => {
   const { id } = useParams();
@@ -31,21 +36,28 @@ const CustomerInfo = () => {
     data: customer,
     isFetching,
     isLoading: isLoadingCustomer, // Initial customer data loading state
+    refetch, // Add refetch to update customer data after discount
   } = useShowOneCustomerQuery(id);
 
   // State variables for dialogs and display toggles
   const [openAddPAyment, setOpenAddPayment] = useState(false);
   const [showBookings, setShowBooking] = useState(false);
   const [showPayments, setShowPayments] = useState(false);
+  const [showDiscounts, setShowDiscounts] = useState(false);
+
   const [openViewImage, setOpenViewImage] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [openDel, setOpenDel] = useState(false);
 
   // State and settings for CustomerFormDialog
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  // State for AddDiscountDialog
+  const [isAddDiscountDialogOpen, setIsAddDiscountDialogOpen] = useState(false); // New state
 
   const [updateCustomer, { isLoading: isUpdating }] =
     useUpdateCustomerMutation();
+  const [addDiscount, { isLoading: isAddingDiscount }] =
+    useAddDiscountMutation(); // New mutation hook
 
   const navigate = useNavigate();
   const { hasPermission } = useAuth();
@@ -59,13 +71,22 @@ const CustomerInfo = () => {
     showToast("success", "تم تعديل معلومات الزبون");
   };
 
+  // Callback function on successful discount addition
+  const handleDiscountSuccess = () => {
+    setIsAddDiscountDialogOpen(false);
+    showToast("success", "تم إضافة الخصم بنجاح");
+    refetch(); // Refetch customer data to update the remaining balance and total values
+  };
+
   const handelDelete = async () => {
     try {
       await deleteCustomer(id).unwrap();
       navigate("/dashboard/customers");
     } catch (error) {
       console.error("Failed to delete customer:", error);
-      // You can add an error notification here
+      showToast("error", "فشل حذف الزبون");
+    } finally {
+      setOpenDel(false);
     }
   };
 
@@ -119,13 +140,25 @@ const CustomerInfo = () => {
             <Button
               onClick={() => {
                 setIsFormDialogOpen(true);
-                // initialData in CustomerFormDialog will be populated with `customer`
               }}
               variant="outline"
               className="gap-2 cursor-pointer w-full sm:w-auto"
             >
               <Icon icon="mdi:pencil" className="text-lg" />
               تعديل
+            </Button>
+          )}
+
+          {hasPermission(Permissions.EditCustomers) && (
+            <Button
+              onClick={() => {
+                setIsAddDiscountDialogOpen(true); // Open the new discount dialog
+              }}
+              variant="outline"
+              className="gap-2 cursor-pointer w-full sm:w-auto"
+            >
+              <Icon icon="mdi:percent" className="text-lg" />
+              إضافة حسم
             </Button>
           )}
 
@@ -147,6 +180,17 @@ const CustomerInfo = () => {
           >
             <Icon icon="mdi:currency-usd" className="text-lg" />
             {showPayments ? "إخفاء الدفعات" : "عرض الدفعات"}
+          </Button>
+
+          <Button
+            onClick={() => {
+              setShowDiscounts((prev) => !prev);
+            }}
+            variant="outline"
+            className="gap-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer w-full sm:w-auto"
+          >
+            <Icon icon="mdi:percent" className="text-lg" />
+            {showDiscounts ? "إخفاء الحسومات" : "عرض الحسومات"}
           </Button>
 
           {hasPermission(Permissions.DeleteCustomers) && (
@@ -192,181 +236,94 @@ const CustomerInfo = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {/* Phone Number */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-full">
-                    <Icon
-                      icon="mdi:phone"
-                      className="text-blue-600 dark:text-blue-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">رقم الهاتف</p>
-                    <p className="font-medium">{customer.phone_number}</p>
-                  </div>
-                </div>
-              </div>
+              <DetailCard
+                icon="mdi:phone"
+                title="رقم الهاتف"
+                content={customer.phone_number}
+                colorClass="bg-blue-50 dark:bg-blue-900/20"
+              />
 
               {/* Alternative Phone Numbers */}
               {customer.alt_phone_number &&
                 customer.alt_phone_number.length > 0 && (
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-full">
-                        <Icon
-                          icon="mdi:phone-plus"
-                          className="text-blue-600 dark:text-blue-300 text-xl"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">
-                          أرقام هواتف بديلة
-                        </p>
-                        {customer.alt_phone_number.map((num, index) => (
-                          <p key={index} className="font-medium">
-                            {num}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <DetailCard
+                    icon="mdi:phone-plus"
+                    title="أرقام هواتف بديلة"
+                    content={
+                      Array.isArray(customer.alt_phone_number)
+                        ? customer.alt_phone_number.join(", ")
+                        : customer.alt_phone_number
+                    }
+                    colorClass="bg-blue-50 dark:bg-blue-900/20"
+                  />
                 )}
 
               {/* Address */}
-              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-100 dark:bg-green-800 rounded-full">
-                    <Icon
-                      icon="mdi:map-marker"
-                      className="text-green-600 dark:text-green-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">العنوان</p>
-                    <p className="font-medium">{customer.address}</p>
-                  </div>
-                </div>
-              </div>
+              <DetailCard
+                icon="mdi:map-marker"
+                title="العنوان"
+                content={customer.address}
+                colorClass="bg-green-50 dark:bg-green-900/20"
+              />
 
               {/* Commercial Registration Number */}
               {customer.commercial_registration_number && (
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-100 dark:border-yellow-800">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-yellow-100 dark:bg-yellow-800 rounded-full">
-                      <Icon
-                        icon="mdi:file-document-box-multiple"
-                        className="text-yellow-600 dark:text-yellow-300 text-xl"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        رقم السجل التجاري
-                      </p>
-                      <p className="font-medium">
-                        {customer.commercial_registration_number}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <DetailCard
+                  icon="mdi:file-document-box-multiple"
+                  title="رقم السجل التجاري"
+                  content={customer.commercial_registration_number}
+                  colorClass="bg-yellow-50 dark:bg-yellow-900/20"
+                />
               )}
 
               {/* Discount */}
-              <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-red-100 dark:bg-red-800 rounded-full">
-                    <Icon
-                      icon="mdi:percent"
-                      className="text-red-600 dark:text-red-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">الخصم</p>
-                    <p className="font-medium">
-                      {parseFloat(customer.discount).toFixed(2)}%
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {/* <DetailCard
+                icon="mdi:percent"
+                title="الخصم"
+                content={`${parseFloat(customer.discount).toFixed(2)}%`}
+                colorClass="bg-red-50 dark:bg-red-900/20"
+              /> */}
 
               {/* Total Paid */}
-              <div className="bg-teal-50 dark:bg-teal-900/20 p-4 rounded-lg border border-teal-100 dark:border-teal-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-teal-100 dark:bg-teal-800 rounded-full">
-                    <Icon
-                      icon="mdi:cash-multiple"
-                      className="text-teal-600 dark:text-teal-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      إجمالي المدفوعات
-                    </p>
-                    <p className="font-medium">{customer.total_paid} $</p>
-                  </div>
-                </div>
-              </div>
+              <DetailCard
+                icon="mdi:cash-multiple"
+                title="إجمالي المدفوعات"
+                content={`${customer.total_paid.toFixed(2)} $`}
+                colorClass="bg-teal-50 dark:bg-teal-900/20"
+              />
 
               {/* Total Due */}
-              <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg border border-indigo-100 dark:border-indigo-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-indigo-100 dark:bg-indigo-800 rounded-full">
-                    <Icon
-                      icon="mdi:cash-multiple"
-                      className="text-indigo-600 dark:text-indigo-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      إجمالي المستحق
-                    </p>
-                    <p className="font-medium">{customer.total} $</p>
-                  </div>
-                </div>
-              </div>
+              <DetailCard
+                icon="mdi:cash-multiple"
+                title="إجمالي المستحق"
+                content={`${customer.total.toFixed(2)} $`}
+                colorClass="bg-indigo-50 dark:bg-indigo-900/20"
+              />
 
               {/* Creation Date */}
-              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-100 dark:bg-purple-800 rounded-full">
-                    <Icon
-                      icon="mdi:calendar-plus"
-                      className="text-purple-600 dark:text-purple-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      تاريخ الإنشاء
-                    </p>
-                    <p className="font-medium">
-                      {new Date(customer.created_at).toLocaleDateString(
-                        "en-US"
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <DetailCard
+                icon="mdi:calendar-plus"
+                title="تاريخ الإنشاء"
+                content={new Date(customer.created_at).toLocaleDateString(
+                  "en-US"
+                )}
+                colorClass="bg-purple-50 dark:bg-purple-900/20"
+              />
 
               {/* Last Modified */}
-              <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-100 dark:border-orange-800">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-orange-100 dark:bg-orange-800 rounded-full">
-                    <Icon
-                      icon="mdi:calendar-sync"
-                      className="text-orange-600 dark:text-orange-300 text-xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">آخر تعديل</p>
-                    <p className="font-medium">
-                      {new Date(customer.updated_at).toLocaleDateString(
-                        "en-US"
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <DetailCard
+                icon="mdi:calendar-sync"
+                title="آخر تعديل"
+                content={new Date(customer.updated_at).toLocaleDateString(
+                  "en-US"
+                )}
+                colorClass="bg-orange-50 dark:bg-orange-900/20"
+              />
 
-              {/* Business Manager Info (if available) */}
+              {/* Business Manager Info (if available) - This block might be a good candidate for another custom component if its structure varies significantly,
+                 but for now, we'll keep it as a standard div if it's more complex than what DetailCard can handle directly.
+                 If it's always just a title and icon/text pairs, you could adapt DetailCard to take an array of objects for content.
+                 For simplicity, keeping it as a div for now as it includes a sub-heading and multiple lines of info. */}
               {customer.customers && customer.customers.length > 0 && (
                 <div className="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-800 col-span-1 sm:col-span-2">
                   <h4 className="font-semibold text-lg mb-2">
@@ -461,6 +418,19 @@ const CustomerInfo = () => {
         </div>
       )}
 
+      {showDiscounts && (
+        <div className="mt-8 border rounded-xl p-4 md:p-6 shadow-sm bg-background">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight mb-4">
+            الخصومات الخاصة بالزبون
+          </h1>
+          <DynamicTable
+            data={customer?.discounts || []}
+            columns={BookingCustomerDiscounts}
+            isLoading={isLoadingCustomer}
+          />
+        </div>
+      )}
+
       {/* Dialogs */}
       <ViewImageDialog
         show={openViewImage}
@@ -495,6 +465,17 @@ const CustomerInfo = () => {
         onSuccess={handleFormSuccess}
         updateCustomerMutation={updateCustomer}
         isUpdating={isUpdating}
+      />
+
+      {/* New Add Discount Dialog */}
+      <AddDiscountDialog
+        open={isAddDiscountDialogOpen}
+        onOpenChange={(isOpen) => setIsAddDiscountDialogOpen(isOpen)}
+        customerId={id}
+        onSuccess={handleDiscountSuccess}
+        addDiscountMutation={addDiscount}
+        isAdding={isAddingDiscount}
+        remainingBalance={customer?.remaining || 0} // Pass remaining balance for validation
       />
       <Toaster />
     </div>

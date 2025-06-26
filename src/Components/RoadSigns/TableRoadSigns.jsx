@@ -42,7 +42,10 @@ const TableRoadSigns = ({ isLoading }) => {
     isCitiesLoading,
     regions,
     isRegionsLoading,
-    setModel
+    setModel ,
+    handleCityChange ,
+    handleRegionChange ,
+
 
   } = useGetRoadSignsByFilter();
 
@@ -50,16 +53,6 @@ const TableRoadSigns = ({ isLoading }) => {
     setModel(id)
   } , [id])
 
-  
-
-  const handleCityChange = (e) => {
-    setCityId(e.target.value);
-    setRegionId(""); // Reset region when city changes
-  };
-
-  const handleRegionChange = (e) => {
-    setRegionId(e.target.value);
-  };
 
   const handleEdit = (roadSign) => {
     setSelectedRoadSign(roadSign);
@@ -88,7 +81,6 @@ const TableRoadSigns = ({ isLoading }) => {
     }
   };
 
-  console.log(roadSigns)
   if (isError) {
     return (
       <div className="text-center p-4 text-red-500">

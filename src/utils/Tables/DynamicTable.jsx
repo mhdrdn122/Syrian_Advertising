@@ -120,7 +120,8 @@ export const DynamicTable = ({
                         <span className="truncate max-w-[150px] text-center sm:max-w-[200px]">
                           {column.format
                             ? column.format(
-                                getNestedValue(row, column.accessor)
+                                getNestedValue(row, column.accessor),
+                                row 
                               )
                             : getNestedValue(row, column.accessor) ?? ""}
                         </span>

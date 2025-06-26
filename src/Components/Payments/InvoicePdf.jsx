@@ -221,7 +221,7 @@ const InvoicePdf = ({
 
             ],
           ]
-        : [["الرصيد المتبقي", "المبلغ المدفوع",  "المبلغ الكلي",  "تاريخ الدفع", "رقم الدفعة"]];
+        : [["الموظف ","الرصيد المتبقي", "المبلغ المدفوع",  "المبلغ الكلي",  "تاريخ الدفع", "رقم الدفعة"]];
 
       // Map payment data to table rows
       const tableData = !showCustomerTable ? customer.payments.map((payment) => [
@@ -235,6 +235,7 @@ const InvoicePdf = ({
         payment.payment_number || "غير متوفر",
 
       ]) : customer.payments.map((payment) => [
+        payment?.user?.full_name || "0.00",
         payment.remaining || "0.00",
         payment.paid || "0.00",
         payment.total || "غير متوفر",

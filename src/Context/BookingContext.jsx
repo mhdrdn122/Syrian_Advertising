@@ -12,6 +12,7 @@ import {
   useUpdateBookingsMutation,
 } from "../RtkQuery/Slice/Booking/BookingApi";
 import { useGetCompanyQuery } from "../RtkQuery/Slice/Auth/AuthApi";
+import { Toaster } from "react-hot-toast";
 
 export const BookingContext = createContext();
 
@@ -77,15 +78,17 @@ export const BookingContextApi = ({ children, bookingId }) => {
           type: parseInt(values.type),
           start_date: values.start_date,
           end_date: values.end_date,
-          roadsigns: selectedSigns.map(({ road_sign_id, booking_faces }) => ({
+          roadsigns: selectedSigns.map(({ road_sign_id, booking_faces  }) => ({
             road_sign_id,
             booking_faces,
+            number_of_reserved_panels:booking_faces,
           })),
           product_type: parseInt(values.product_type),
           notes,
           discount_type: discountValue ? parseInt(discountType) : null,
           value: discountValue ? parseInt(discountValue) : null,
         };
+        console.log(bookingPayload)
 
         if (isEditMode) {
           bookingPayload.id = id;
@@ -130,11 +133,13 @@ export const BookingContextApi = ({ children, bookingId }) => {
       setDiscountType(bookingData.discount_type?.toString() || "1");
       setDiscountValue(bookingData.value?.toString() || "");
       setShowDiscount(!!bookingData.value);
+      console.log(bookingData.roadsigns)
       setSelectedSigns(
         bookingData.roadsigns.map((sign) => ({
           road_sign_id: sign.id,
-          booking_faces: sign.pivot.booking_faces,
-          max_faces: sign.faces_number,
+          booking_faces: sign.pivot?.number_of_reserved_panels,
+          max_faces: sign.panels_number,
+          // panels_number:sign?.total_panels_on_date,
         }))
       );
       setAddedSignIds(new Set(bookingData.roadsigns.map((sign) => sign.id)));
@@ -146,6 +151,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
         },
       });
     }
+    console.log(bookingData)
   }, [bookingData, isEditMode, isLoadingBooking]);
 
   // Set notes for new bookings
@@ -211,7 +217,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
         },
       ]);
       setAddedSignIds(new Set([...addedSignIds, sign.id]));
-      showToast("success", `تم إضافة لوحة إلى السلة`);
+      showToast("success", `تم عنصر إلى السلة`);
     }
   };
 
@@ -242,13 +248,14 @@ export const BookingContextApi = ({ children, bookingId }) => {
     try {
       const payload = {
         product_type: parseInt(formik.values.product_type),
-        roadsigns: selectedSigns.map(({ road_sign_id, booking_faces }) => ({
+        roadsigns: selectedSigns.map(({ road_sign_id, booking_faces  }) => ({
           road_sign_id,
           booking_faces,
         })),
         start_date: formik.values.start_date,
         end_date: formik.values.end_date,
       };
+      console.log(payload)
       const response = await calculateReservation(payload).unwrap();
 
       setCalculationResult(response);
@@ -259,7 +266,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
         }`
       );
     } catch (error) {
-      showToast("error", "فشل في حساب السعر الإجمالي");
+      showToast("error", `${error.data.message}`);
     }
   };
 
@@ -337,6 +344,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
   return (
     <BookingContext.Provider value={contextValue}>
       {children}
+      <Toaster />
     </BookingContext.Provider>
   );
 };

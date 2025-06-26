@@ -113,6 +113,7 @@ export const DialogAddRoadSign = ({ show, handleClose }) => {
       validationSchema={
         faceNumber == 1 ? roadSignValidationSchema1 : roadSignValidationSchema2
       }
+      styles={"overflow-visible"}
       mutationHook={useAddRoadSignMutation}
       initialValues={roadSignInitialValues}
       selectData={selectData}

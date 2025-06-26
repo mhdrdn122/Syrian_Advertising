@@ -1,35 +1,15 @@
-import { BookingType } from "../../../Static/StaticData";
-
-export const BookingCustomerColumns = [
+export const BookingCustomerDiscounts = [
   {
-    header: "من",
-    accessor: "start_date",
-    format: (value) => new Date(value).toLocaleDateString("en-US"),
-    prefixIcon: "mdi:calendar-start",
-    className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
-    priority: 4,
-  },
-
-  {
-    header: "إلى",
-    accessor: "end_date",
-    format: (value) => new Date(value).toLocaleDateString("en-US"),
-    prefixIcon: "mdi:calendar-end",
-    className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
-    priority: 3,
-  },
-
-  {
-    header: "الحالة",
-    accessor: "type",
+    header: "نوع الحسم",
+    accessor: "discount_type",
     prefixIcon: "mdi:tag",
-    format: (value) => BookingType[value] || "غير معروف",
+    format: (value) => (value == 1 ? "قيمة ثابتة" : "نسبة مئوية"),
     className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
     priority: 6,
   },
   {
     header: "القيمة قبل الحسم",
-    accessor: "total_price_befor_discount",
+    accessor: "total",
     format: (value) => parseFloat(value).toFixed(2),
 
     prefixIcon: "mdi:currency-usd",
@@ -53,10 +33,18 @@ export const BookingCustomerColumns = [
   },
   {
     header: "القيمة بعد الحسم",
-    accessor: "total_price",
+    accessor: "remaining",
     format: (value) => parseFloat(value).toFixed(2),
     prefixIcon: "mdi:currency-usd",
     className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
     priority: 6,
+  },
+  {
+    header: "تاريخ الحسم",
+    accessor: "created_at",
+    format: (value) => new Date(value).toLocaleDateString("en-US"),
+    prefixIcon: "mdi:calendar-start",
+    className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
+    priority: 4,
   },
 ];

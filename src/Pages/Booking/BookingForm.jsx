@@ -20,9 +20,12 @@ const BookingContent = () => {
       className="container mx-auto p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen"
     >
       <div className="flex justify-between items-center mb-8">
+        {/* Booking Form Title */}
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
           {isEditMode ? "تعديل الحجز" : "إضافة حجز جديد"}
         </h1>
+
+        {/* Button Add To Cart */}
         <button
           type="button"
           variant="outline"
@@ -48,7 +51,10 @@ const BookingContent = () => {
           onSubmit={formik.handleSubmit}
           className="space-y-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg"
         >
+          {/* Booking Form Inputs */}
           <BookingFields />
+
+          {/* Booking Form Table */}
           <BookingTable />
         </form>
       )}
@@ -60,6 +66,7 @@ const BookingContent = () => {
   );
 };
 
+// The booking form provider provides all the required data for the booking components.
 const BookingForm = ({ bookingId }) => {
   return (
     <BookingContextApi bookingId={bookingId}>

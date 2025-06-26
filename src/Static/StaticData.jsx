@@ -21,8 +21,14 @@ export const typeOptions = [
 export const productTypeOptions = [
   { value: 1, label: "محلي" },
   { value: 2, label: "أجنبي" },
-  { value: 3, label: "كلاهما" },
+  { value: 3, label: "محلي اجنبي" },
 ];
+
+export const statusBookings = {
+  1: "قيد المعالجة",
+  2: "مركب",
+  3: "منتهي",
+};
 
 export const productTypeMap = {
   1: "محلي",
@@ -159,6 +165,13 @@ export const navLinksAdministrationPage = [
     permission: "view-road-signs",
   },
   {
+    to: "roadSignReports",
+    text: " تقرير اللوحات ",
+    mobileText: "تقرير اللوحات",
+    permission: "view-road-signs",
+    
+  },
+  {
     to: "box",
     text: "  الصندوق",
     mobileText: "الصندوق ",
@@ -170,4 +183,21 @@ export const navLinksAdministrationPage = [
     mobileText: "الوسيط ",
     permission: Permissions.ViewBrokers,
   },
+];
+
+
+// Define period options based on number of periods (e.g., 1 period = 28 days, 2 periods = 56 days)
+export const periodOptions = [
+  { value: 1, label: "فترة واحدة (28 يوم)" },
+  { value: 2, label: "2 فترة (56 يوم)" },
+  { value: 3, label: "3 فترة (84 يوم)" },
+  { value: 4, label: "4 فترة (112 يوم)" },
+  { value: 5, label: "5 فترة (140 يوم)" },
+  { value: 6, label: "6 فترة (168 يوم)" },
+  { value: 7, label: "7 فترة (196 يوم)" },
+  { value: 8, label: "8 فترة (224 يوم)" },
+  { value: 9, label: "9 فترة (252 يوم)" },
+  { value: 10, label: "10 فترة (280 يوم)" },
+  { value: 11, label: "11 فترة (308 يوم)" },
+  { value: 12, label: "12 فترة (336 يوم)" },
 ];

@@ -8,6 +8,7 @@ import {
   useGetCitiesQuery,
 } from "../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
 import { useLocation, useNavigate } from "react-router";
+import { showToast } from "../utils/Notifictions/showToast";
 
 const useGetRoadSignsByFilter = () => {
   const [startDate, setStartDate] = useState("");
@@ -23,7 +24,11 @@ const useGetRoadSignsByFilter = () => {
   const { data: cities, isLoading: isCitiesLoading } = useGetCitiesQuery();
   const [
     getActiveRegionsByCity,
-    { data: regions, isLoading: isRegionsLoading , isFetching: isRegionsFetching },
+    {
+      data: regions,
+      isLoading: isRegionsLoading,
+      isFetching: isRegionsFetching,
+    },
   ] = useGetActiveRegionsByCityMutation();
   const { data: getRoadSignsModel, isLoading: isGetRoadSignsModel } =
     useGetRoadSignsModelQuery();
@@ -43,8 +48,11 @@ const useGetRoadSignsByFilter = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    roadSigns?.length == 0
+      ? showToast("error", "لا توجد بيانات في هذا المكان الرجاء اختار مكان آخر")
+      : null;
     roadSigns?.length == 0 && routeBooking != "booking"
-      ? navigate("/dashboard/road_signs")
+      ? setTimeout(() => navigate("/dashboard/road_signs"), 1000)
       : null;
   }, [roadSigns]);
 
@@ -53,6 +61,19 @@ const useGetRoadSignsByFilter = () => {
       getActiveRegionsByCity(cityId);
     }
   }, [cityId, getActiveRegionsByCity]);
+
+  const handleCityChange = (e) => {
+    setCityId(e.target.value);
+    setRegionId("");
+  };
+
+  const handleRegionChange = (e) => {
+    setRegionId(e.target.value);
+  };
+
+  const handleModelChange = (e) => {
+    setModel(e.target.value);
+  };
 
   return {
     startDate,
@@ -76,7 +97,9 @@ const useGetRoadSignsByFilter = () => {
     getRoadSignsModel,
     isGetRoadSignsModel,
     isRoadSignsFetching,
-
+    handleCityChange,
+    handleRegionChange,
+    handleModelChange,
   };
 };
 

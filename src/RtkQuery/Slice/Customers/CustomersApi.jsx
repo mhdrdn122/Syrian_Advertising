@@ -19,6 +19,14 @@ export const CustomersSlice = createApi({
       }),
       invalidatesTags: ["customers"],
     }),
+    addDiscount: builder.mutation({
+      query: (data) => ({
+        url: "discounts",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["customers"],
+    }),
     showOneCustomer: builder.query({
       query: (id) => `customers/${id}`,
       providesTags: ["customers"],
@@ -48,4 +56,5 @@ export const {
   useShowOneCustomerQuery,
   useDeleteCustomerMutation,
   useUpdateCustomerMutation,
+  useAddDiscountMutation,
 } = CustomersSlice;

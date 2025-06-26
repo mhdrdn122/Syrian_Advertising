@@ -11,13 +11,7 @@ import { Link, useLocation } from "react-router"
 import { useAuth } from "../Context/AuthProvider"
 
 export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: Icon
-  }[]
+  items
 }) {
   const { pathname } = useLocation()
   const {hasPermission} =  useAuth()

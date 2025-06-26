@@ -99,6 +99,7 @@ const InvoiceExcel = ({
       } else {
         // Simplified payment details for a single customer
         paymentHeaders = [
+          "الموظف ",
           "الرصيد المتبقي",
           "المبلغ المدفوع",
           "المبلغ الكلي",
@@ -106,6 +107,7 @@ const InvoiceExcel = ({
           "رقم الدفعة",
         ];
         tableData = customer.payments.map((payment) => [
+        payment?.user?.full_name || "0.00",
           payment.remaining || "0.00",
           payment.paid || "0.00",
           payment.total || "غير متوفر",

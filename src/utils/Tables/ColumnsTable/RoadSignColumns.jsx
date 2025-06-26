@@ -44,6 +44,13 @@ export const RoadSignColumns = [
       cellClassName: "text-right font-mono",
       priority: 6,
     },
+     {
+      header: "عدد الوجوه",
+      accessor: "panels_number",
+      prefixIcon: "mdi:package-variant",
+      className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
+      priority: 8,
+    },
     
    
     

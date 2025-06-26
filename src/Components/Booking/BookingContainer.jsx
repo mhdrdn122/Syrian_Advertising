@@ -7,23 +7,15 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
 
+const permissions = {
+  show: Permissions.ViewBookings,
+  edit: Permissions.EditBookings,
+};
+
 const BookingContainer = () => {
   const { data, isLoading } = useGetBookingQuery();
   const navigate = useNavigate();
   const { hasPermission } = useAuth();
-
-  const onShow = (row) => {
-    navigate(`/dashboard/booking/${row.id}`);
-  };
-
-  const onEdit = (row) => {
-    navigate(`/dashboard/booking/edit/${row.id}`);
-  };
-
-    const permissions = {
-        show : Permissions.ViewBookings,
-        edit : Permissions.EditBookings,
-      }
 
   return (
     <div className="p-4 sm:p-6 w-full mx-auto space-y-6 overflow-x-auto">
@@ -46,8 +38,8 @@ const BookingContainer = () => {
         data={data || []}
         columns={BookingColumns}
         isLoading={isLoading}
-        onShow={onShow}
-        onEdit={onEdit}
+        onShow={(row) => navigate(`/dashboard/booking/${row.id}`)}
+        onEdit={(row) => navigate(`/dashboard/booking/edit/${row.id}`)}
         permissions={permissions}
       />
     </div>

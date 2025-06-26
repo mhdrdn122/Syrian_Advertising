@@ -1,4 +1,4 @@
-import { BookingType } from "../../../Static/StaticData";
+import { BookingType, statusBookings } from "../../../Static/StaticData";
 
 export const BookingColumns = [
    {
@@ -32,10 +32,19 @@ export const BookingColumns = [
   
  
   {
-    header: "الحالة",
+    header: "نوع الحجز",
     accessor: "type",
     prefixIcon: "mdi:tag",
     format: (value) => BookingType[value] || "غير معروف",
+    className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
+    priority: 6,
+  },
+
+   {
+    header: "الحالة",
+    accessor: "status",
+    prefixIcon: "mdi:tag",
+    format: (value) => statusBookings[value] || "غير معروف",
     className: "min-w-[80px] sm:min-w-[100px] md:min-w-[120px]",
     priority: 6,
   },

@@ -111,6 +111,7 @@ export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
       mutationHook={useUpdateRoadSignMutation}
       initialValues={transformedInitialValues}
       selectData={selectData}
+      styles={"overflow-visible"}
       onSubmitTransform={onSubmitTransform}
       onFieldChange={(fieldName, value) => {
         if (fieldName === "city_id") {

@@ -1,11 +1,7 @@
 // Columns for Bookings This Week
 export const ReportBookingsColumns = [
   
-   {
-    header: "عدد الأمتار",
-    accessor: "advertising_meters",
-    cellClassName: "text-center",
-  },
+  
  
   {
     header: "عدد الوجوه",

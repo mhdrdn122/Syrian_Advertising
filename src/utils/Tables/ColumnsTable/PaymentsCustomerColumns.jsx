@@ -34,4 +34,11 @@
       className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
       priority: 5,
     },
+    {
+      header: "الموظف",
+      accessor: "user.full_name",
+      prefixIcon: "mdi:account-outline",
+      className: "min-w-[100px] sm:min-w-[120px] md:min-w-[150px]",
+      priority: 5,
+    },
   ];
