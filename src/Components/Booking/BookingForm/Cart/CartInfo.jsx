@@ -6,7 +6,7 @@ const CartInfo = () => {
   const { customers, formik } = useContext(BookingContext);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4   bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
       <div className="flex flex-col">
         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
           الزبون:

@@ -85,7 +85,6 @@ const CustomerFormDialog = ({
         ...(values.is_tracking && values.customer.full_name && { customer: values.customer }),
         ...(values.commercial_registration_number && { commercial_registration_number: values.commercial_registration_number }),
       };
-      console.log(payload)
 
       try {
         if (isEditMode) {
@@ -95,9 +94,8 @@ const CustomerFormDialog = ({
         }
         onSuccess(); 
       } catch (error) {
-        showToast("error", error);
+        showToast("error", error.data?.message || "حدث خطأ ما");
         console.log(error)
-        // يمكنك هنا إضافة منطق لعرض رسالة خطأ للمستخدم
       }
     },
   });

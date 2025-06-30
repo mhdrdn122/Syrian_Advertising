@@ -33,7 +33,6 @@ export const BookingContextApi = ({ children, bookingId }) => {
   const [contractDialog, setContractDialog] = useState(false);
   const [notes, setNotes] = useState("");
   const [queryParams, setQueryParams] = useState({ start_date: "2025-06-30" });
-  
 
   // RTK Query hooks
   const { data: roadSigns, isLoading: isLoadingRoadSigns } =
@@ -48,7 +47,8 @@ export const BookingContextApi = ({ children, bookingId }) => {
     useAddNewBookingMutation();
   const [updateBookings, { isLoading: isLoadingUpdate }] =
     useUpdateBookingsMutation();
-  const [calculateReservation ,{ isLoading:isLoadingCalculateReservation}] = useCalculateReservationMutation();
+  const [calculateReservation, { isLoading: isLoadingCalculateReservation }] =
+    useCalculateReservationMutation();
 
   const { data: company, isFetching: isCompanyFetching } = useGetCompanyQuery();
 
@@ -78,17 +78,16 @@ export const BookingContextApi = ({ children, bookingId }) => {
           type: parseInt(values.type),
           start_date: values.start_date,
           end_date: values.end_date,
-          roadsigns: selectedSigns.map(({ road_sign_id, booking_faces  }) => ({
+          roadsigns: selectedSigns.map(({ road_sign_id, booking_faces }) => ({
             road_sign_id,
             booking_faces,
-            number_of_reserved_panels:booking_faces,
+            number_of_reserved_panels: booking_faces,
           })),
           product_type: parseInt(values.product_type),
           notes,
           discount_type: discountValue ? parseInt(discountType) : null,
           value: discountValue ? parseInt(discountValue) : null,
         };
-        console.log(bookingPayload)
 
         if (isEditMode) {
           bookingPayload.id = id;
@@ -113,7 +112,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
       } catch (error) {
         showToast(
           "error",
-          isEditMode ? "فشل في تعديل الحجز" : "فشل في إضافة الحجز"
+          error.data?.message || "حدث خطأ ما، يرجى المحاولة مرة أخرى"
         );
       }
     },
@@ -133,7 +132,6 @@ export const BookingContextApi = ({ children, bookingId }) => {
       setDiscountType(bookingData.discount_type?.toString() || "1");
       setDiscountValue(bookingData.value?.toString() || "");
       setShowDiscount(!!bookingData.value);
-      console.log(bookingData.roadsigns)
       setSelectedSigns(
         bookingData.roadsigns.map((sign) => ({
           road_sign_id: sign.id,
@@ -151,7 +149,6 @@ export const BookingContextApi = ({ children, bookingId }) => {
         },
       });
     }
-    console.log(bookingData)
   }, [bookingData, isEditMode, isLoadingBooking]);
 
   // Set notes for new bookings
@@ -206,6 +203,38 @@ export const BookingContextApi = ({ children, bookingId }) => {
 
   // Handlers
   const addToCart = (sign) => {
+    // Check for start_date
+    if (!formik.values.start_date) {
+      showToast("error", "يرجى إدخال تاريخ البدء.");
+      return;
+    }
+
+    // Check for end_date
+    if (!formik.values.end_date) {
+      showToast("error", "يرجى إدخال تاريخ الانتهاء.");
+      return;
+    }
+
+    // Check for customer_id
+    if (!formik.values.customer_id) {
+      showToast("error", "يرجى اختيار العميل.");
+      return;
+    }
+
+    // Check for type
+    if (!formik.values.type) {
+      showToast("error", "يرجى إدخال نوع الحجز.");
+      return;
+    }
+
+    // Check for product_type
+    if (!formik.values.product_type) {
+      showToast("error", "يرجى إدخال نوع المنتج.");
+      return;
+    }
+
+    
+
     const existingSign = selectedSigns.find((s) => s.road_sign_id === sign.id);
     if (!existingSign) {
       setSelectedSigns([
@@ -217,7 +246,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
         },
       ]);
       setAddedSignIds(new Set([...addedSignIds, sign.id]));
-      showToast("success", `تم عنصر إلى السلة`);
+      showToast("success", `تم  إضافة عنصر إلى السلة`);
     }
   };
 
@@ -248,14 +277,13 @@ export const BookingContextApi = ({ children, bookingId }) => {
     try {
       const payload = {
         product_type: parseInt(formik.values.product_type),
-        roadsigns: selectedSigns.map(({ road_sign_id, booking_faces  }) => ({
+        roadsigns: selectedSigns.map(({ road_sign_id, booking_faces }) => ({
           road_sign_id,
           booking_faces,
         })),
         start_date: formik.values.start_date,
         end_date: formik.values.end_date,
       };
-      console.log(payload)
       const response = await calculateReservation(payload).unwrap();
 
       setCalculationResult(response);
@@ -338,7 +366,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
     calculateTotal,
     handleDiscountValueChange,
     calculateDiscountedPrice,
-    isLoadingCalculateReservation
+    isLoadingCalculateReservation,
   };
 
   return (

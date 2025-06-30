@@ -19,9 +19,7 @@ const ContractPage = () => {
   // Fetch booking data using RTK Query.
   const { data: getBooking, isSuccess } = useGetOneBookingsQuery(bookingId);
 
-  // Log booking data for debugging purposes.
-  // console.log(getBooking);
-
+ 
   // Prepare contract details for display.
   const contractDetails = {
     firstParty: {
@@ -86,11 +84,11 @@ const ContractPage = () => {
         format: "a4", // Page format.
         orientation: "portrait", // Page orientation.
         putTotalPages: true, // Add "Page X of Y" to the PDF.
-        encryption: {
-          // PDF encryption settings.
-          userPermissions: ["print", "modify"],
-          userPassword: "super",
-        },
+        // encryption: {
+        //   // PDF encryption settings.
+        //   userPermissions: ["print", "modify"],
+        //   userPassword: "super",
+        // },
       },
       pagebreak: {
         // Control page breaks in the PDF.
@@ -258,6 +256,14 @@ const ContractPage = () => {
               </p>
             </div>
           ))}
+
+          <div>
+            إجمالي الأمتار الطباعية :{" "}
+
+          {getBooking?.total_printing_space}
+
+          </div>
+
         </div>
 
         <div>

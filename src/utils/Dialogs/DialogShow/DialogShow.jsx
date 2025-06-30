@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Icon } from '@iconify/react';
-import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { productTypeMap } from '../../../Static/StaticData';
 

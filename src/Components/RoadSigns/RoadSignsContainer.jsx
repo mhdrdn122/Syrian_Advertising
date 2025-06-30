@@ -14,7 +14,7 @@ const RoadSignsContainer = () => {
     return (
       <div className="w-full h-full flex-col flex justify-center items-center">
         <LoadingGet />
-        <p>Loading ... </p>
+        <p>جاري التحميل ... </p>
       </div>
     );
   }

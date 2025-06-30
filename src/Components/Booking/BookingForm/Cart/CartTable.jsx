@@ -30,28 +30,26 @@ const CartTable = () => {
 
           <TableHead className="text-right w-auto">المنطقة</TableHead>
           <TableHead className="text-right w-auto">المكان</TableHead>
-          <TableHead className="text-right w-20">عدد اللوحات</TableHead>
+          <TableHead className="text-right w-20">عدد الأوجه المطلوب </TableHead>
+          <TableHead className="text-right w-20">عدد الوجوه المتاحة </TableHead>
+
           <TableHead className="text-right w-32">أمتار الطباعة</TableHead>
           <TableHead className="text-right w-16">إجراء</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {selectedSigns.map((sign) => {
-          const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
-  console.log(roadSign)
-          
+          const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);          
           const faces_max = roadSign
             ? isEditMode
-              ? roadSign.panels_number -
+              ? roadSign?.panels_number -
                 roadSign.total_panels_on_date +
                 (bookingData?.roadsigns.find(
                   (rs) => rs.id === sign.road_sign_id
                 )?.pivot.number_of_reserved_panels || 0)
-              : roadSign.panels_number - roadSign.total_panels_on_date
+              : roadSign?.panels_number - roadSign.total_panels_on_date
             : null;
-            {
-              console.log(selectedSigns)
-            }
+           
           return (
             <TableRow
               key={sign.road_sign_id}
@@ -77,6 +75,9 @@ const CartTable = () => {
                   }
                   className="w-16 text-right"
                 />
+              </TableCell>
+              <TableCell>
+                {(roadSign?.panels_number - roadSign.total_panels_on_date ) || "0" }
               </TableCell>
               <TableCell>
                 {roadSign?.template?.printing_space || "غير متوفر"}

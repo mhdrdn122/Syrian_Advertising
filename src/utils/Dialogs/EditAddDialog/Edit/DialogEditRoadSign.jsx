@@ -2,8 +2,7 @@ import {
   useGetTemplateProductsQuery,
   useUpdateRoadSignMutation,
 } from "../../../../RtkQuery/Slice/RoadSings/RoadSingsApi";
-import {  roadSignFields1, roadSignFields2, roadSignFieldsEdit } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignFields";
-import {  roadSignValidationSchema1, roadSignValidationSchema2, roadSignValidationSchemaEdit } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
+import {  roadSignFieldsEdit } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignFields";
 import {
   useGetActiveRegionsByCityMutation,
   useGetCitiesQuery,
@@ -11,6 +10,7 @@ import {
 import DynamicDialog from "../DynamicDialog";
 import { isAvailableRoadSign } from "../../../../Static/StaticData";
 import { useEffect, useMemo, useState } from "react";
+import { roadSignValidationSchemaEdit } from "../../Data/DynamicDialogConfiguration/RoadSignDialogConfiguration/roadSignValidationSchema";
 
 export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
   const { data: citiesData, isSuccess: isCitiesSuccess } = useGetCitiesQuery();
@@ -111,7 +111,6 @@ export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
       mutationHook={useUpdateRoadSignMutation}
       initialValues={transformedInitialValues}
       selectData={selectData}
-      styles={"overflow-visible"}
       onSubmitTransform={onSubmitTransform}
       onFieldChange={(fieldName, value) => {
         if (fieldName === "city_id") {

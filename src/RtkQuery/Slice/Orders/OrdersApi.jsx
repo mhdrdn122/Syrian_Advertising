@@ -25,6 +25,9 @@ export const OrdersSlice = createApi({
           if (params?.action_date) {
             queryParams.append("action_date", params.action_date);
           }
+          if (params?.status) {
+            queryParams.append("status", params.status);
+          }
           return `/orders?${queryParams.toString()}`;
         },
         providesTags: ["orders"],

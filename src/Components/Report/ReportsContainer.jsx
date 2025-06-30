@@ -126,7 +126,7 @@ const ReportsContainer = () => {
         {/* customer-booking This Date Tables */}
         <TabsContent value="customer-booking">
           <div className="my-3 text-center text-red-600 text-[20px]">
-            <span>عدد الأمتار الإجمالي : </span>
+            <span> عدد الأمتار الإعلانية الإجمالي : </span>
             <span>{data?.total_advertising_space_all_customers} </span>
           </div>
 
@@ -154,6 +154,10 @@ const ReportsContainer = () => {
 
         {/* model-booking This Date Tables */}
         <TabsContent value="model-booking">
+          <div className="my-3 text-center text-red-600 text-[20px]">
+            <span> عدد الأمتار الإعلانية الإجمالي : </span>
+            <span>{data?.total_advertising_space_all_customers} </span>
+          </div>
           <DynamicTable
             data={data?.globalModelCounts || []}
             columns={[
@@ -163,8 +167,18 @@ const ReportsContainer = () => {
                 cellClassName: "text-center",
               },
               {
-                header: "عدد النماذج",
-                accessor: "count",
+                header: "عدد اللوحات المحجوزة من هذا النموذج",
+                accessor: "reserved_panels",
+                cellClassName: "text-center",
+              },
+              {
+                header: "عدد اللوحات المتاحة من هذا النموذج",
+                accessor: "available_panels",
+                cellClassName: "text-center",
+              },
+              {
+                header: "عدد اللوحات الكلي من هذا النموذج",
+                accessor: "total_panels",
                 cellClassName: "text-center",
               },
             ]}

@@ -165,3 +165,14 @@ main{
 td div{
   display: inline-flex !important;
 }
+
+
+#radix-«r4»{
+  max-width: 900px !important;
+    width: 90%;
+} 
+
+ /* #radix-«r8»{
+   max-width: 1900px !important;
+    width: 80% !important;
+} */

@@ -145,6 +145,7 @@ const BookingFields = () => {
         <Input
           type="date"
           name="start_date" // Explicitly set name
+          
           onChange={handleStartDateChange} // Use custom handler for start date
           onBlur={formik.handleBlur} // Keep Formik's onBlur for validation
           value={formik.values.start_date || ""} // Explicitly set value from Formik state
@@ -197,7 +198,7 @@ const BookingFields = () => {
           // if manual changes are allowed and should override auto-calculation.
           {...formik.getFieldProps("end_date")}
           className="w-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-right"
-          readOnly // Consider making it readOnly if it's always auto-calculated
+          // readOnly // Consider making it readOnly if it's always auto-calculated
         />
         {formik.touched.end_date && formik.errors.end_date && (
           <p className="text-sm text-red-500 mt-1 text-right">

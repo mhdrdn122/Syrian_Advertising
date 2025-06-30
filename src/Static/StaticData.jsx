@@ -160,14 +160,14 @@ export const navLinksAdministrationPage = [
 
   {
     to: "report",
-    text: " التقرير الاسبوعي",
-    mobileText: "التقرير الاسبوعي",
+    text: " تقرير لوحات الزبائن",
+    mobileText: "التقرير الزبائن",
     permission: "view-road-signs",
   },
   {
     to: "roadSignReports",
-    text: " تقرير اللوحات ",
-    mobileText: "تقرير اللوحات",
+    text: "  التقرير الاسبوعي",
+    mobileText: " التقرير الاسبوعي",
     permission: "view-road-signs",
     
   },

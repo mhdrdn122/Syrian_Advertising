@@ -136,14 +136,14 @@ const BookingTable = () => {
           <TableHeader>
             <TableRow className="bg-gray-100 dark:bg-gray-800">
               <TableHead className="text-right">نموذج</TableHead>
-              <TableHead className="text-right">عدد اللوحات</TableHead>
-              <TableHead className="text-right">عدد اللوحات المحجوزة</TableHead>
+              <TableHead className="text-right">عدد الوجوه</TableHead>
+              <TableHead className="text-right">عدد الوجوه المحجوزة</TableHead>
               <TableHead className="text-right">عدد الأمتار</TableHead>
               <TableHead className="text-right">القياس</TableHead>
               <TableHead className="text-right">المنطقة</TableHead>
               <TableHead className="text-right">مكان التموضع</TableHead>
               <TableHead className="text-right">الاتجاه</TableHead>
-              <TableHead className="text-right">اللوحات المتاحة</TableHead>
+              <TableHead className="text-right">الوجوه المتاحة</TableHead>
               <TableHead className="text-right">إجراء</TableHead>
             </TableRow>
           </TableHeader>

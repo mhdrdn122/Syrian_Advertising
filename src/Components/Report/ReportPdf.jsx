@@ -125,13 +125,14 @@ export const ReportPdf = ({
       currentY += 10;
 
       const modelSummaryHeaders = [
-        ["المساحة الإعلانية الإجمالية", "العدد", "النموذج"],
+        ["عدد اللوحات الكلي من هذا النموذج","عدد اللوحات المتاحة من هذا النموذج", "عدد اللوحات المحجوزة من هذا النموذج", "النموذج"],
       ];
 
       const modelSummaryData = globalModelCounts.map((model) => [
-        model.total_advertising_space || "0.00",
-        model.count || "0",
-        model.model || "غير متوفر",
+        model?.total_panels || "0.00",
+        model?.available_panels || "0.00",
+        model?.reserved_panels || "0",
+        model?.model || "غير متوفر",
       ]);
 
       autoTable(doc, {

@@ -28,26 +28,26 @@ const CartDialog = () => {
   } = useContext(BookingContext);
 
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog dir="rtl" open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent
         dir="rtl"
-        className="w-full max-w-[90vw] max-w-4xl max-h-[90vh] dialog-content overflow-auto p-6"
+        className="w-full  max-h-[90vh] dialog-content overflow-auto p-6"
       >
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-right">
             سلة الحجز
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-6">
+        <div  className="space-y-6 w-[100%] max-w-[70vw]  md:max-w-[100vw]  ">
           <CartInfo />
 
           {calculationResult && <CalculationResult />}
 
-          <div className="rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="rounded-lg  shadow-sm border border-gray-200 dark:border-gray-700">
             <CartTable />
           </div>
         </div>
-        <DialogFooter className="flex justify-between mt-6 flex-wrap gap-2">
+        <DialogFooter  className="flex  mt-6 flex-wrap gap-2">
           <Button
             type="button"
             onClick={calculateTotal}

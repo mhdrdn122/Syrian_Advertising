@@ -64,9 +64,9 @@ const InvoicePdf = ({
       const customerData = [
         [
           customer?.remaining || "0.00",
-          customer?.total_paid || "0.00",
+          customer?.total_paid.toFixed(2) || "0.00",
 
-          customer?.total || "0.00",
+          customer?.total.toFixed(2) || "0.00",
           // new Date().toLocaleDateString("en-US"),
           customer.phone_number || "غير متوفر",
           customer.company_name || "غير متوفر",
@@ -148,8 +148,8 @@ const InvoicePdf = ({
 
       const customerData = customer?.map((c) => [
         c?.remaining || "0.00",
-        c?.total_paid || "0.00",
-        c?.total || "0.00",
+        c?.total_paid.toFixed(2) || "0.00",
+        c?.total.toFixed(2) || "0.00",
 
         c?.address,
         c?.phone_number || "غير متوفر",
@@ -225,10 +225,10 @@ const InvoicePdf = ({
 
       // Map payment data to table rows
       const tableData = !showCustomerTable ? customer.payments.map((payment) => [
-        payment.remaining || "0.00",
-        payment.paid || "0.00",
+        payment.remaining.toFixed(2) || "0.00",
+        payment.paid.toFixed(2) || "0.00",
         payment.date || "غير متوفر",
-        payment.total || "غير متوفر",
+        payment.total.toFixed(2) || "غير متوفر",
         payment?.user?.full_name || customer?.phone_number || "غير متوفر",
         payment?.customer?.phone_number || customer?.phone_number || "غير متوفر",
         payment?.customer?.full_name || customer?.full_name || "غير متوفر",
@@ -236,9 +236,9 @@ const InvoicePdf = ({
 
       ]) : customer.payments.map((payment) => [
         payment?.user?.full_name || "0.00",
-        payment.remaining || "0.00",
-        payment.paid || "0.00",
-        payment.total || "غير متوفر",
+        payment.remaining.toFixed(2) || "0.00",
+        payment.paid.toFixed(2) || "0.00",
+        payment.total.toFixed(2) || "غير متوفر",
         payment.date || "غير متوفر",
         payment.payment_number || "غير متوفر",
       ])
