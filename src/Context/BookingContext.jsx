@@ -78,11 +78,15 @@ export const BookingContextApi = ({ children, bookingId }) => {
           type: parseInt(values.type),
           start_date: values.start_date,
           end_date: values.end_date,
-          roadsigns: selectedSigns.map(({ road_sign_id, booking_faces }) => ({
-            road_sign_id,
-            booking_faces,
-            number_of_reserved_panels: booking_faces,
-          })),
+          roadsigns: selectedSigns.flatMap((sign) =>
+            sign.dateRanges.map((range) => ({
+              road_sign_id: sign.road_sign_id,
+              booking_faces: range.booking_faces,
+              number_of_reserved_panels: range.booking_faces,
+              start_date: range.startDate,
+              end_date: range.endDate,
+            }))
+          ),
           product_type: parseInt(values.product_type),
           notes,
           discount_type: discountValue ? parseInt(discountType) : null,
@@ -132,15 +136,25 @@ export const BookingContextApi = ({ children, bookingId }) => {
       setDiscountType(bookingData.discount_type?.toString() || "1");
       setDiscountValue(bookingData.value?.toString() || "");
       setShowDiscount(!!bookingData.value);
-      setSelectedSigns(
-        bookingData.roadsigns.map((sign) => ({
+
+      // تجميع التواريخ حسب road_sign_id
+      const signsMap = new Map();
+      bookingData.roadsigns.forEach((sign) => {
+        const existingSign = signsMap.get(sign.id) || {
           road_sign_id: sign.id,
-          booking_faces: sign.pivot?.number_of_reserved_panels,
           max_faces: sign.panels_number,
-          // panels_number:sign?.total_panels_on_date,
-        }))
-      );
-      setAddedSignIds(new Set(bookingData.roadsigns.map((sign) => sign.id)));
+          dateRanges: [],
+        };
+        existingSign.dateRanges.push({
+          startDate: sign.pivot.start_date,
+          endDate: sign.pivot.end_date,
+          booking_faces: sign.pivot.number_of_reserved_panels,
+        });
+        signsMap.set(sign.id, existingSign);
+      });
+
+      setSelectedSigns(Array.from(signsMap.values()));
+      setAddedSignIds(new Set(signsMap.keys()));
       setCalculationResult({
         price_per_period: bookingData?.total_price,
         amount: {
@@ -194,7 +208,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
     }
   }, [roadSigns]);
 
-  //Initial value for the notes field in case of addition booking
+  // Initial value for the notes field in case of addition booking
   useEffect(() => {
     if (!isEditMode) {
       setNotes(company?.contract_note);
@@ -233,54 +247,112 @@ export const BookingContextApi = ({ children, bookingId }) => {
       return;
     }
 
-    
-
     const existingSign = selectedSigns.find((s) => s.road_sign_id === sign.id);
-    if (!existingSign) {
+    if (existingSign) {
+       const newDateRanges = sign.customDateRanges
+        ? [...existingSign.dateRanges, ...sign.customDateRanges]
+        : [...existingSign.dateRanges, { 
+            startDate: formik.values.start_date, 
+            endDate: formik.values.end_date, 
+            booking_faces: 1 
+          }];
+
+      setSelectedSigns(
+        selectedSigns.map((s) =>
+          s.road_sign_id === sign.id
+            ? { ...s, dateRanges: newDateRanges }
+            : s
+        )
+      );
+      showToast("success", `تم إضافة لوحة في تواريخ جديدة  `);
+    } else {
+      const dateRanges = sign.customDateRanges
+        ? sign.customDateRanges
+        : [{ 
+            startDate: formik.values.start_date, 
+            endDate: formik.values.end_date, 
+            booking_faces: 1 
+          }];
+
       setSelectedSigns([
         ...selectedSigns,
         {
           road_sign_id: sign.id,
-          booking_faces: 1,
-          max_faces: sign.faces_number,
+          max_faces: sign.panels_number,
+          dateRanges,
         },
       ]);
       setAddedSignIds(new Set([...addedSignIds, sign.id]));
-      showToast("success", `تم  إضافة عنصر إلى السلة`);
+      showToast("success", `تم إضافة عنصر إلى السلة`);
     }
   };
 
-  const updateSignFaces = (road_sign_id, value) => {
+  const updateSignFaces = (road_sign_id, rangeIndex, value) => {
     setSelectedSigns(
       selectedSigns.map((sign) =>
         sign.road_sign_id === road_sign_id
-          ? { ...sign, booking_faces: parseInt(value) }
+          ? {
+              ...sign,
+              dateRanges: sign.dateRanges.map((range, index) =>
+                index === rangeIndex
+                  ? { ...range, booking_faces: parseInt(value) || 1 }
+                  : range
+              ),
+            }
           : sign
       )
     );
   };
 
-  const removeFromCart = (road_sign_id) => {
-    setSelectedSigns(
-      selectedSigns.filter((sign) => sign.road_sign_id !== road_sign_id)
-    );
-    setAddedSignIds(
-      new Set([...addedSignIds].filter((id) => id !== road_sign_id))
-    );
+  const removeFromCart = (road_sign_id, rangeIndex = null) => {
+    if (rangeIndex !== null) {
+      setSelectedSigns(
+        selectedSigns.map((sign) =>
+          sign.road_sign_id === road_sign_id
+            ? {
+                ...sign,
+                dateRanges: sign.dateRanges.filter((_, index) => index !== rangeIndex),
+              }
+            : sign
+        ).filter((sign) => sign.dateRanges.length > 0)
+      );
+      if (
+        selectedSigns.find((sign) => sign.road_sign_id === road_sign_id)?.dateRanges
+          .length === 1
+      ) {
+        setAddedSignIds(
+          new Set([...addedSignIds].filter((id) => id !== road_sign_id))
+        );
+      }
+      showToast("success", "تم الإزالة من السلة");
+    }
+     else {
+      setSelectedSigns(
+        selectedSigns.filter((sign) => sign.road_sign_id !== road_sign_id)
+      );
+      setAddedSignIds(
+        new Set([...addedSignIds].filter((id) => id !== road_sign_id))
+      );
+      showToast("success", "تم إزالة اللوحة من السلة");
+    }
     setCalculationResult(null);
     setShowDiscount(false);
     setDiscountValue("");
-    showToast("success", "تم إزالة اللوحة من السلة");
   };
 
   const calculateTotal = async () => {
     try {
       const payload = {
         product_type: parseInt(formik.values.product_type),
-        roadsigns: selectedSigns.map(({ road_sign_id, booking_faces }) => ({
-          road_sign_id,
-          booking_faces,
-        })),
+        roadsigns: selectedSigns.flatMap((sign) =>
+          sign.dateRanges.map((range) => ({
+            road_sign_id: sign.road_sign_id,
+            booking_faces: range.booking_faces,
+            start_date: range.startDate,
+            end_date: range.endDate,
+            number_of_reserved_panels:range?.booking_faces
+          }))
+        ),
         start_date: formik.values.start_date,
         end_date: formik.values.end_date,
       };
@@ -311,7 +383,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
       if (value <= 100) {
         setDiscountValue(value);
       } else {
-        setDiscountValue(calculationResult?.price_per_period);
+        setDiscountValue(100);
         showToast("error", "قيمة الحسم لا يمكن أن تتجاوز 100%");
       }
     }

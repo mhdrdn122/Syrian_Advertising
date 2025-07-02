@@ -187,6 +187,13 @@ const ContractPage = () => {
                   عدد الأوجه
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
+                   من تاريخ
+                </th>
+                <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
+                  الى تاريخ
+                </th>
+
+                <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
                   المدة الإعلانية (بالايام)
                 </th>
                 <th style={{ ...styles.adTableThTd, ...styles.adTableTh }}>
@@ -202,7 +209,10 @@ const ContractPage = () => {
                   <td style={styles.adTableThTd}>{ad?.place}</td>
                   <td style={styles.adTableThTd}>{ad?.directions}</td>
                   <td style={styles.adTableThTd}>{ad?.pivot.booking_faces} وجه اعلاني</td>
-                  <td style={styles.adTableThTd}>{getBooking?.duration_of_days} يوم</td>
+                  <td style={styles.adTableThTd}>{ad?.pivot.start_date}  </td>
+                  <td style={styles.adTableThTd}>{ad?.pivot.end_date}  </td>
+
+                  <td style={styles.adTableThTd}>{ad?.pivot.days_of_reservation} يوم</td>
                   <td style={styles.adTableThTd}>
                   
                     {ad?.pivot.total_faces_price}

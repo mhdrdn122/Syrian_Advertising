@@ -118,7 +118,7 @@ export const DialogEditRoadSign = ({ show, handleClose, initData }) => {
         }
        
       }}
-      styles={"overflow-visible"}
+      // styles={"overflow-visible"}
     />
   );
 };

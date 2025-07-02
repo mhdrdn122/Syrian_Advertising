@@ -1,1 +1,1 @@
-export const BASE_URL = "https://road.levantmenu.ae/api" 
+export const BASE_URL = "https://9386-169-150-196-105.ngrok-free.app/api" 
