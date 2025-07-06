@@ -20,113 +20,150 @@ import { Loader, Loader2Icon } from "lucide-react";
 import { Permissions } from "../../Static/StaticData";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HistoryOrdersColumns } from "../../utils/Tables/ColumnsTable/HistoryOrdersColumns";
+import useMangeOrders from "../../hooks/useMangeOrders";
 
 const OrdersContainer = () => {
-  const [activeTab, setActiveTab] = useState("orders");
 
-  const [orderType, setOrderType] = useState("");
-  const [cityId, setCityId] = useState("");
-  const [regionId, setRegionId] = useState("");
-  const [actionDate, setActionDate] = useState("");
-  const [regions, setRegions] = useState([]);
+  // const [activeTab, setActiveTab] = useState("orders");
 
-  const { data: cities, isLoading: isCitiesLoading } = useGetCitiesQuery();
-  const [getActiveRegionsByCity] = useGetActiveRegionsByCityMutation();
+  // const [orderType, setOrderType] = useState("");
+  // const [cityId, setCityId] = useState("");
+  // const [regionId, setRegionId] = useState("");
+  // const [actionDate, setActionDate] = useState("");
+  // const [regions, setRegions] = useState([]);
 
-  const queryParams = {
-    ...(orderType === "both" && { type: [3] }),
-    ...(orderType === "release" && { type: [1] }),
-    ...(orderType === "installation" && { type: [2] }),
-    ...(cityId && { city_id: cityId }),
-    ...(regionId && { region_id: regionId }),
-    ...(actionDate && { action_date: actionDate }),
-    ...( { status: false }),
-  };
+  // const { data: cities, isLoading: isCitiesLoading } = useGetCitiesQuery();
+  // const [getActiveRegionsByCity] = useGetActiveRegionsByCityMutation();
 
-  const { data, isLoading, isFetching } = useGetOrdersQuery(queryParams, {
-    refetchOnMountOrArgChange: true,
-  });
+  // const queryParams = {
+  //   ...(orderType === "both" && { type: [3] }),
+  //   ...(orderType === "release" && { type: [1] }),
+  //   ...(orderType === "installation" && { type: [2] }),
+  //   ...(cityId && { city_id: cityId }),
+  //   ...(regionId && { region_id: regionId }),
+  //   ...(actionDate && { action_date: actionDate }),
+  //   ...( { status: false }),
+  // };
 
-  const {
-    data: history,
-    isLoading: isLoadingHistory,
-    isFetching: isFetchingHistory,
-  } = useGetOrdersQuery(
-    {
-      status: true,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  const [confirmOrder, { isLoading: iLoadingConfirm }] =
-    useConfirmOneOrderMutation();
+  // const { data, isLoading, isFetching } = useGetOrdersQuery(queryParams, {
+  //   refetchOnMountOrArgChange: true,
+  // });
 
-  const [openShow, setOpenShow] = useState(false);
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [isConfirmAction, setIsConfirmAction] = useState(true);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  // const {
+  //   data: history,
+  //   isLoading: isLoadingHistory,
+  //   isFetching: isFetchingHistory,
+  // } = useGetOrdersQuery(
+  //   {
+  //     status: true,
+  //   },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //   }
+  // );
+  // const [confirmOrder, { isLoading: iLoadingConfirm }] =
+  //   useConfirmOneOrderMutation();
 
-  // Fetch regions when city changes
-  useEffect(() => {
-    const fetchRegions = async () => {
-      if (cityId) {
-        try {
-          const response = await getActiveRegionsByCity(cityId).unwrap();
-          setRegions(response || []);
-          setRegionId(""); // Reset region when city changes
-        } catch (error) {
-          showToast("error", "فشل في جلب المناطق");
-        }
-      } else {
-        setRegions([]);
-        setRegionId("");
-      }
-    };
-    fetchRegions();
-  }, [cityId, getActiveRegionsByCity]);
+  // const [openShow, setOpenShow] = useState(false);
+  // const [openConfirm, setOpenConfirm] = useState(false);
+  // const [openEdit, setOpenEdit] = useState(false);
+  // const [isConfirmAction, setIsConfirmAction] = useState(true);
+  // const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const handleEdit = (order) => {
-    setSelectedOrder(order);
-    setOpenEdit(true);
-  };
+  // // Fetch regions when city changes
+  // useEffect(() => {
+  //   const fetchRegions = async () => {
+  //     if (cityId) {
+  //       try {
+  //         const response = await getActiveRegionsByCity(cityId).unwrap();
+  //         setRegions(response || []);
+  //         setRegionId(""); // Reset region when city changes
+  //       } catch (error) {
+  //         showToast("error", "فشل في جلب المناطق");
+  //       }
+  //     } else {
+  //       setRegions([]);
+  //       setRegionId("");
+  //     }
+  //   };
+  //   fetchRegions();
+  // }, [cityId, getActiveRegionsByCity]);
 
-  const handleShow = (order) => {
-    setSelectedOrder(order);
-    setOpenShow(true);
-  };
+  // const handleEdit = (order) => {
+  //   setSelectedOrder(order);
+  //   setOpenEdit(true);
+  // };
 
-  const handleConfirmOrUnconfirm = async () => {
-    try {
-      const status = isConfirmAction ? 1 : 0;
-      await confirmOrder({ status, id: selectedOrder.id }).unwrap();
-      showToast(
-        "success",
-        isConfirmAction ? "تم تأكيد الطلب بنجاح" : "تم إلغاء تأكيد الطلب بنجاح"
-      );
-    } catch (err) {
-      showToast(
-        "error",
-        `حدث خطأ أثناء ${isConfirmAction ? "تأكيد" : "إلغاء تأكيد"} الطلب: ${
-          err.data?.message || "خطأ غير معروف"
-        }`
-      );
-    }
-    setOpenConfirm(false);
-  };
+  // const handleShow = (order) => {
+  //   setSelectedOrder(order);
+  //   setOpenShow(true);
+  // };
 
-  const onConfirmOrder = (row) => {
-    setSelectedOrder(row);
-    setIsConfirmAction(true);
-    setOpenConfirm(true);
-  };
+  // const handleConfirmOrUnconfirm = async () => {
+  //   try {
+  //     const status = isConfirmAction ? 1 : 0;
+  //     await confirmOrder({ status, id: selectedOrder.id }).unwrap();
+  //     showToast(
+  //       "success",
+  //       isConfirmAction ? "تم تأكيد الطلب بنجاح" : "تم إلغاء تأكيد الطلب بنجاح"
+  //     );
+  //   } catch (err) {
+  //     showToast(
+  //       "error",
+  //       `حدث خطأ أثناء ${isConfirmAction ? "تأكيد" : "إلغاء تأكيد"} الطلب: ${
+  //         err.data?.message || "خطأ غير معروف"
+  //       }`
+  //     );
+  //   }
+  //   setOpenConfirm(false);
+  // };
 
-  const onUnconfirmOrder = (row) => {
-    setSelectedOrder(row);
-    setIsConfirmAction(false);
-    setOpenConfirm(true);
-  };
+  // const onConfirmOrder = (row) => {
+  //   setSelectedOrder(row);
+  //   setIsConfirmAction(true);
+  //   setOpenConfirm(true);
+  // };
+
+  // const onUnconfirmOrder = (row) => {
+  //   setSelectedOrder(row);
+  //   setIsConfirmAction(false);
+  //   setOpenConfirm(true);
+  // };
+
+  const 
+        {
+          setActiveTab , 
+          orderType , 
+          setOrderType , 
+          cityId ,
+          setCityId ,
+          regionId , 
+          setRegionId ,
+          actionDate ,
+          setActionDate ,
+          regions ,
+           cities ,
+          isCitiesLoading ,
+          data ,
+          isLoading ,
+          isFetching ,
+          history ,
+          isFetchingHistory ,
+          iLoadingConfirm ,
+          openShow ,
+          setOpenShow ,
+          openConfirm ,
+          setOpenConfirm ,
+          openEdit ,
+          setOpenEdit ,
+          isConfirmAction ,
+          selectedOrder ,
+          setSelectedOrder ,
+          handleEdit , 
+          handleShow , 
+          handleConfirmOrUnconfirm ,
+          onConfirmOrder ,
+        } = useMangeOrders()
 
   // Only show loading on initial load or when cities are loading
   if (isLoading || isCitiesLoading) {

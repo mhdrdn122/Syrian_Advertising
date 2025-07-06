@@ -24,7 +24,9 @@ export const DynamicTable = ({
   columns,
   isLoading,
   onEdit,
+  onEditBooking,
   onDelete,
+  onDeleteBooking,
   onShow,
   onConfirmOrder,
   onUnconfirmOrder,
@@ -121,7 +123,7 @@ export const DynamicTable = ({
                           {column.format
                             ? column.format(
                                 getNestedValue(row, column.accessor),
-                                row 
+                                row
                               )
                             : getNestedValue(row, column.accessor) ?? ""}
                         </span>
@@ -147,7 +149,7 @@ export const DynamicTable = ({
                         )}
                         {(onConfirmOrder || onUnconfirmOrder) && (
                           <>
-                            {(row.status === 0 || true) &&
+                            {(row?.status === 0 || row?.is_received === 0 ) &&
                               onConfirmOrder &&
                               hasPermission(permissions?.confirm) && (
                                 <Button
@@ -162,7 +164,7 @@ export const DynamicTable = ({
                                   />
                                 </Button>
                               )}
-                            {row.status === 1 &&
+                            {(row.status === 1 || row?.status === 2) &&
                               onUnconfirmOrder &&
                               hasPermission(permissions?.unConfirm) && (
                                 <Button
@@ -179,7 +181,7 @@ export const DynamicTable = ({
                               )}
                           </>
                         )}
-                        {onEdit && hasPermission(permissions?.edit) && (
+                        {onEdit  && hasPermission(permissions?.edit) && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -189,6 +191,23 @@ export const DynamicTable = ({
                             <Icon icon="mdi:pencil" className="text-primary" />
                           </Button>
                         )}
+
+                        {onEditBooking &&
+                          hasPermission(permissions?.edit) &&
+                          row?.status == 1 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => onEditBooking(row)}
+                              className="h-7 w-7 p-0"
+                            >
+                              <Icon
+                                icon="mdi:pencil"
+                                className="text-primary"
+                              />
+                            </Button>
+                          )}
+
                         {onDelete && hasPermission(permissions?.delete) && (
                           <Button
                             variant="destructive"
@@ -199,6 +218,19 @@ export const DynamicTable = ({
                             <Icon icon="mdi:trash" />
                           </Button>
                         )}
+
+                        {onDeleteBooking &&
+                          hasPermission(permissions?.delete) &&
+                          row?.status == 1  && (
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => onDeleteBooking(row)}
+                              className="h-7 w-7 p-0"
+                            >
+                              <Icon icon="mdi:trash" />
+                            </Button>
+                          )}
                       </div>
                     </TableCell>
                   )}

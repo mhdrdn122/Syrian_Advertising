@@ -21,7 +21,7 @@ export const HistoryOrdersColumns = [
       header: "تاريخ الفك أو التركيب",
       accessor: "action_date",
       prefixIcon: "mdi:calendar",
-      format: (value) => new Date(value).toLocaleDateString("en-US"),
+      // format: (value) => new Date(value).toLocaleDateString("en-US"),
       className: "min-w-[120px]",
       priority: 5,
     },

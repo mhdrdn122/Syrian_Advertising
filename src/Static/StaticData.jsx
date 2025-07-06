@@ -28,6 +28,8 @@ export const statusBookings = {
   1: "قيد المعالجة",
   2: "مركب",
   3: "منتهي",
+  4: "ملغى",
+
 };
 
 export const productTypeMap = {
@@ -61,12 +63,16 @@ export const Permissions = {
   DeleteRoadSigns: "delete-road-signs",
   DeleteTemplates: "delete-templates",
   DeleteUsers: "delete-users",
+  DeleteBookings: "delete-bookings",
+  DeletePayments: "delete-payments",
+
+
 
   EditBookings: "edit-bookings",
   EditBrokers: "edit-brokers",
   EditCities: "edit-cities",
   EditCustomers: "edit-customers",
-  EditOrders: "edit-orders", //
+  EditOrders: "edit-orders", 
   EditPayments: "edit-payments",
   EditRegions: "edit-regions",
   EditRoadSigns: "edit-road-signs",

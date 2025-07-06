@@ -1,81 +1,43 @@
-import { useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import HeaderComponent from "../../utils/HeaderComponent";
 import { PaymentsColumns } from "../../utils/Tables/ColumnsTable/PaymentsColumns";
 import { DialogAddPayments } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddPayments";
-import {
-  useConfirmOnePaymentMutation,
-  useGetPaymentsQuery,
-} from "../../RtkQuery/Slice/Payments/PaymentsApi";
-import { ViewImageDialog } from "./ViewImageDialog";
 import InvoicePdf from "./InvoicePdf";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
-import { showToast } from "../../utils/Notifictions/showToast";
-import { Permissions } from "../../Static/StaticData";
+ import { Permissions } from "../../Static/StaticData";
 import InvoiceExcel from "./InvoiceExcel";
+import useMangePayments from "../../hooks/useMangePayments";
 
 const PaymentsContainer = () => {
-  const [openAdd, setOpenAdd] = useState(false);
-  const [openViewImage, setOpenViewImage] = useState(false);
-  const [confirmPayment, { isLoading: isLoadingConfirm }] =
-    useConfirmOnePaymentMutation();
 
-  const [selectedPayment, setSelectedPayment] = useState(null);
-  const { data: payments, isLoading: isLoadingPayments } =
-    useGetPaymentsQuery();
-  const {
-    data: paymentIsNotReceived,
-    isLoading: isLoadingPaymentsNotReceived,
-  } = useGetPaymentsQuery({ is_received: false });
+  const {openAdd,
+    setOpenAdd, 
+    openDelete,
+    setOpenDelete,
+     isLoadingConfirm,
+    payments,
+    isFetchingPayments,
+    paymentIsReceived,
+    isFetchingPaymentsReceived,
+    setActiveTab,
+    openConfirm,
+    setOpenConfirm,
+    onShow,
+    onConfirmPayment,
+    handleConfirm,
+     isLoadingDelete,
+    handleDelete,
+    onConfirmDelete,
+    isFetchingPaymentsNotReceived,
+    paymentIsNotReceived,
+    dataInvoicePdf ,
+    permissions
+} =  useMangePayments()
 
-  const { data: paymentIsReceived, isLoading: isLoadingPaymentsReceived } =
-    useGetPaymentsQuery({ is_received: true });
-
-
-  const [activeTab, setActiveTab] = useState("payments");
-
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [isConfirmAction, setIsConfirmAction] = useState(true);
-
-  const onShow = (row) => {
-    setSelectedPayment(row);
-    setOpenViewImage(true);
-  };
+  
 
  
-  const onConfirmPayment = (row) => {
-    setSelectedPayment(row);
-    setIsConfirmAction(true);
-    setOpenConfirm(true);
-  };
-
-  const handleConfirm = async () => {
-    try {
-      await confirmPayment(selectedPayment.id).unwrap();
-      showToast(
-        "success",
-        isConfirmAction ? "تم تأكيد الطلب بنجاح" : "تم إلغاء تأكيد الطلب بنجاح"
-      );
-    } catch (err) {
-      showToast(
-        "error",
-        `حدث خطأ أثناء ${isConfirmAction ? "تأكيد" : "إلغاء تأكيد"} الطلب: ${
-          err.data?.message || "خطأ غير معروف"
-        }`
-      );
-    }
-    setOpenConfirm(false);
-  };
-
-  const dataInvoicePdf = {
-    payments: payments,
-  };
-
-  const permissions = {
-    confirm: Permissions.EditPayments,
-    show: Permissions.ViewPayments,
-  };
 
   return (
     <>
@@ -116,42 +78,33 @@ const PaymentsContainer = () => {
               permission={Permissions.CreatePayments}
             />
             <div className="flex gap-3 justify-between">
-               <InvoicePdf
-              customer={dataInvoicePdf}
-              showCustomerTable={false}
-              showCustomerPaymentsTable={true}
-            />
+              <InvoicePdf
+                customer={dataInvoicePdf}
+                showCustomerTable={false}
+                showCustomerPaymentsTable={true}
+              />
 
-            <InvoiceExcel
-              customer={dataInvoicePdf}
-              showCustomerTable={false}
-              showCustomerPaymentsTable={true}
-            />
+              <InvoiceExcel
+                customer={dataInvoicePdf}
+                showCustomerTable={false}
+                showCustomerPaymentsTable={true}
+              />
             </div>
-           
+
             <DynamicTable
               data={payments || []}
               columns={PaymentsColumns}
-              isLoading={isLoadingPayments}
+              isLoading={isFetchingPayments}
               onShow={onShow}
               permissions={permissions}
+              onDelete={handleDelete}
             />
 
             <DialogAddPayments
               show={openAdd}
               handleClose={() => setOpenAdd(false)}
             />
-
-            <ViewImageDialog
-              show={openViewImage}
-              handleClose={() => setOpenViewImage(false)}
-              imageUrl={
-                selectedPayment?.payment_image
-                  ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
-                  : null
-              }
-              paymentNumber={selectedPayment?.payment_number}
-            />
+            
           </div>
         </TabsContent>
 
@@ -160,22 +113,13 @@ const PaymentsContainer = () => {
             <DynamicTable
               data={paymentIsNotReceived || []}
               columns={PaymentsColumns}
-              isLoading={isLoadingPaymentsNotReceived}
+              isLoading={isFetchingPaymentsNotReceived}
               onShow={onShow}
+              onDelete={handleDelete}
               onConfirmOrder={onConfirmPayment}
               permissions={permissions}
 
               // onUnconfirmOrder={onConfirmOrder}
-            />{" "}
-            <ViewImageDialog
-              show={openViewImage}
-              handleClose={() => setOpenViewImage(false)}
-              imageUrl={
-                selectedPayment?.payment_image
-                  ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
-                  : null
-              }
-              paymentNumber={selectedPayment?.payment_number}
             />
           </div>
         </TabsContent>
@@ -185,24 +129,16 @@ const PaymentsContainer = () => {
             <DynamicTable
               data={paymentIsReceived || []}
               columns={PaymentsColumns}
-              isLoading={isLoadingPaymentsReceived}
+              isLoading={isFetchingPaymentsReceived}
               onShow={onShow}
               permissions={permissions}
+              onDelete={handleDelete}
             />{" "}
-            <ViewImageDialog
-              show={openViewImage}
-              handleClose={() => setOpenViewImage(false)}
-              imageUrl={
-                selectedPayment?.payment_image
-                  ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
-                  : null
-              }
-              paymentNumber={selectedPayment?.payment_number}
-            />
           </div>
         </TabsContent>
       </Tabs>
 
+    
       <DeleteDialog
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
@@ -212,6 +148,13 @@ const PaymentsContainer = () => {
         titleLoading="جاري التأكيد"
         onConfirm={handleConfirm}
         loading={isLoadingConfirm}
+      />
+
+      <DeleteDialog
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        onConfirm={onConfirmDelete}
+        loading={isLoadingDelete}
       />
     </>
   );

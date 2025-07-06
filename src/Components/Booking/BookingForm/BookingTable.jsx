@@ -52,10 +52,10 @@ const BookingTable = () => {
     setEndDate(formik.values.end_date);
   }, [formik.values.start_date, formik.values.end_date]);
 
-  console.log(dateRanges)
+  console.log(dateRanges);
   const handleShowDialog = (sign) => {
     setSelectedSign(sign);
-    
+
     const mainStartDate = new Date(formik.values.start_date);
     const mainEndDate = new Date(formik.values.end_date);
     const bookedRanges = sign.booking_dates.map((range) => ({
@@ -79,19 +79,28 @@ const BookingTable = () => {
     setIsSignAvailable(isAvailable);
     setDateRanges(
       isAvailable
-        ? [{ startDate: formik.values.start_date, endDate: formik.values.end_date, booking_faces: 1 }]
+        ? [
+            {
+              startDate: formik.values.start_date,
+              endDate: formik.values.end_date,
+              booking_faces: 1,
+            },
+          ]
         : [{ startDate: "", endDate: "", booking_faces: 1 }]
     );
     setIsDialogOpen(true);
   };
 
   const addDateRange = () => {
-    console.log("addDateRange")
-    setDateRanges([...dateRanges, { startDate: "", endDate: "", booking_faces: 1 }]);
+    console.log("addDateRange");
+    setDateRanges([
+      ...dateRanges,
+      { startDate: "", endDate: "", booking_faces: 1 },
+    ]);
   };
 
   const removeDateRange = (index) => {
-    console.log("removeDateRange")
+    console.log("removeDateRange");
     if (dateRanges.length > 1) {
       setDateRanges(dateRanges.filter((_, i) => i !== index));
     }
@@ -105,7 +114,10 @@ const BookingTable = () => {
 
   const updateBookingFaces = (index, value) => {
     const newRanges = [...dateRanges];
-    const maxPanels = getMaxAvailablePanels(newRanges[index].startDate, newRanges[index].endDate);
+    const maxPanels = getMaxAvailablePanels(
+      newRanges[index].startDate,
+      newRanges[index].endDate
+    );
     const parsedValue = parseInt(value) || 1;
     newRanges[index].booking_faces = Math.min(parsedValue, maxPanels);
     setDateRanges(newRanges);
@@ -116,7 +128,7 @@ const BookingTable = () => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     let maxPanels = selectedSign.panels_number;
-    console.log(maxPanels)
+    console.log(maxPanels);
 
     for (const range of selectedSign.available_date_ranges) {
       const rangeStart = new Date(range.start_date);
@@ -162,7 +174,11 @@ const BookingTable = () => {
       const end = new Date(range.endDate);
       const maxPanels = getMaxAvailablePanels(range.startDate, range.endDate);
 
-      if (start >= end || range.booking_faces > maxPanels || range.booking_faces < 1) {
+      if (
+        start >= end ||
+        range.booking_faces > maxPanels ||
+        range.booking_faces < 1
+      ) {
         return false;
       }
 
@@ -194,7 +210,9 @@ const BookingTable = () => {
         alert("يرجى إدخال تواريخ وعدد لوحات صالحة على الأقل لمدى زمني واحد");
       }
     } else {
-      alert("يرجى اختيار تواريخ وعدد لوحات صالحة دون تعارض مع الحجوزات الحالية");
+      alert(
+        "يرجى اختيار تواريخ وعدد لوحات صالحة دون تعارض مع الحجوزات الحالية"
+      );
     }
   };
 
@@ -381,7 +399,10 @@ const BookingTable = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent dir="rtl" className="sm:max-w-[600px] dark:bg-gray-800">
+        <DialogContent
+          dir="rtl"
+          className="sm:max-w-[600px] overflow-y-auto dark:bg-gray-800"
+        >
           <DialogHeader>
             <DialogTitle className="text-right text-gray-800 dark:text-gray-100">
               اختيار تواريخ وعدد اللوحات
@@ -461,7 +482,10 @@ const BookingTable = () => {
                     <Input
                       type="number"
                       min="1"
-                      max={selectedSign?.panels_number - selectedSign?.total_panels_on_date}
+                      max={
+                        selectedSign?.panels_number -
+                        selectedSign?.total_panels_on_date
+                      }
                       value={dateRanges[0].booking_faces}
                       onChange={(e) => updateBookingFaces(0, e.target.value)}
                       className="w-full p-2 border border-gray-300 dark:bg-gray-900 rounded-md text-right"
@@ -482,11 +506,13 @@ const BookingTable = () => {
                         <input
                           type="date"
                           value={range.startDate}
+                          
                           onChange={(e) =>
                             updateDateRange(index, "startDate", e.target.value)
                           }
-                       disabled={selectedSign?.available_date_ranges?.length == 0}
-
+                          disabled={
+                            selectedSign?.available_date_ranges?.length == 0
+                          }
                           className="w-full p-2 border border-gray-300 dark:bg-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
@@ -500,34 +526,32 @@ const BookingTable = () => {
                           onChange={(e) =>
                             updateDateRange(index, "endDate", e.target.value)
                           }
-                       disabled={selectedSign?.available_date_ranges?.length == 0}
-
+                          disabled={
+                            selectedSign?.available_date_ranges?.length == 0
+                          }
                           className="w-full p-2 border border-gray-300 dark:bg-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
                       <div className="flex-1">
-                        {/* {
-                          console.log(getMaxAvailablePanels(range.startDate, range.endDate))
-
-                        }{
-                           console.log(range.startDate)
-                        }{
-                          console.log(range.endDate)
-                        } */}
-
-                        
                         <Label className="text-gray-700 dark:text-gray-300">
                           عدد اللوحات
                         </Label>
                         <Input
                           type="number"
                           min="1"
-                          max={getMaxAvailablePanels(range.startDate, range.endDate)}
+                          max={getMaxAvailablePanels(
+                            range.startDate,
+                            range.endDate
+                          )}
                           value={range.booking_faces}
-                          onChange={(e) => updateBookingFaces(index, e.target.value)}
+                          onChange={(e) =>
+                            updateBookingFaces(index, e.target.value)
+                          }
                           className="w-full p-2 border border-gray-300 dark:bg-gray-900 rounded-md text-right"
-                       disabled={selectedSign?.available_date_ranges?.length == 0}
-                       />
+                          disabled={
+                            selectedSign?.available_date_ranges?.length == 0
+                          }
+                        />
                       </div>
                       {dateRanges.length > 1 && (
                         <Button
@@ -547,8 +571,7 @@ const BookingTable = () => {
                     variant="outline"
                     onClick={addDateRange}
                     className="mt-2"
-                       disabled={(selectedSign?.available_date_ranges?.length == 0) }
-
+                    disabled={selectedSign?.available_date_ranges?.length == 0}
                   >
                     إضافة مدى تاريخي آخر
                   </Button>

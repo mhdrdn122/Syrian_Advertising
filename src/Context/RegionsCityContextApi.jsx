@@ -71,7 +71,7 @@ export const RegionsCityContextApi = ({ children }) => {
         setIsRegionDialogOpen(false);
       }
     } catch (error) {
-      showToast("error", "حدث خطأ غير متوقع حاول من جديد");
+      showToast("error", `${error.data.message}`);
     }
   };
 
@@ -88,7 +88,8 @@ export const RegionsCityContextApi = ({ children }) => {
         setDeleteDialogRegionOpen(false);
       }
     } catch (error) {
-      showToast("error", "حدث خطأ غير متوقع حاول من جديد");
+        showToast("error", `${error.data.message}`);
+
     }
   };
 

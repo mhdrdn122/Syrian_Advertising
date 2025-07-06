@@ -249,13 +249,17 @@ export const BookingContextApi = ({ children, bookingId }) => {
 
     const existingSign = selectedSigns.find((s) => s.road_sign_id === sign.id);
     if (existingSign) {
-       const newDateRanges = sign.customDateRanges
+      // إذا كانت اللوحة موجودة، أضف التواريخ الجديدة إلى dateRanges
+      const newDateRanges = sign.customDateRanges
         ? [...existingSign.dateRanges, ...sign.customDateRanges]
-        : [...existingSign.dateRanges, { 
-            startDate: formik.values.start_date, 
-            endDate: formik.values.end_date, 
-            booking_faces: 1 
-          }];
+        : [
+            ...existingSign.dateRanges,
+            {
+              startDate: formik.values.start_date,
+              endDate: formik.values.end_date,
+              booking_faces: 1,
+            },
+          ];
 
       setSelectedSigns(
         selectedSigns.map((s) =>
@@ -264,15 +268,18 @@ export const BookingContextApi = ({ children, bookingId }) => {
             : s
         )
       );
-      showToast("success", `تم إضافة لوحة في تواريخ جديدة  `);
+      showToast("success", `تم إضافة تواريخ جديدة للوحة`);
     } else {
+      // إذا لم تكن اللوحة موجودة، أضفها مع التواريخ
       const dateRanges = sign.customDateRanges
         ? sign.customDateRanges
-        : [{ 
-            startDate: formik.values.start_date, 
-            endDate: formik.values.end_date, 
-            booking_faces: 1 
-          }];
+        : [
+            {
+              startDate: formik.values.start_date,
+              endDate: formik.values.end_date,
+              booking_faces: 1,
+            },
+          ];
 
       setSelectedSigns([
         ...selectedSigns,
@@ -287,7 +294,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
     }
   };
 
-  const updateSignFaces = (road_sign_id, rangeIndex, value) => {
+  const updateSignFaces = (road_sign_id, rangeIndex, updates) => {
     setSelectedSigns(
       selectedSigns.map((sign) =>
         sign.road_sign_id === road_sign_id
@@ -295,7 +302,12 @@ export const BookingContextApi = ({ children, bookingId }) => {
               ...sign,
               dateRanges: sign.dateRanges.map((range, index) =>
                 index === rangeIndex
-                  ? { ...range, booking_faces: parseInt(value) || 1 }
+                  ? {
+                      ...range,
+                      booking_faces: updates.booking_faces || range.booking_faces,
+                      startDate: updates.startDate || range.startDate,
+                      endDate: updates.endDate || range.endDate,
+                    }
                   : range
               ),
             }
@@ -307,14 +319,16 @@ export const BookingContextApi = ({ children, bookingId }) => {
   const removeFromCart = (road_sign_id, rangeIndex = null) => {
     if (rangeIndex !== null) {
       setSelectedSigns(
-        selectedSigns.map((sign) =>
-          sign.road_sign_id === road_sign_id
-            ? {
-                ...sign,
-                dateRanges: sign.dateRanges.filter((_, index) => index !== rangeIndex),
-              }
-            : sign
-        ).filter((sign) => sign.dateRanges.length > 0)
+        selectedSigns
+          .map((sign) =>
+            sign.road_sign_id === road_sign_id
+              ? {
+                  ...sign,
+                  dateRanges: sign.dateRanges.filter((_, index) => index !== rangeIndex),
+                }
+              : sign
+          )
+          .filter((sign) => sign.dateRanges.length > 0)
       );
       if (
         selectedSigns.find((sign) => sign.road_sign_id === road_sign_id)?.dateRanges
@@ -324,9 +338,8 @@ export const BookingContextApi = ({ children, bookingId }) => {
           new Set([...addedSignIds].filter((id) => id !== road_sign_id))
         );
       }
-      showToast("success", "تم الإزالة من السلة");
-    }
-     else {
+      showToast("success", "تم إزالة المدى الزمني من السلة");
+    } else {
       setSelectedSigns(
         selectedSigns.filter((sign) => sign.road_sign_id !== road_sign_id)
       );
@@ -350,7 +363,7 @@ export const BookingContextApi = ({ children, bookingId }) => {
             booking_faces: range.booking_faces,
             start_date: range.startDate,
             end_date: range.endDate,
-            number_of_reserved_panels:range?.booking_faces
+            number_of_reserved_panels: range.booking_faces,
           }))
         ),
         start_date: formik.values.start_date,

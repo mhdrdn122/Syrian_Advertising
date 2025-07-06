@@ -48,6 +48,15 @@ export const PaymentsSlice = createApi({
       }),
       invalidatesTags: ["payments"],
     }),
+     deletePayment: builder.mutation({
+      query: (id) => {
+        return({
+        url: `payments/${id}`,
+        method: "POST",
+        body:{"_method": "DELETE"}
+      })},
+      invalidatesTags: ["payments"],
+    }),
   }),
 });
 
@@ -56,4 +65,5 @@ export const {
   useAddNewPaymentMutation,
   useConfirmOnePaymentMutation,
   useGetTotalPaymentAndRemainingQuery,
+  useDeletePaymentMutation,
 } = PaymentsSlice;

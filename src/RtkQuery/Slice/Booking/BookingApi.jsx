@@ -48,6 +48,24 @@ export const BookingSlice = createApi({
       },
       invalidatesTags: ["bookings"],
     }),
+    deleteBooking: builder.mutation({
+      query: (id) => {
+        return({
+        url: `bookings/${id}`,
+        method: "POST",
+        body:{"_method": "DELETE"}
+      })},
+      invalidatesTags: ["bookings"],
+    }),
+  cancelBooking: builder.mutation({
+      query: (id) => {
+        return({
+        url: `cancel-booking/${id}`,
+        method: "POST",
+        body:{}
+      })},
+      invalidatesTags: ["bookings"],
+    }),
   }),
 });
 
@@ -57,4 +75,6 @@ export const {
   useCalculateReservationMutation,
   useUpdateBookingsMutation,
   useGetOneBookingsQuery,
+  useDeleteBookingMutation,
+  useCancelBookingMutation,
 } = BookingSlice;
