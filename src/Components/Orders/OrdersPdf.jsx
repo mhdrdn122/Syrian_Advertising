@@ -1,9 +1,8 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import "../../assets/fonts/Amiri-Regular.js"; // Import the Amiri font file
+import "../../assets/fonts/Amiri-Regular.js";
 
 const OrdersPdf = ({ orders }) => {
-
   const generatePDF = () => {
     // Initialize jsPDF with A4 landscape settings
     const doc = new jsPDF({

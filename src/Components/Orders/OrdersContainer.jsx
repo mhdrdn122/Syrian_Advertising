@@ -1,4 +1,3 @@
-
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { OrderFieldsShow } from "../../utils/Dialogs/Data/Show/OrderFieldsShow";
 import DialogShow from "../../utils/Dialogs/DialogShow/DialogShow";
@@ -13,40 +12,40 @@ import { HistoryOrdersColumns } from "../../utils/Tables/ColumnsTable/HistoryOrd
 import useMangeOrders from "../../hooks/useMangeOrders";
 
 const OrdersContainer = () => {
-  const 
-        {
-          setActiveTab , 
-          orderType , 
-          setOrderType , 
-          cityId ,
-          setCityId ,
-          regionId , 
-          setRegionId ,
-          actionDate ,
-          setActionDate ,
-          regions ,
-           cities ,
-          isCitiesLoading ,
-          data ,
-          isLoading ,
-          isFetching ,
-          history ,
-          isFetchingHistory ,
-          iLoadingConfirm ,
-          openShow ,
-          setOpenShow ,
-          openConfirm ,
-          setOpenConfirm ,
-          openEdit ,
-          setOpenEdit ,
-          isConfirmAction ,
-          selectedOrder ,
-          setSelectedOrder ,
-          handleEdit , 
-          handleShow , 
-          handleConfirmOrUnconfirm ,
-          onConfirmOrder ,
-        } = useMangeOrders()
+  const {
+    setActiveTab,
+    orderType,
+    setOrderType,
+    cityId,
+    setCityId,
+    regionId,
+    setRegionId,
+    actionDate,
+    setActionDate,
+    regions,
+    cities,
+    isCitiesLoading,
+    data,
+    isLoading,
+    isFetching,
+    history,
+    isFetchingHistory,
+    iLoadingConfirm,
+    openShow,
+    setOpenShow,
+    openConfirm,
+    setOpenConfirm,
+    openEdit,
+    setOpenEdit,
+    isConfirmAction,
+    selectedOrder,
+    setSelectedOrder,
+    handleEdit,
+    handleShow,
+    handleConfirmOrUnconfirm,
+    onConfirmOrder,
+    permission,
+  } = useMangeOrders();
 
   // Only show loading on initial load or when cities are loading
   if (isLoading || isCitiesLoading) {
@@ -57,12 +56,6 @@ const OrdersContainer = () => {
       </div>
     );
   }
-
-  const permission = {
-    edit: Permissions.EditOrders,
-    confirm: Permissions.EditOrders,
-    unConfirm: Permissions.EditOrders,
-  };
 
   return (
     <>
@@ -229,6 +222,7 @@ const OrdersContainer = () => {
             />
           </div>
         </TabsContent>
+        
         <TabsContent value="history">
           <DynamicTable
             data={history || []}

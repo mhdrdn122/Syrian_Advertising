@@ -100,9 +100,9 @@ const ContractPage = () => {
 
     // Execute PDF generation.
     html2pdf()
-      .set(pdfOptions) // Apply defined options.
-      .from(element) // Set source element.
-      .save() // Save the PDF.
+      .set(pdfOptions)  
+      .from(element) 
+      .save() 
       .then(() => {
         console.log("PDF generated successfully!");
       })
@@ -112,17 +112,7 @@ const ContractPage = () => {
       });
   };
 
-  /**
-   * Calculates the duration between two dates in years.
-   * Not currently used in the component's rendering, but available.
-   */
-  // const calculateDurationInYears = (startDate, endDate) => {
-  //   const start = new Date(startDate);
-  //   const end = new Date(endDate);
-  //   const diffInMs = end - start;
-  //   const diffInYears = diffInMs / (1000 * 60 * 60 * 24 * 365.25);
-  //   return Math.round(diffInYears * 10) / 10;
-  // };
+
 
   // Show loading state while data is being fetched.
   if (!isSuccess) {

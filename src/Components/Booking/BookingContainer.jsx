@@ -1,75 +1,30 @@
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
-import {
-  useCancelBookingMutation,
-  useDeleteBookingMutation,
-  useGetBookingQuery,
-} from "../../RtkQuery/Slice/Booking/BookingApi";
 import { BookingColumns } from "../../utils/Tables/ColumnsTable/BookingColumns";
-import { useNavigate } from "react-router";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
-import { useState } from "react";
-import { showToast } from "../../utils/Notifictions/showToast";
+import useGetBookings from "../../hooks/useGetBookings";
 
 const BookingContainer = () => {
-  const { data, isLoading } = useGetBookingQuery();
-  const navigate = useNavigate();
-  const { hasPermission } = useAuth();
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openCancelBooking, setOpenCancelBooking] = useState(false);
-
-  const [selectBooking, setSelectBooking] = useState();
-
-  const [deleteBooking, { isLoading: isLoadingDelete }] =
-    useDeleteBookingMutation();
-
-  const [cancelBooking, { isLoading: isLoadingCancel }] =
-    useCancelBookingMutation();
-
-  const handleDelete = (row) => {
-    if (!row) {
-      console.error("No row data provided for edit");
-      return;
-    }
-    setSelectBooking(row);
-    setOpenDelete(true);
-  };
-
-  const onCancelBooking = (row) => {
-    setSelectBooking(row);
-    setOpenCancelBooking(true);
-  };
-
-  const handelCancelBooking = async () => {
-    try {
-      await cancelBooking(selectBooking?.id).unwrap();
-      showToast("success", "تم إيقاف الطلب بنجاح");
-    } catch (err) {
-      showToast("error", err.data?.message || "خطأ غير معروف");
-    }
-    setOpenCancelBooking(false);
-  };
-
-  const onConfirmDelete = async () => {
-    try {
-      await deleteBooking(selectBooking?.id).unwrap();
-      showToast("success", "تم حذف الحجز بنجاح");
-    } catch (err) {
-      showToast("error", err.data.message);
-    }
-    setOpenDelete(false);
-  };
-  const permissions = {
-    show: Permissions.ViewBookings,
-    edit: Permissions.EditBookings,
-    delete: Permissions.DeleteBookings,
-    unConfirm: Permissions.EditBookings,
-    
-  };
-
+  const {
+    permissions,
+    data,
+    isLoading,
+    navigate,
+    hasPermission,
+    openDelete,
+    setOpenDelete,
+    openCancelBooking,
+    setOpenCancelBooking,
+    isLoadingDelete,
+    isLoadingCancel,
+    handleDelete,
+    onCancelBooking,
+    onConfirmDelete,
+    handelCancelBooking,
+  } = useGetBookings();
+  
   return (
     <div className="p-4 sm:p-6 w-full mx-auto space-y-6 overflow-x-auto">
       <div className="flex my-6 px-3 flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

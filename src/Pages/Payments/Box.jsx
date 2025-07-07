@@ -1,24 +1,10 @@
-import React, { useState } from "react";
-import { useGetTotalPaymentAndRemainingQuery } from "../../RtkQuery/Slice/Payments/PaymentsApi";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { BoxColumns } from "../../utils/Tables/ColumnsTable/BoxColumns";
+import useMangePayments from "../../hooks/useMangePayments";
 
 const Box = () => {
-  const [fromDate, setFromDate] = useState();
-  const [toDate, setToDate] = useState();
-
-  const { data , isLoading} = useGetTotalPaymentAndRemainingQuery({
-    from_date: fromDate,
-    to_date: toDate,
-  });
-
-  const dataBox = [
-    {
-      total_booking_amount: data?.total_booking_amount,
-      total_customer_remaining: data?.total_customer_remaining,
-      total_paid_received: data?.total_paid_received,
-    },
-  ];
+  const { dataBox, fromDate, setFromDate, toDate, setToDate, isFetchingBox } =
+    useMangePayments();
 
   return (
     <div>
@@ -49,7 +35,11 @@ const Box = () => {
           />
         </div>
       </div>
-      <DynamicTable data={dataBox} isLoading={isLoading} columns={BoxColumns} />
+      <DynamicTable
+        data={dataBox}
+        isLoading={isFetchingBox}
+        columns={BoxColumns}
+      />
     </div>
   );
 };

@@ -11,6 +11,7 @@ import DialogEditProfile from "../../utils/Dialogs/EditAddDialog/Edit/DialogEdit
 import DialogEditCompany from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditCompany";
 import { useState } from "react";
 import DetailCard from "../../utils/DetailCard";
+import SkeletonLoader from "../../utils/SkeletonLoader";
 
 const ProfileInfo = () => {
   const { data: profile, isFetching: isProfileFetching } = useGetProfileQuery();
@@ -20,21 +21,7 @@ const ProfileInfo = () => {
 
   if (isProfileFetching || isCompanyFetching) {
     return (
-      <div className="p-4 md:p-6 space-y-4">
-        <Skeleton className="h-10 w-1/3" />
-        <div className="flex gap-4">
-          <Skeleton className="h-32 w-32 rounded-full" />
-          <div className="space-y-2 flex-1">
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-lg" />
-          ))}
-        </div>
-      </div>
+     <SkeletonLoader />
     );
   }
 

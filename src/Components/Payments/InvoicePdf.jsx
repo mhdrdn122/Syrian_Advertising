@@ -1,7 +1,7 @@
 import React from "react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import "../../assets/fonts/Amiri-Regular.js"; // Import the Amiri font file
+import "../../assets/fonts/Amiri-Regular.js"; 
 
 const InvoicePdf = ({
   customer,

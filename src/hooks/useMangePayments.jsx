@@ -4,6 +4,7 @@ import {
   useConfirmOnePaymentMutation,
   useDeletePaymentMutation,
   useGetPaymentsQuery,
+  useGetTotalPaymentAndRemainingQuery,
 } from "../RtkQuery/Slice/Payments/PaymentsApi";
 
 import { showToast } from "../utils/Notifictions/showToast";
@@ -17,6 +18,10 @@ const useMangePayments = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isConfirmAction, setIsConfirmAction] = useState(true);
   const [selectPayment, setSelectPayment] = useState();
+
+  // box state
+  const [fromDate, setFromDate] = useState();
+  const [toDate, setToDate] = useState();
 
   const [confirmPayment, { isLoading: isLoadingConfirm }] =
     useConfirmOnePaymentMutation();
@@ -32,6 +37,13 @@ const useMangePayments = () => {
   const [deletePayment, { isLoading: isLoadingDelete }] =
     useDeletePaymentMutation();
 
+  // box query
+  const { data, isFetching: isFetchingBox } = useGetTotalPaymentAndRemainingQuery(
+    {
+      from_date: fromDate,
+      to_date: toDate,
+    }
+  );
 
   const onShow = useCallback((row) => {
     setSelectedPayment(row);
@@ -73,7 +85,6 @@ const useMangePayments = () => {
     setOpenDelete(false);
   }, [selectPayment?.id, deletePayment]);
 
-  
   const dataInvoicePdf = useMemo(() => {
     return {
       payments: payments,
@@ -88,6 +99,15 @@ const useMangePayments = () => {
     };
   }, [Permissions]);
 
+
+  // start box
+  const dataBox = [
+    {
+      total_booking_amount: data?.total_booking_amount,
+      total_customer_remaining: data?.total_customer_remaining,
+      total_paid_received: data?.total_paid_received,
+    },
+  ];
   return {
     openAdd,
     setOpenAdd,
@@ -122,6 +142,12 @@ const useMangePayments = () => {
     paymentIsNotReceived,
     dataInvoicePdf,
     permissions,
+    dataBox,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
+    isFetchingBox,
   };
 };
 

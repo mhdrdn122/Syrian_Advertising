@@ -13,23 +13,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-// import { showToast } from "../../Notifictions/showToast";
 import { Toaster } from "react-hot-toast";
 import { showToast } from "../../utils/Notifictions/showToast";
 
 const AddDiscountDialog = ({
   open,
   onOpenChange,
-  customerId, // ID of the customer to apply the discount to
-  onSuccess, // Callback function on successful discount addition
-  addDiscountMutation, // RTK Query mutation hook for adding discount
-  isAdding, // Loading state from the mutation
-  remainingBalance, // The customer's remaining balance
+  customerId,  
+  onSuccess,  
+  addDiscountMutation,  
+  isAdding,  
+  remainingBalance,  
 }) => {
   const formik = useFormik({
     initialValues: {
-      value: "", // Discount value
-      discount_type: "1", // 1 for fixed amount, 2 for percentage
+      value: "",  
+      discount_type: "1",  
       customer_id: customerId,
     },
     validationSchema: Yup.object({

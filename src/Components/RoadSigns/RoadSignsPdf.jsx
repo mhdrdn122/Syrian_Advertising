@@ -2,8 +2,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import "../../assets/fonts/Amiri-Regular.js"; // Import the Amiri font file
 
-const RoadSignsPdf = ({ roadSigns , endDate , startDate  }) => {
-
+const RoadSignsPdf = ({ roadSigns, endDate, startDate }) => {
   const generatePDF = () => {
     // Initialize jsPDF with A4 landscape settings
     const doc = new jsPDF({
@@ -17,15 +16,10 @@ const RoadSignsPdf = ({ roadSigns , endDate , startDate  }) => {
 
     // Add title in the center
     const title = "بيانات اللوحات الطرقية";
-   
-
-
-
 
     const pageWidth = doc.internal.pageSize.getWidth();
     doc.setFontSize(16);
     doc.text(title, pageWidth / 2, 15, { align: "center" });
-
 
     // Define table headers (in reverse order for RTL)
     const headers = [
@@ -33,7 +27,7 @@ const RoadSignsPdf = ({ roadSigns , endDate , startDate  }) => {
         "المكان",
         "المنطقة",
         "المدينة",
-        "عدد الأوجه المتاحة",
+        "عدد اللوحات ",
         "شكل اللوحة",
         "القياس",
         "نموذج اللوحة",
@@ -45,7 +39,7 @@ const RoadSignsPdf = ({ roadSigns , endDate , startDate  }) => {
       item.place,
       item.region.name,
       item.city.name,
-      item.faces_number - item.total_faces_on_date,
+      item.panels_number,
       item.template.type,
       item.template.size,
       item.template.model,

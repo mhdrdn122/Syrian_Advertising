@@ -1,77 +1,37 @@
-import { useEffect, useState } from "react";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  useGetRoadSignBookingByWeekQuery,
-  useGetSoadSignDontHaveBookingQuery,
-} from "../../RtkQuery/Slice/Report/ReportApi";
 import { ReportBookingsColumns } from "../../utils/Tables/ColumnsTable/ReportBookingsColumns";
 import { ReportUnbookedSignsColumns } from "../../utils/Tables/ColumnsTable/ReportUnbookedSignsColumns";
 import { Loader } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import {
-  useGetActiveRegionsByCityMutation,
-  useGetCitiesQuery,
-  useGetRegionsQuery,
-} from "../../RtkQuery/Slice/CitiesAndRegions/CitiesAndRegionsApi";
-import { useGetRoadSignsModelQuery } from "../../RtkQuery/Slice/RoadSings/RoadSingsApi";
+import useReports from "../../hooks/useReports";
 
 const RoadSignsReport = () => {
-  const [activeTab, setActiveTab] = useState("bookings");
-  const [cityId, setCityId] = useState();
-  const [regionId, setRegionId] = useState();
-  const [model, setModel] = useState();
-    const [fromDate, setFromDate] = useState();
-    const [toDate, setToDate] = useState();
-
-  const { data: cities, isLoading: isCitiesLoading } = useGetCitiesQuery();
-  const [
-    getActiveRegionsByCity,
-    { data: regions, isLoading: isRegionsLoading },
-  ] = useGetActiveRegionsByCityMutation();
-  const { data: getRoadSignsModel, isLoading: isGetRoadSignsModel } =
-    useGetRoadSignsModelQuery();
-
-  useEffect(() => {
-    getActiveRegionsByCity(cityId);
-  }, [cityId, getActiveRegionsByCity]);
-
-  // Fetch data for bookings this week
   const {
-    data: bookingsData,
-    isLoading: isBookingsLoading,
-    isFetching: isBookingsFetching,
-  } = useGetRoadSignBookingByWeekQuery({
-    city_id: cityId,
-    region_id: regionId,
-    model: model,
-  });
-
-  // Fetch data for unbooked signs
-  const {
-    data: unbookedSignsData,
-    isLoading: isUnbookedLoading,
-    isFetching: isUnbookedFetching,
-  } = useGetSoadSignDontHaveBookingQuery({
-    city_id: cityId,
-    region_id: regionId,
-    model: model,
-    from_date: fromDate,
-    to_date: toDate,
-  });
-
-  const handleCityChange = (e) => {
-    setCityId(e.target.value);
-    setRegionId(""); // Reset region when city changes
-  };
-
-  const handleRegionChange = (e) => {
-    setRegionId(e.target.value);
-  };
-
-  const handleModelChange = (e) => {
-    setModel(e.target.value);
-  };
+    setActiveTab,
+    cityId,
+    regionId,
+    model,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
+    cities,
+    isCitiesLoading,
+    regions,
+    isRegionsLoading,
+    getRoadSignsModel,
+    isGetRoadSignsModel,
+    bookingsData,
+    isBookingsLoading,
+    isBookingsFetching,
+    unbookedSignsData,
+    isUnbookedLoading,
+    isUnbookedFetching,
+    handleCityChange,
+    handleRegionChange,
+    handleModelChange,
+  } = useReports();
 
   // Handle loading state
   if (isBookingsLoading || isUnbookedLoading) {
@@ -138,14 +98,6 @@ const RoadSignsReport = () => {
                 </option>
               ))
             )}
-
-            {/* <option value="">اختر منطقة</option>
-                  {isRegionsLoading && <option>جاري تحميل المناطق ...</option>}
-                  {regions?.map((region) => (
-                    <option key={region.id} value={region.id}>
-                      {region.name}
-                    </option>
-                  ))} */}
           </select>
         </div>
 
@@ -203,7 +155,7 @@ const RoadSignsReport = () => {
 
         {/* Unbooked Signs Table */}
         <TabsContent value="unbooked">
-           {/* Date Filter */}
+          {/* Date Filter */}
           <div className="flex justify-between items-center gap-3 mb-5">
             <div className="flex flex-col flex-1 ">
               <label className="mb-2 text-sm font-medium text-right  text-foreground">

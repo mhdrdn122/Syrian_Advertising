@@ -27,14 +27,14 @@ const TableRoadSigns = ({ isLoading }) => {
   const [deleteRoadSign, { isLoading: isDeleting }] =
     useDeleteRoadSignMutation();
   const {
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
+    // startDate,
+    // setStartDate,
+    // endDate,
+    // setEndDate,
     cityId,
-    setCityId,
+    // setCityId,
     regionId,
-    setRegionId,
+    // setRegionId,
     roadSigns,
     isRoadSignsFetching,
     isError,

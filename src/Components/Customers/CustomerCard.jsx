@@ -4,17 +4,14 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
-import { useState } from "react";
-import { useDeleteCustomerMutation } from "../../RtkQuery/Slice/Customers/CustomersApi";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
+import useCustomers from "../../hooks/useCustomers";
 
 const CustomerCard = ({
   id,
@@ -25,19 +22,14 @@ const CustomerCard = ({
   createdAt,
   updatedAt,
 }) => {
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-  const [deleteCustomer, { isLoading }] = useDeleteCustomerMutation();
-  const { hasPermission } = useAuth();
-
-  const handleDelete = async () => {
-    await deleteCustomer(id).unwrap();
-  };
-
-  const handleViewDetails = (e) => {
-    e.preventDefault();
-    navigate(`/dashboard/customers/${id}`);
-  };
+  const {
+    handleViewDetails,
+    hasPermission,
+    setOpen,
+    open,
+    isDeleting,
+    handelDelete,
+  } = useCustomers({id});
 
   return (
     <div className="block text-right w-full group">
@@ -151,8 +143,8 @@ const CustomerCard = ({
         <DeleteDialog
           open={open}
           onClose={() => setOpen(false)}
-          loading={isLoading}
-          onConfirm={handleDelete}
+          loading={isDeleting}
+          onConfirm={handelDelete}
         />
       </motion.div>
     </div>

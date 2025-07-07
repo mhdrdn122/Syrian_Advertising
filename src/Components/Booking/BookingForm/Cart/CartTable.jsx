@@ -46,73 +46,66 @@ const CartTable = () => {
     const end = new Date(endDate);
 
     while (currentDate <= end) {
-      dates.push(currentDate.toDateString()); 
+      dates.push(currentDate.toDateString());
       currentDate.setDate(currentDate.getDate() + 1);
     }
     return dates;
   };
 
-  const getMaxAvailablePanels = (sign, startDate, endDate , rangeIndex ) => {
+  const getMaxAvailablePanels = (sign, startDate, endDate, rangeIndex) => {
     const roadSign = roadSigns?.find((rs) => rs.id === sign.road_sign_id);
     if (!roadSign || !startDate || !endDate) return 0;
 
     let maxPanels = roadSign.panels_number;
-    
-    const start = new Date(startDate);
-    const end = new Date(endDate); // نهاية الفترة المطلوبة
 
-    // حساب اللوحات المتاحة بناءً على available_date_ranges
-    // يجب أن تكون هذه اللوحات المتاحة هي الحد الأقصى لأي فترة تتداخل معها
-    // هذه العملية معقدة وقد تتطلب منطقًا أكثر تفصيلاً إذا كانت اللوحات تختلف لكل نطاق متاح
-    // حاليا، إذا تداخلت الفترة مع نطاق متاح، يتم تقليل maxPanels
-    // هذا الجزء من الكود قد يحتاج لمراجعة إضافية إذا كانت available_panels تختلف عبر النطاقات
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
     for (const range of roadSign.available_date_ranges) {
-        const rangeStart = new Date(range.start_date);
-        const rangeEnd = new Date(range.end_date);
-        
-        // إذا كان هناك تداخل بين الفترة المطلوبة والنطاق المتاح
-        if ((start <= rangeEnd && end >= rangeStart)) {
-            maxPanels = Math.min(maxPanels, range.available_panels);
-        }
+      const rangeStart = new Date(range.start_date);
+      const rangeEnd = new Date(range.end_date);
+
+      if (start <= rangeEnd && end >= rangeStart) {
+        maxPanels = Math.min(maxPanels, range.available_panels);
+      }
     }
 
-    // التحقق من التعارض مع التواريخ المحجوزة وتقليل اللوحات إلى 0 إذا كان هناك تعارض غير مستثنى
     for (const booked of roadSign.booking_dates) {
       const bookedStart = new Date(booked.start_date);
       const bookedEnd = new Date(booked.end_date);
 
-      // إذا كان هناك تداخل (نفس شروط validateDateRange)
       if (
         (start >= bookedStart && start < bookedEnd) ||
         (end > bookedStart && end <= bookedEnd) ||
         (start <= bookedStart && end >= bookedEnd)
       ) {
-        // استثناء الحجز الأصلي في وضع التعديل
-        const currentBookedSignInEditMode = isEditMode && bookingData?.roadsigns.some(rs => 
-            rs.id === sign.road_sign_id && 
-            new Date(rs.pivot.start_date).getTime() === bookedStart.getTime() && 
-            new Date(rs.pivot.end_date).getTime() === bookedEnd.getTime()
-        );
+        const currentBookedSignInEditMode =
+          isEditMode &&
+          bookingData?.roadsigns.some((rs) => {
+            rs.id === sign.road_sign_id &&
+              new Date(rs?.pivot?.start_date).getTime() ===
+                bookedStart?.getTime() &&
+              new Date(rs?.pivot?.end_date).getTime() === bookedEnd?.getTime();
+          });
 
-        if (!currentBookedSignInEditMode) {
-          maxPanels = 0; // غير متاح إذا كان هناك تعارض ولم يكن الحجز الأصلي
-          break; // لا داعي للتحقق من باقي الحجوزات
+        if (currentBookedSignInEditMode) {
+          maxPanels = 0;
+          break;
         }
       }
     }
 
-    // في وضع التعديل، أضف عدد اللوحات المحجوزة سابقًا لهذه اللوحة
     if (isEditMode) {
-      const existingBooking = bookingData?.roadsigns.find(
+      const existingBooking = bookingData?.roadsigns?.find(
         (rs) =>
           rs.id === sign.road_sign_id &&
-          // تأكد من أن هذه المقارنات تستخدم تواريخ الحجز الأصلي في bookingData
-          // وليس تواريخ الفترة الجديدة (startDate, endDate)
-          new Date(rs.pivot?.start_date).toDateString() === new Date(sign.dateRanges[rangeIndex]?.startDate).toDateString() &&
-          new Date(rs.pivot.end_date).toDateString() === new Date(sign.dateRanges[rangeIndex].endDate).toDateString()
+          new Date(rs.pivot?.start_date).toDateString() ===
+            new Date(sign.dateRanges[rangeIndex]?.startDate).toDateString() &&
+          new Date(rs.pivot.end_date).toDateString() ===
+            new Date(sign.dateRanges[rangeIndex]?.endDate).toDateString()
       );
       if (existingBooking) {
-        maxPanels += existingBooking.pivot.number_of_reserved_panels;
+        maxPanels += existingBooking?.pivot?.number_of_reserved_panels;
       }
     }
 
@@ -129,58 +122,57 @@ const CartTable = () => {
     const start = new Date(newStartDate);
     const end = new Date(newEndDate);
 
-    // التحقق من أن تاريخ البداية لا يأتي بعد تاريخ النهاية
-    if (start.getTime() > end.getTime()) {
-      showToast("error", "تاريخ البداية يجب أن يكون قبل أو يساوي تاريخ النهاية.");
+     if (start.getTime() > end.getTime()) {
+      showToast(
+        "error",
+        "تاريخ البداية يجب أن يكون قبل أو يساوي تاريخ النهاية."
+      );
       return false;
     }
 
-    // التحقق من عدم التعارض مع التواريخ المحجوزة
-    for (const booked of roadSign.booking_dates) {
+     for (const booked of roadSign.booking_dates) {
       const bookedStart = new Date(booked.start_date);
       const bookedEnd = new Date(booked.end_date);
 
-      // الشرط هنا: إذا كان الحجز الحالي (booked) هو نفسه الحجز الأصلي الذي يتم تعديله، تجاهله.
-      // نستخدم تواريخ الحجز في 'booked' للمقارنة مع 'bookingData' لأنه يمثل حالة الحجز الفعلية.
-      const isCurrentBookingOriginal = isEditMode && bookingData?.roadsigns.some(rs => 
-        rs.id === sign.road_sign_id && 
-        new Date(rs.pivot.start_date).getTime() === bookedStart.getTime() && 
-        new Date(rs.pivot.end_date).getTime() === bookedEnd.getTime()
-      );
+      const isCurrentBookingOriginal =
+        isEditMode &&
+        bookingData?.roadsigns.some(
+          (rs) =>
+            rs.id === sign.road_sign_id &&
+            new Date(rs.pivot.start_date).getTime() === bookedStart.getTime() &&
+            new Date(rs.pivot.end_date).getTime() === bookedEnd.getTime()
+        );
 
       if (isCurrentBookingOriginal) {
-        continue; // تجاهل هذا التداخل لأنه الحجز الأصلي نفسه الذي يتم تعديله
+        continue; 
       }
 
-      // شروط التداخل العامة (مع مراعاة أن التواريخ قد تكون شاملة)
-      // إذا كانت الفترة الجديدة تبدأ ضمن فترة محجوزة (اليوم الأخير غير مشمول لـ bookedEnd)
-      // أو الفترة الجديدة تنتهي ضمن فترة محجوزة (اليوم الأول غير مشمول لـ bookedStart)
-      // أو الفترة الجديدة تغطي الفترة المحجوزة بالكامل
       if (
         (start >= bookedStart && start < bookedEnd) ||
         (end > bookedStart && end <= bookedEnd) ||
         (start <= bookedStart && end >= bookedEnd)
       ) {
-        showToast("error", `تاريخ الحجز يتعارض مع حجز موجود من ${booked.start_date} إلى ${booked.end_date}.`);
+        showToast(
+          "error",
+          `تاريخ الحجز يتعارض مع حجز موجود من ${booked.start_date} إلى ${booked.end_date}.`
+        );
         return false;
       }
     }
 
-    // التحقق من أن الفترة المطلوبة تقع بالكامل ضمن النطاقات المتاحة
-    let isCoveredByAvailableRanges = false;
-    
-    // نجمع كل الأيام المتاحة من جميع النطاقات في Set
-    const availableDatesSet = new Set();
+     let isCoveredByAvailableRanges = false;
+
+     const availableDatesSet = new Set();
     for (const range of roadSign.available_date_ranges) {
-      // نستخدم getDatesInRange لجمع كل الأيام بين start_date و end_date
-      getDatesInRange(range.start_date, range.end_date).forEach(date => availableDatesSet.add(date));
+       getDatesInRange(range.start_date, range.end_date).forEach((date) =>
+        availableDatesSet.add(date)
+      );
     }
 
-    // نتحقق مما إذا كان كل يوم في الفترة المطلوبة موجودًا في الـ availableDatesSet
-    let currentCheckDate = new Date(newStartDate);
-    const finalEndDateInclusive = new Date(newEndDate); // النهاية شاملة
+     let currentCheckDate = new Date(newStartDate);
+    const finalEndDateInclusive = new Date(newEndDate);  
 
-    isCoveredByAvailableRanges = true; // نفترض أنها متاحة حتى نجد يومًا غير متاح
+    isCoveredByAvailableRanges = true;  
     while (currentCheckDate <= finalEndDateInclusive) {
       if (!availableDatesSet.has(currentCheckDate.toDateString())) {
         isCoveredByAvailableRanges = false;
@@ -190,12 +182,14 @@ const CartTable = () => {
     }
 
     if (!isCoveredByAvailableRanges) {
-      showToast("error", "الفترة المطلوبة غير متاحة بالكامل ضمن النطاقات المعلنة.");
+      showToast(
+        "error",
+        "الفترة المطلوبة غير متاحة بالكامل ضمن النطاقات المعلنة."
+      );
       return false;
     }
 
-    // إذا وصلت إلى هنا، فالفترة صالحة ومتاحة
-    return true;
+     return true;
   };
 
   return (
@@ -222,7 +216,8 @@ const CartTable = () => {
             const maxPanels = getMaxAvailablePanels(
               sign,
               range.startDate,
-              range.endDate
+              range.endDate,
+              index
             );
             const rowColor = getSignColor(sign.road_sign_id);
 
@@ -254,8 +249,8 @@ const CartTable = () => {
                       if (
                         validateDateRange(
                           sign,
-                          e.target.value, // تاريخ البداية المعدّل
-                          range.endDate, // تاريخ النهاية الأصلي للفترة الحالية
+                          e.target.value,  
+                          range.endDate,  
                           index
                         )
                       ) {
@@ -312,7 +307,7 @@ const CartTable = () => {
                     className={`w-16 text-right ${rowColor}`}
                   />
                 </TableCell>
-               {/* <TableCell className={rowColor}>{maxPanels || "0"}</TableCell>*/}
+                {/* <TableCell className={rowColor}>{maxPanels || "0"}</TableCell>*/}
                 {/* <TableCell className={rowColor}>
                   {roadSign?.template?.printing_space || "غير متوفر"}
                 </TableCell> */}

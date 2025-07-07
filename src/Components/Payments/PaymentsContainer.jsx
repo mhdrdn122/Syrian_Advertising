@@ -8,6 +8,7 @@ import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
  import { Permissions } from "../../Static/StaticData";
 import InvoiceExcel from "./InvoiceExcel";
 import useMangePayments from "../../hooks/useMangePayments";
+import {ViewImageDialog} from "./ViewImageDialog"
 
 const PaymentsContainer = () => {
 
@@ -32,7 +33,10 @@ const PaymentsContainer = () => {
     isFetchingPaymentsNotReceived,
     paymentIsNotReceived,
     dataInvoicePdf ,
-    permissions
+    permissions ,
+    openViewImage ,
+    setOpenViewImage ,
+    selectedPayment ,
 } =  useMangePayments()
 
   
@@ -148,6 +152,16 @@ const PaymentsContainer = () => {
         titleLoading="جاري التأكيد"
         onConfirm={handleConfirm}
         loading={isLoadingConfirm}
+      />
+       <ViewImageDialog
+        show={openViewImage}
+        handleClose={() => setOpenViewImage(false)}
+        imageUrl={
+          selectedPayment?.payment_image
+            ? `https://road.levantmenu.ae/storage/${selectedPayment.payment_image}`
+            : null
+        }
+        paymentNumber={selectedPayment?.payment_number}
       />
 
       <DeleteDialog

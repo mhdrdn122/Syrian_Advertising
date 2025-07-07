@@ -1,29 +1,25 @@
-import { useState } from "react";
-import { DynamicTable } from "../../utils/Tables/DynamicTable";
+ import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetRoadSignBookingByDateQuery } from "../../RtkQuery/Slice/Report/ReportApi";
-import { Loader } from "lucide-react";
+ import { Loader } from "lucide-react";
 import { ReportBookingsCustomersColumns } from "../../utils/Tables/ColumnsTable/ReportBookingsCustomersColumns";
 import { ReportPdf } from "./ReportPdf";
 import { productTypeOptions } from "../../Static/StaticData";
 import { Label } from "@/components/ui/label";
+import useReports from "../../hooks/useReports";
 
 const ReportsContainer = () => {
-  const [activeTab, setActiveTab] = useState("bookings");
-  const [fromDate, setFromDate] = useState();
-  const [toDate, setToDate] = useState();
-  const [productId, setProductId] = useState();
-
-  // Fetch data for bookings this Date
   const {
+    setActiveTab,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
     data,
-    isLoading: isBookingsDateLoading,
-    isFetching: isBookingsDateFetching,
-  } = useGetRoadSignBookingByDateQuery({
-    from_date: fromDate,
-    to_date: toDate,
-    product_type: productId,
-  });
+    isBookingsDateLoading,
+    isBookingsDateFetching,
+    productId,
+    setProductId,
+  } = useReports();
 
   // Handle loading state
   if (isBookingsDateLoading) {
@@ -106,7 +102,7 @@ const ReportsContainer = () => {
         }
         from_date={fromDate}
         to_date={toDate}
-        product={productTypeOptions[productId || 0].label}
+        product={productTypeOptions[productId - 1 || 0]?.label}
       />
       {/* Tabs for switching between bookings and unbooked signs */}
       <Tabs

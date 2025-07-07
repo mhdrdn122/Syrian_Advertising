@@ -1,73 +1,33 @@
-import { useEffect, useState } from "react";
-import {
-  useDeleteTemplateMutation,
-  useGetTemplatesQuery,
-} from "../../RtkQuery/Slice/Template/TemplateApi";
-import { useNavigate, useParams } from "react-router";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { DialogAddTemplate } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddTemplate";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { DialogEditTemplate } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditTemplate";
 import { TemplateFieldsShow } from "../../utils/Dialogs/Data/Show/TamplatefieldsShow";
 import DialogShow from "../../utils/Dialogs/DialogShow/DialogShow";
-import { showToast } from "../../utils/Notifictions/showToast";
 import { TemplateColumns } from "../../utils/Tables/ColumnsTable/TamplateColumn";
-import { Permissions } from "../../Static/StaticData";
+import useTemplates from "../../hooks/useTemplates";
 const TableTemplate = () => {
-  const { id } = useParams();
-  const { data, isLoading, isSuccess } = useGetTemplatesQuery(id);
-  const [show, setShow] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openShow, setOpenShow] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [deleteTemplate, { isLoading: isDeleting }] =
-    useDeleteTemplateMutation();
-    const navigate = useNavigate()
-
-  const [initData, setInitDat] = useState({});
-
-  useEffect(() => {
-
-    data?.length == 0 ? navigate("/dashboard/models") : " "
-
-  },[data])
-
-  const handleEdit = (template) => {
-    setSelectedTemplate(template);
-    setInitDat(template);
-    setOpenEdit(true);
-  };
-
-  const handleDelete = (template) => {
-    setSelectedTemplate(template);
-    setOpenDelete(true);
-  };
-
-  const handleShow = (template) => {
-    setSelectedTemplate(template);
-    setOpenShow(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (selectedTemplate) {
-      try {
-        await deleteTemplate(selectedTemplate.id).unwrap();
-        setOpenDelete(false);
-        setSelectedTemplate(null);
-        showToast("success", "تم الحذف بنجاح");
-      } catch (error) {
-        showToast("error", error);
-      }
-    }
-  };
-
-    const permissions = {
-        delete : Permissions.DeleteRoadSigns,
-        show : Permissions.ViewTemplates,
-        edit : Permissions.EditTemplates,
-      }
-
+  const {
+    data,
+    isLoading,
+    show,
+    setShow,
+    openDelete,
+    setOpenDelete,
+    openEdit,
+    setOpenEdit,
+    openShow,
+    setOpenShow,
+    selectedTemplate,
+    setSelectedTemplate,
+    isDeleting,
+    initData,
+    handleEdit,
+    handleDelete,
+    handleShow,
+    handleConfirmDelete,
+    permissions,
+  } = useTemplates();
   return (
     <div className="p-4 sm:p-6 max-w-full mx-auto space-y-6 overflow-x-auto">
       <DynamicTable

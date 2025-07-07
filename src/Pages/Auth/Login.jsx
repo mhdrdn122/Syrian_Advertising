@@ -123,6 +123,7 @@ export function Login({ className, ...props }) {
 
               <Link
                 to="#"
+                onClick={showToast("error" , "يرجى التواصل مع المدير")}
                 className="ml-auto text-center inline-block text-sm underline-offset-4 hover:underline"
               >
                 هل نسيت كلمة المرور ؟{" "}

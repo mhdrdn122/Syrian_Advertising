@@ -1,133 +1,88 @@
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import {
-  useDeleteCustomerMutation,
   useShowOneCustomerQuery,
-  useUpdateCustomerMutation,
-  useAddDiscountMutation, // Import the new mutation hook
 } from "../../RtkQuery/Slice/Customers/CustomersApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useState } from "react";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { DynamicTable } from "../../utils/Tables/DynamicTable";
 import { BookingCustomerColumns } from "../../utils/Tables/ColumnsTable/BookingByCustomerColumns";
 import { PaymentsCustomerColumns } from "../../utils/Tables/ColumnsTable/PaymentsCustomerColumns";
 import { ViewImageDialog } from "../Payments/ViewImageDialog";
 import InvoicePdf from "../Payments/InvoicePdf";
-import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
 import { DialogAddPayments } from "../../utils/Dialogs/EditAddDialog/Add/DialogAddPayments";
 import HeaderComponent from "../../utils/HeaderComponent";
 import InvoiceExcel from "../Payments/InvoiceExcel";
 import CustomerFormDialog from "../../Pages/Customers/CustomerFormDialog";
-import { showToast } from "../../utils/Notifictions/showToast";
 import { Toaster } from "react-hot-toast";
 import DetailCard from "../../utils/DetailCard";
-// Import the new discount dialog component
-import AddDiscountDialog from "./AddDiscountDialog"; // New import
+import AddDiscountDialog from "./AddDiscountDialog";  
 import { BookingCustomerDiscounts } from "../../utils/Tables/ColumnsTable/BookingCustomerDiscounts";
+import useCustomers from "../../hooks/useCustomers";
+import SkeletonLoader from "../../utils/SkeletonLoader";
 
 const CustomerInfo = () => {
   const { id } = useParams();
+  
   const {
     data: customer,
     isFetching,
-    isLoading: isLoadingCustomer, // Initial customer data loading state
-    refetch, // Add refetch to update customer data after discount
+    isLoading: isLoadingCustomer, 
+    refetch, 
   } = useShowOneCustomerQuery(id);
 
-  // State variables for dialogs and display toggles
-  const [openAddPAyment, setOpenAddPayment] = useState(false);
-  const [showBookings, setShowBooking] = useState(false);
-  const [showPayments, setShowPayments] = useState(false);
-  const [showDiscounts, setShowDiscounts] = useState(false);
 
-  const [openViewImage, setOpenViewImage] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState(null);
-  const [openDel, setOpenDel] = useState(false);
 
-  // State and settings for CustomerFormDialog
-  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
-  // State for AddDiscountDialog
-  const [isAddDiscountDialogOpen, setIsAddDiscountDialogOpen] = useState(false); // New state
+  const {
+    setOpenAddPayment,
+    showBookings,
+    setShowBooking,
+    showPayments,
+    setShowPayments,
+    showDiscounts,
+    setShowDiscounts,
+    openViewImage,
+    setOpenViewImage,
+    selectedPayment,
+     openDel,
+    setOpenDel,
+    isFormDialogOpen,
+    setIsFormDialogOpen,
+    isAddDiscountDialogOpen,
+    setIsAddDiscountDialogOpen,
+    updateCustomer,
+    isUpdating,
+    addDiscount,
+    isAddingDiscount,
+     hasPermission, 
+     isDeleting,
+    handleFormSuccess,
+    handleDiscountSuccess,
+    handelDelete,
+    onShowBookingDetails,
+    onShowPaymentImage,
+    openAddPayment
+  } =  useCustomers({refetch , id})
 
-  const [updateCustomer, { isLoading: isUpdating }] =
-    useUpdateCustomerMutation();
-  const [addDiscount, { isLoading: isAddingDiscount }] =
-    useAddDiscountMutation(); // New mutation hook
 
-  const navigate = useNavigate();
-  const { hasPermission } = useAuth();
-
-  const [deleteCustomer, { isLoading: isDeleting }] =
-    useDeleteCustomerMutation();
-
-  // Callback function on successful form submission (add/edit)
-  const handleFormSuccess = () => {
-    setIsFormDialogOpen(false);
-    showToast("success", "تم تعديل معلومات الزبون");
-  };
-
-  // Callback function on successful discount addition
-  const handleDiscountSuccess = () => {
-    setIsAddDiscountDialogOpen(false);
-    showToast("success", "تم إضافة الخصم بنجاح");
-    refetch(); // Refetch customer data to update the remaining balance and total values
-  };
-
-  const handelDelete = async () => {
-    try {
-      await deleteCustomer(id).unwrap();
-      navigate("/dashboard/customers");
-    } catch (error) {
-      console.error("Failed to delete customer:", error);
-      showToast("error", "فشل حذف الزبون");
-    } finally {
-      setOpenDel(false);
-    }
-  };
-
+  
   if (isFetching) {
     return (
-      <div className="p-4 md:p-6 space-y-4">
-        <Skeleton className="h-10 w-1/3" />
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          <Skeleton className="h-32 w-32 rounded-full" />
-          <div className="space-y-2 flex-1 w-full">
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-            <Skeleton className="h-4 w-full" />{" "}
-            {/* Skeleton for company_name */}
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-lg" />
-          ))}
-        </div>
-      </div>
+     <SkeletonLoader />
     );
   }
 
   if (!customer) {
     return (
       <div className="p-4 text-center text-red-500">
-        Customer not found or failed to load.
+        الزبون غير متوفر
       </div>
     );
   }
 
-  const onShowBookingDetails = (row) => {
-    navigate(`/dashboard/booking/${row?.id}`);
-  };
-
-  const onShowPaymentImage = (row) => {
-    setOpenViewImage(true);
-    setSelectedPayment(row);
-  };
 
   return (
     <div dir="rtl" className="p-4 md:p-6 max-w-7xl w-full mx-auto">
@@ -320,10 +275,6 @@ const CustomerInfo = () => {
                 colorClass="bg-orange-50 dark:bg-orange-900/20"
               />
 
-              {/* Business Manager Info (if available) - This block might be a good candidate for another custom component if its structure varies significantly,
-                 but for now, we'll keep it as a standard div if it's more complex than what DetailCard can handle directly.
-                 If it's always just a title and icon/text pairs, you could adapt DetailCard to take an array of objects for content.
-                 For simplicity, keeping it as a div for now as it includes a sub-heading and multiple lines of info. */}
               {customer.customers && customer.customers.length > 0 && (
                 <div className="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-800 col-span-1 sm:col-span-2">
                   <h4 className="font-semibold text-lg mb-2">
@@ -451,8 +402,10 @@ const CustomerInfo = () => {
       />
 
       <DialogAddPayments
-        show={openAddPAyment}
-        handleClose={() => setOpenAddPayment(false)}
+        show={openAddPayment}
+        handleClose={() => {
+          setOpenAddPayment(false) ;
+          refetch()}}
         id={id}
       />
 

@@ -2,7 +2,6 @@ import CustomerCard from "./CustomerCard";
 import LoadingGet from "../../utils/Loading/LoadingGet/LoadingGet";
 
 const CustomersContainer = ({customers , isFetching}) => {
-  // const { data, isFetching } = useGetCustomersQuery();
 
   if (isFetching) {
     return (

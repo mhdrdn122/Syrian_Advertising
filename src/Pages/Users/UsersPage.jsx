@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
-import UsersContainer from '../../Components/Users/UsersContainer';
+ import UsersContainer from '../../Components/Users/UsersContainer';
 import HeaderComponent from '../../utils/HeaderComponent';
 import { DialogAddUser } from '../../utils/Dialogs/EditAddDialog/Add/DialogAddUser';
-import { useGetUsersQuery } from '../../RtkQuery/Slice/Users/UsersApi';
-import useSearch from '../../hooks/useSearch';
-import InvoicePdf from '../../Components/Payments/InvoicePdf';
-import { Permissions } from '../../Static/StaticData';
+ import useSearch from '../../hooks/useSearch';
+ import { Permissions } from '../../Static/StaticData';
+import useUsers from '../../hooks/useUsers';
 
 const UsersPage = () => {
-  const [open, setOpen] = useState(false);
-  const { data: users, isFetching, isSuccess } = useGetUsersQuery();
-
+const {users , isSuccess , setOpen , open , isFetchingUsers} = useUsers()
   const { searchQuery, setSearchQuery, filteredData } = useSearch(
     isSuccess ? users : [],
     'username'
@@ -28,7 +24,7 @@ const UsersPage = () => {
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <UsersContainer users={filteredData} isFetching={isFetching} />
+      <UsersContainer users={filteredData} isFetching={isFetchingUsers} />
       <DialogAddUser show={open} handleClose={() => setOpen(false)} />
     </div>
   );

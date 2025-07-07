@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,58 +5,34 @@ import { Icon } from "@iconify/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "../../utils/Dialogs/DeleteDialog/DeleteDialog";
 import { DialogEditUser } from "../../utils/Dialogs/EditAddDialog/Edit/DialogEditUser";
-import {
-  useDeleteUserMutation,
-  useGetActivitiesQuery,
-  useShowOneUsersQuery,
-} from "../../RtkQuery/Slice/Users/UsersApi";
 import DialogShow from "../../utils/Dialogs/DialogShow/DialogShow";
 import { ActivityFieldsShow } from "../../utils/Dialogs/Data/Show/ActivityFieldsShow";
-import { useAuth } from "../../Context/AuthProvider";
 import { Permissions } from "../../Static/StaticData";
 import DetailCard from "../../utils/DetailCard";
+import SkeletonLoader from "../../utils/SkeletonLoader";
+import useUsers from "../../hooks/useUsers";
 
 const UserInfo = () => {
-  const { id } = useParams();
-  const { data: user, isFetching } = useShowOneUsersQuery(id);
-  const { data: activities, isFetching: isFetchingActivities } =
-    useGetActivitiesQuery(id);
-  const [open, setOpen] = useState(false);
-  const [openActivities, setOpenActivities] = useState(false);
-  const [openDel, setOpenDel] = useState(false);
-  const navigate = useNavigate();
-  const [deleteUser, { isLoading }] = useDeleteUserMutation();
-  const { hasPermission } = useAuth();
 
-  const handleDelete = async () => {
-    try {
-      await deleteUser(id).unwrap();
-      navigate("/dashboard/users");
-    } catch (error) {
-      console.error("Failed to delete user:", error);
-      // يمكنك إضافة إشعار خطأ هنا
-    } finally {
-      setOpenDel(false); // أغلق الحوار بعد المحاولة
-    }
-  };
+  const {
+    user,
+    isFetching,
+    activities,
+    isFetchingActivities,
+    open,
+    setOpen,
+    openActivities,
+    setOpenActivities,
+    openDel,
+    setOpenDel,
+    isLoading,
+    hasPermission,
+    handleDelete,
+  } = useUsers()
 
   if (isFetching) {
     return (
-      <div dir="rtl" className="p-4 md:p-6 space-y-4">
-        <Skeleton className="h-10 w-1/3" />
-        <div className="flex gap-4">
-          <Skeleton className="h-32 w-32 rounded-full" />
-          <div className="space-y-2 flex-1">
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-lg" />
-          ))}
-        </div>
-      </div>
+      <SkeletonLoader />
     );
   }
 
